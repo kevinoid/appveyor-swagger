@@ -1,0 +1,3875 @@
+swagger: '2.0'
+
+# Document metadata
+info:
+  title: AppVeyor REST API
+  version: 0.0.20161219
+  description: http://help.appveyor.com/discussions
+  contact:
+    name: AppVeyor Team
+    email: team@appveyor.com
+    url: https://www.appveyor.com/about/
+  termsOfService: https://www.appveyor.com/terms-of-service/
+  license:
+    name: AppVeyor End User License Agreement (EULA)
+    url: https://www.appveyor.com/eula/
+
+# Link to published docs
+externalDocs:
+  description: AppVeyor REST API Documentation
+  url: https://www.appveyor.com/docs/api/
+
+# Domain of the service
+host: ci.appveyor.com
+
+# Protocols the API supports
+schemes:
+  - https
+
+# Path prefix for API paths
+basePath: /api
+
+# Supported request types (Content-Type)
+consumes:
+  - application/json
+
+# Supported response types (Accept)
+produces:
+  - application/json
+  - application/xml
+
+securityDefinitions:
+  # OpenAPI v3.0 definition:
+  #apiToken:
+  #  type: http
+  #  scheme: bearer
+  apiToken:
+    description: >-
+      API token can be acquired from https://ci.appveyor.com/api-token
+      It must be passed as `"Bearer <token>"` rather than just `"<token>"`
+      due to [lack of bearer token authentication support in the OpenAPI 2.0
+      Specification](https://github.com/OAI/OpenAPI-Specification/issues/583).
+      This is [corrected in OpenAPI
+      3.0](https://github.com/OAI/OpenAPI-Specification/pull/807).
+    type: apiKey
+    in: header
+    name: Authorization
+
+security:
+  - apiToken: []
+
+tags:
+- name: Environments and Deployments
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/environments-deployments/
+- name: Projects and Builds
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/projects-builds/
+- name: Team
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/team/
+
+parameters:
+  ### {{{ Teams
+  roleId:
+    name: roleId
+    in: path
+    description: Role ID
+    type: integer
+    required: true
+    minimum: 0
+  userId:
+    name: userId
+    in: path
+    description: User ID
+    type: integer
+    required: true
+    minimum: 0
+
+  ### }}}
+  ### {{{ Projects and Builds
+  accountName:
+    name: accountName
+    in: path
+    description: Account Name
+    type: string
+    required: true
+  branch:
+    name: branch
+    in: query
+    description: Repository Branch
+    type: string
+  buildBranch:
+    name: buildBranch
+    in: path
+    description: Build Branch
+    type: string
+    required: true
+  buildVersion:
+    name: buildVersion
+    in: path
+    description: Build Version (`version` property of `Build`)
+    type: string
+    required: true
+  jobId:
+    name: jobId
+    in: path
+    description: Build ID (`id` property of `Job`)
+    type: string
+    required: true
+  projectSlug:
+    name: projectSlug
+    in: path
+    description: Project Slug
+    type: string
+    required: true
+  recordsNumber:
+    name: recordsNumber
+    in: query
+    description: Records per page
+    type: integer
+    minimum: 0
+    # TODO: Default?
+  startBuildId:
+    name: startBuildId
+    in: query
+    # TODO: Description?  Default?  What is it?
+    type: integer
+    minimum: 0
+
+  ### }}}
+  ### {{{ Environments and Deployments
+  deploymentId:
+    name: deploymentId
+    in: path
+    description: Deployment ID (`deploymentId` property of `Deployment`)
+    type: integer
+    minimum: 0
+    required: true
+  deploymentEnvironmentId:
+    name: deploymentEnvironmentId
+    in: path
+    description: >
+      Deployment Environment ID (`deploymentEnvironmentId` property of
+      `DeploymentEnvironment`)
+    type: integer
+    minimum: 0
+    required: true
+  ### }}}
+
+definitions:
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+    required: [message]
+
+  ### {{{ Teams
+  NotificationFrequency:
+    type: string
+    # TODO: Determine other possible values
+    enum: [all]
+
+  CollaboratorCreate:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+      roleId:
+        type: integer
+        minimum: 0
+    # TODO: Check that these are required
+    required: [email, roleId]
+
+  CollaboratorUpdate:
+    type: object
+    properties:
+      userId:
+        type: integer
+        minimum: 0
+      roleId:
+        type: integer
+        minimum: 0
+    # TODO: Check that these are required
+    required: [userId, roleId]
+
+  # {{{ Permissions
+
+  Permission:
+    type: string
+    # FIXME: Swagger does not allow anyOf in Schema yet
+    # https://github.com/OAI/OpenAPI-Specification/pull/741
+    # So enumerate all possibilities instead
+    #anyOf:
+    #- ProjectsPermission
+    #- EnvironmentsPermission
+    #- BuildEnvironmentPermission
+    #- AccountPermission
+    #- UsersPermission
+    #- RolesPermission
+    #- UserPermission
+    enum:
+    - AddRole
+    - AddUser
+    - ConfigureApiKeys
+    - ConfigureBuildEnvironment
+    - DeleteRole
+    - DeleteUser
+    - DeployToEnvironment
+    - ManageApplicationAuthorizations
+    - ManageEnvironments
+    - ManageProjects
+    - RunProjectBuild
+    - UpdateAccountDetails
+    - UpdateBillingDetails
+    - UpdateEnvironmentSettings
+    - UpdateProjectSettings
+    - UpdateRoleDetails
+    - UpdateUserDetails
+
+  PermissionState:
+    type: object
+    properties:
+      name:
+        $ref: '#/definitions/Permission'
+      description:
+        type: string
+      allowed:
+        # Note: true==allow, false==deny, undefined==inherit
+        type: boolean
+    required: [name]
+
+  Group:
+    type: string
+    enum:
+    - Account
+    - BuildEnvironment
+    - Environments
+    - Projects
+    - Roles
+    - User
+    - Users
+
+  GroupPermissions:
+    type: object
+    discriminator: name
+    properties:
+      name:
+        $ref: '#/definitions/Group'
+      permissions:
+        type: array
+        items:
+          $ref: '#/definitions/PermissionState'
+    required: [name, permissions]
+
+  AccountPermission:
+    type: string
+    enum:
+    - ManageApplicationAuthorizations
+    - UpdateAccountDetails
+    - UpdateBillingDetails
+
+  AccountPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/AccountPermission'
+
+  #AccountGroupPermissions:
+  Account:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/AccountPermissionState'
+
+  BuildEnvironmentPermission:
+    type: string
+    enum:
+    - ConfigureBuildEnvironment
+
+  BuildEnvironmentPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/BuildEnvironmentPermission'
+
+  #BuildEnvironmentGroupPermissions:
+  BuildEnvironment:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/BuildEnvironmentPermissionState'
+
+  EnvironmentsPermission:
+    type: string
+    enum:
+    - DeployToEnvironment
+    - ManageEnvironments
+    - UpdateEnvironmentSettings
+
+  EnvironmentsPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/EnvironmentsPermission'
+
+  #EnvironmentsGroupPermissions:
+  Environments:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/EnvironmentsPermissionState'
+
+  ProjectsPermission:
+    type: string
+    enum:
+    - ManageProjects
+    - RunProjectBuild
+    - UpdateProjectSettings
+
+  ProjectsPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/ProjectsPermission'
+
+  #ProjectsGroupPermissions:
+  Projects:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/ProjectsPermissionState'
+
+  RolesPermission:
+    type: string
+    enum:
+    - AddRole
+    - DeleteRole
+    - UpdateRoleDetails
+
+  RolesPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/RolesPermission'
+
+  #RolesGroupPermissions:
+  Roles:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/RolesPermissionState'
+
+  UserPermission:
+    type: string
+    enum:
+    - ConfigureApiKeys
+
+  UserPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/UserPermission'
+
+  #UserGroupPermissions:
+  User:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/UserPermissionState'
+
+  UsersPermission:
+    type: string
+    enum:
+    - AddUser
+    - DeleteUser
+    - UpdateUserDetails
+
+  UsersPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/UsersPermission'
+
+  #UsersGroupPermissions:
+  Users:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/UsersPermissionState'
+
+  # Permissions }}}
+
+  RoleCreate:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+    required: [name]
+
+  Role:
+    type: object
+    properties:
+      roleId:
+        type: integer
+        minimum: 0
+      name:
+        type: string
+        minLength: 1
+      isSystem:
+        type: boolean
+      created:
+        readOnly: true
+        type: string
+        format: date-time
+    required: [name]
+
+  RoleWithGroups:
+    allOf:
+    - $ref: '#/definitions/Role'
+    - type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/definitions/GroupPermissions'
+
+  UserCreate:
+    type: object
+    properties:
+      fullName:
+        type: string
+      email:
+        type: string
+        format: email
+      roleId:
+        type: integer
+        minimum: 0
+      generatePassword:
+        type: boolean
+      password:
+        # Note: Could require/forbid password based on generatePassword
+        #       using JSON Schema oneOf but it is not allowed by Swagger spec
+        # https://github.com/OAI/OpenAPI-Specification/issues/333
+        # https://github.com/OAI/OpenAPI-Specification/pull/741
+        type: string
+        minLength: 1
+        format: password
+      confirmPassword:
+        # FIXME: Can't think of a way to validate equality with password
+        # https://stackoverflow.com/a/27610799
+        type: string
+        minLength: 1
+        format: password
+    # TODO: Check that these are required
+    required: [fullName, email, roleId]
+
+  # Note:  Should be User, but User name must be used for UserGroupPermissions
+  # due to how discriminator works.
+  # Item 1 of https://github.com/OAI/OpenAPI-Specification/issues/707
+  AVUser:
+    type: object
+    properties:
+      accountId:
+        readOnly: true
+        type: integer
+        minimum: 0
+      accountName:
+        readOnly: true
+        type: string
+      isOwner:
+        readOnly: true
+        type: boolean
+      isCollaborator:
+        readOnly: true
+        type: boolean
+      userId:
+        type: integer
+        minimum: 0
+      fullName:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        minLength: 1
+        format: password
+      roleId:
+        type: integer
+        minimum: 0
+      roleName:
+        readOnly: true
+        type: string
+      successfulBuildNotification:
+        $ref: '#/definitions/NotificationFrequency'
+      failedBuildNotification:
+        $ref: '#/definitions/NotificationFrequency'
+      notifyWhenBuildStatusChangedOnly:
+        type: boolean
+      created:
+        readOnly: true
+        type: string
+        format: date-time
+      updated:
+        readOnly: true
+        type: string
+        format: date-time
+
+  ### Teams }}}
+  ### {{{ Projects and Builds
+
+  Status:
+    type: string
+    # TODO: Determine other possible values
+    enum: [queued, success]
+
+  Job:
+    type: object
+    properties:
+      jobId:
+        type: string
+      name:
+        type: string
+      allowFailure:
+        type: boolean
+      messagesCount:
+        type: integer
+        minimum: 0
+      compilationMessagesCount:
+        type: integer
+        minimum: 0
+      compilationErrorsCount:
+        type: integer
+        minimum: 0
+      compilationWarningsCount:
+        type: integer
+        minimum: 0
+      testsCount:
+        type: integer
+        minimum: 0
+      passedTestsCount:
+        type: integer
+        minimum: 0
+      failedTestsCount:
+        type: integer
+        minimum: 0
+      artifactsCount:
+        type: integer
+        minimum: 0
+      status:
+        $ref: '#/definitions/Status'
+      started:
+        type: string
+        format: date-time
+      finished:
+        type: string
+        format: date-time
+      created:
+        type: string
+        format: date-time
+      updated:
+        type: string
+        format: date-time
+
+  BuildCreate:
+    type: object
+    properties:
+      accountName:
+        type: string
+        minLength: 1
+      projectSlug:
+        type: string
+        minLength: 1
+      branch:
+        type: string
+      commitId:
+        type: string
+      pullRequestId:
+        description: Can not be used with `branch` or `commitId`
+        type: integer
+        minimum: 1
+      environmentVariables:
+        type: object
+        additionalProperties:
+          type: string
+    required: [accountName, projectSlug]
+
+  Build:
+    type: object
+    properties:
+      buildId:
+        type: integer
+        minimum: 0
+      jobs:
+        type: array
+        items:
+          $ref: '#/definitions/Job'
+      buildNumber:
+        type: integer
+        minimum: 0
+      version:
+        type: string
+      message:
+        type: string
+      messageExtended:
+        type: string
+      branch:
+        type: string
+        # TODO: pattern restriction?
+      isTag:
+        type: boolean
+      commitId:
+        type: string
+        # TODO: pattern restriction?
+      authorName:
+        type: string
+      authorUsername:
+        type: string
+      committerName:
+        type: string
+      committerUsername:
+        type: string
+      committed:
+        type: string
+        format: date-time
+      pullRequestId:
+        type: integer
+        minimum: 1
+      pullRequestName:
+        type: string
+      messages:
+        type: array
+        items:
+          # TODO: Are these really strings?  No examples.
+          type: string
+      status:
+        $ref: '#/definitions/Status'
+      started:
+        type: string
+        format: date-time
+      finished:
+        type: string
+        format: date-time
+      created:
+        type: string
+        format: date-time
+      updated:
+        type: string
+        format: date-time
+
+  RepositoryAuthentication:
+    type: string
+    enum: [credentials, ssh]
+
+  RepositoryProvider:
+    type: string
+    enum:
+    - bitBucket
+    - git
+    - gitHub
+    - gitLab
+    - kiln
+    - mercurial
+    - stash
+    - subversion
+    - vso
+
+  AccessRightType:
+    type: string
+    enum: [Delete, RunBuild, Update, View]
+
+  AccessRightDefinition:
+    type: object
+    properties:
+      name:
+        $ref: '#/definitions/AccessRightType'
+      description:
+        type: string
+    required: [name]
+
+  AccessRight:
+    type: object
+    properties:
+      name:
+        $ref: '#/definitions/AccessRightType'
+      allowed:
+        # Note: true==allow, false==deny, undefined==inherit
+        type: boolean
+    required: [name]
+
+  RoleACE:
+    type: object
+    properties:
+      roleId:
+        type: integer
+        minimum: 0
+      name:
+        type: string
+      isAdmin:
+        type: boolean
+      accessRights:
+        type: array
+        items:
+          $ref: '#/definitions/AccessRight'
+
+  SecurityDescriptor:
+    type: object
+    properties:
+      accessRightDefinitions:
+        type: array
+        items:
+          $ref: '#/definitions/AccessRightDefinition'
+      roleAces:
+        type: array
+        items:
+          $ref: '#/definitions/RoleACE'
+
+  ProjectCreate:
+    description: >-
+      `repositoryAuthentication` is only used for git, mercurial, subversion
+      `repositoryProvider`.
+    type: object
+    properties:
+      repositoryProvider:
+        $ref: '#/definitions/RepositoryProvider'
+      repositoryName:
+        description: >-
+          URL when repositoryProvider is git, mercurial, subversion
+          username/project when repositoryProvider is gitHub
+        type: string
+        minLength: 1
+      repositoryAuthentication:
+        $ref: '#/definitions/RepositoryAuthentication'
+      repositoryUsername:
+        description: Required if repositoryAuthentication is credentials
+        type: string
+      repositoryPassword:
+        description: Required if repositoryAuthentication is credentials
+        type: string
+        format: password
+    required: [repositoryProvider, repositoryName]
+
+  Project:
+    type: object
+    properties:
+      projectId:
+        type: integer
+        minimum: 0
+      accountId:
+        type: integer
+        minimum: 0
+      accountName:
+        type: string
+      builds:
+        type: array
+        items:
+          $ref: '#/definitions/Build'
+      name:
+        type: string
+      slug:
+        type: string
+        # TODO: urlsafe pattern restriction?
+      repositoryType:
+        $ref: '#/definitions/RepositoryProvider'
+      repositoryScm:
+        type: string
+        # TODO: Determine enumeration values
+        enum: [git]
+      repositoryName:
+        type: string
+        # TODO: pattern restriction?
+      repositoryBranch:
+        type: string
+        # TODO: pattern restriction?
+      isPrivate:
+        type: boolean
+      skipBranchesWithoutAppveyorYml:
+        type: boolean
+      enableSecureVariablesInPullRequests:
+        type: boolean
+      enableSecureVariablesInPullRequestsFromSameRepo:
+        type: boolean
+      enableDeploymentInPullRequests:
+        type: boolean
+      rollingBuilds:
+        type: boolean
+      alwaysBuildClosedPullRequests:
+        type: boolean
+      tags:
+        type: string
+        # TODO: pattern to restrict to comma-separated tokens?
+      nuGetFeed:
+        type: object
+        properties:
+          id:
+            type: string
+            # TODO: pattern restriction?
+          name:
+            type: string
+          publishingEnabled:
+            type: boolean
+          created:
+            type: string
+            format: date-time
+      securityDescriptor:
+        $ref: '#/definitions/SecurityDescriptor'
+      created:
+        type: string
+        format: date-time
+      updated:
+        type: string
+        format: date-time
+
+  ProjectBuild:
+    type: object
+    properties:
+      project:
+        $ref: '#/definitions/Project'
+      build:
+        $ref: '#/definitions/Build'
+
+  ProjectBuilds:
+    type: object
+    properties:
+      project:
+        $ref: '#/definitions/Project'
+      build:
+        type: array
+        items:
+          $ref: '#/definitions/Build'
+
+  Image:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+    required: [name]
+
+  ScriptLanguage:
+    type: string
+    enum: [cmd, ps]
+
+  Script:
+    type: object
+    properties:
+      language:
+        $ref: '#/definitions/ScriptLanguage'
+      script:
+        type: string
+    required: [language, script]
+
+  Artifact:
+    type: object
+    properties:
+      path:
+        type: string
+        # format: globpath
+      name:
+        title: Deployment name
+        type: string
+        minLength: 0
+      type:
+        type: string
+        enum: ['', WebDeployPackage]
+    required: [path, name, type]
+
+  BuildMode:
+    type: string
+    enum: [msbuild, none, script]
+
+  BuildWorkerImage:
+    type: string
+    enum:
+    - Previous Visual Studio 2013
+    - Previous Visual Studio 2015
+    - Visual Studio 2013
+    - Visual Studio 2015
+    - WMF 5
+
+  DeployMode:
+    type: string
+    enum: [providers, none, script]
+
+  MSBuildVerbosity:
+    type: string
+    enum: [quiet, minimal, normal, detailed]
+
+  OSService:
+    type: string
+    enum:
+    - iis
+    - mongodb
+    - msmq
+    - mssql2008r2sp2
+    - mssql2008r2sp2rs
+    - mssql2012sp1
+    - mssql2012sp1rs
+    - mssql2014
+    - mssql2014rs
+    - mssql2016
+    - mysql
+    - postgresql
+
+  Platform:
+    type: string
+    enum:
+    - ARM
+    - Any CPU
+    - x64
+    - x86
+
+  TestMode:
+    type: string
+    enum: [auto, none, script]
+
+  StoredValue:
+    type: object
+    properties:
+      isEncrypted:
+        type: boolean
+      value:
+        type: string
+        # Empty environment variable is represented without value prop
+    required: [isEncrypted]
+
+  StoredNameValue:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+      value:
+        $ref: '#/definitions/StoredValue'
+    required: [name, value]
+
+  HostEntry:
+    type: object
+    properties:
+      host:
+        type: string
+        minLength: 1
+        # Note:  API doesn't enforce valid hostnames
+        # format: hostname
+      ip:
+        type: string
+        minLength: 1
+        # Note:  API doesn't enforce valid IP address
+        # Can't use anyOf for format: ipv4 or format: ipv6 anyway.
+        # https://github.com/OAI/OpenAPI-Specification/pull/741
+    required: [host, ip]
+
+  Configuration:
+    type: object
+    properties:
+      doNotIncrementBuildNumberOnPullRequests:
+        type: boolean
+      initScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      branchesMode:
+        type: string
+        enum: [exclude, include]
+      includeBranches:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+          required: [value]
+      excludeBranches:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+          required: [value]
+      skipTags:
+        type: boolean
+      skipNonTags:
+        type: boolean
+      skipBranchWithPullRequests:
+        type: boolean
+      skipCommitsFiles:
+        type: array
+        # TODO: Determine item type
+        items: {}
+      onlyCommitsFiles:
+        type: array
+        # TODO: Determine item type
+        items: {}
+      cloneScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      onBuildSuccessScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      onBuildErrorScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      onBuildFinishScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      patchAssemblyInfo:
+        type: boolean
+      assemblyInfoFile:
+        type: string
+      assemblyVersionFormat:
+        type: string
+      assemblyFileVersionFormat:
+        type: string
+      assemblyInformationalVersionFormat:
+        type: string
+      maxJobs:
+        type: integer
+        minimum: 1
+      buildCloud:
+        type: array
+        # TODO: Determine item type
+        items: {}
+      operatingSystem:
+        title: Build worker image
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              $ref: '#/definitions/BuildWorkerImage'
+          required: [value]
+      services:
+        title: OS services to start during the build process
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              $ref: '#/definitions/OSService'
+          required: [value]
+      cloneFolder:
+        type: string
+      shallowClone:
+        type: boolean
+      forceHttpsClone:
+        type: boolean
+      cloneDepth:
+        type: integer
+        minimum: 1
+      environmentVariables:
+        type: array
+        items:
+          $ref: '#/definitions/StoredNameValue'
+      environmentVariablesMatrix:
+        type: array
+        items:
+          type: object
+          properties:
+            variables:
+              $ref: '#/definitions/StoredNameValue'
+      installScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      hostsEntries:
+        type: array
+        items:
+          $ref: '#/definitions/HostEntry'
+      cacheEntries:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              #format: path
+          required: [value]
+      configureNuGetProjectSource:
+        type: boolean
+      configureNuGetAccountSource:
+        type: boolean
+      disableNuGetPublishOnPullRequests:
+        type: boolean
+      buildMode:
+        $ref: '#/definitions/BuildMode'
+      platform:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              $ref: '#/definitions/Platform'
+          required: [value]
+      configuration:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              minLength: 1
+          required: [value]
+      msBuildProjectFileName:
+        type: string
+        # format: path
+      packageWebApplicationProjects:
+        type: boolean
+      packageWebApplicationProjectsXCopy:
+        type: boolean
+      packageAzureCloudServiceProjects:
+        type: boolean
+      packageNuGetProjects:
+        type: boolean
+      packageNuGetSymbols:
+        type: boolean
+      includeNuGetReferences:
+        type: boolean
+      msBuildInParallel:
+        type: boolean
+      msBuildVerbosity:
+        $ref: '#/definitions/MSBuildVerbosity'
+      buildScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      beforeBuildScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      beforePackageScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      afterBuildScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      testMode:
+        $ref: '#/definitions/TestMode'
+      testAssemblies:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              minLength: 1
+              #format: wildcard-path
+          required: [value]
+      testCategoriesMode:
+        type: string
+        enum: [exclude, include]
+      testCategories:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              minLength: 1
+          required: [value]
+      testCategoriesMatrix:
+        type: array
+        items:
+          type: object
+          properties:
+            categories:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                    minLength: 1
+                required: [value]
+      testScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      beforeTestScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      afterTestScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      deployMode:
+        $ref: '#/definitions/DeployMode'
+      deployments:
+        type: array
+        items:
+          $ref: '#/definitions/DeploymentProvider'
+      deployScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      beforeDeployScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      afterDeployScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
+      xamarinRegisterAndroidProduct:
+        type: boolean
+      xamarinRegisterIosProduct:
+        type: boolean
+      matrixFastFinish:
+        type: boolean
+      matrixAllowFailures:
+        type: array
+        # TODO: Determine item type
+        # https://www.appveyor.com/docs/build-configuration/#allow-failing-jobs
+        items: {}
+      artifacts:
+        type: array
+        items:
+          $ref: '#/definitions/Artifact'
+      notifications:
+        type: array
+        items:
+          $ref: '#/definitions/NotificationProviderSettings'
+
+  ProjectWithConfiguration:
+    type: object
+    allOf:
+    - $ref: '#/definitions/Project'
+    - type: object
+      properties:
+        scheduleCrontabExpression:
+          type: string
+          # TODO: pattern restriction to valid cron entry time
+        repositoryAuthentication:
+          $ref: '#/definitions/RepositoryAuthentication'
+        repositoryUsername:
+          type: string
+        sshPublicKey:
+          type: string
+        webhookId:
+          type: string
+        webhookUrl:
+          type: string
+          format: uri
+        buildPriority:
+          type: integer
+          minimum: 1
+        ignoreAppveyorYml:
+          type: boolean
+        customYmlName:
+          type: string
+        configuration:
+          $ref: '#/definitions/Configuration'
+
+  ProjectSettings:
+    type: object
+    properties:
+      project:
+        $ref: '#/definitions/Project'
+      settings:
+        $ref: '#/definitions/ProjectWithConfiguration'
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      buildClouds:
+        type: array
+        # TODO: Determine item type
+        items: {}
+      defaultImageName:
+        type: string
+
+  ### Projects and Builds }}}
+  ### {{{ Environments and Deployments
+
+  HttpMethodRestricted:
+    type: string
+    enum: [GET, POST]
+
+  ### {{{ Deployment Settings
+
+  DeploymentProviderType:
+    type: string
+    enum:
+    - Agent
+    - AzureBlob
+    - AzureCS
+    - AzureWebJob
+    - BinTray
+    - FTP
+    - GitHub
+    - NuGet
+    - S3
+    - SqlDatabase
+    - WebDeploy
+    - Webhook
+
+  DeploymentProvider:
+    type: object
+    # FIXME: discriminator requires schema names that clash with existing
+    # non-DeploymentProvider schemas.
+    # https://github.com/OAI/OpenAPI-Specification/issues/707
+    # It is also not supported at all by most code generators.
+    # Future: https://github.com/swagger-api/swagger-codegen/pull/4252
+    #discriminator: provider
+    properties:
+      provider:
+        $ref: '#/definitions/DeploymentProviderType'
+      providerSettings:
+        type: array
+        items:
+          $ref: '#/definitions/StoredNameValue'
+      onBranch:
+        type: array
+        # The web UI only displays a single branch.  Max length?
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              minLength: 1
+          required: [value]
+      onEnvironmentVariables:
+        type: array
+        items:
+          $ref: '#/definitions/StoredNameValue'
+    required: [provider]
+
+  # TODO: Not worth effort to specify without anyOf or discriminator support
+  # FTPDeploymentSetting:
+  #   type: string
+  #   enum:
+  #   - active_mode
+  #   - application
+  #   - artifact
+  #   - beta
+  #   - debug
+  #   - enable_ssl
+  #   - folder
+  #   - host
+  #   - password
+  #   - protocol
+  #   - server
+  #   - username
+  #
+  # FTPDeploymentSettingNameValue:
+  #   allOf:
+  #   - $ref: '#/definitions/StoredNameValue'
+  #   - properties:
+  #       name:
+  #         $ref: '#/definitions/FTPDeploymentSetting'
+  #
+  # FTPDeploymentProvider:
+  #   allOf:
+  #   - $ref: '#/definitions/DeploymentProvider'
+  #   - type: object
+  #     properties:
+  #       provider:
+  #         type: string
+  #         enum: [FTP]
+  #       providerSettings:
+  #         type: array
+  #         items:
+  #           $ref: '#/definitions/FTPDeploymentSettingNameValue'
+
+  DeploymentEnvironmentSettings:
+    type: object
+    properties:
+      providerSettings:
+        type: array
+        items:
+          $ref: '#/definitions/StoredNameValue'
+      environmentVariables:
+        type: array
+        items:
+          $ref: '#/definitions/StoredNameValue'
+      notifications:
+        type: array
+        items:
+          $ref: '#/definitions/NotificationProviderSettings'
+
+  DeploymentEnvironmentCreate:
+    type: object
+    properties:
+      name:
+        type: string
+      provider:
+        $ref: '#/definitions/DeploymentProviderType'
+      settings:
+        $ref: '#/definitions/DeploymentEnvironmentSettings'
+    required: [name, provider, settings]
+
+  DeploymentEnvironmentProjectsMode:
+    description: |-
+      0 is "Any project can be deployed to the environment"
+      1 is "Only selected projects can be deployed to the environment"
+      2 is "All except selected projects can be deployed to the environment"
+    type: integer
+    enum: [0, 1, 2]
+
+  DeploymentEnvironment:
+    description: >-
+      Note that `projectsMode` is always 0 from /api/environments.  Non-zero
+      values come from /api/environments/{deploymentEnvironmentId}/settings
+    type: object
+    properties:
+      deploymentEnvironmentId:
+        type: integer
+        minimum: 0
+      accountId:
+        type: integer
+      name:
+        type: string
+      provider:
+        $ref: '#/definitions/DeploymentProviderType'
+      projectsMode:
+        $ref: '#/definitions/DeploymentEnvironmentProjectsMode'
+      securityDescriptor:
+        $ref: '#/definitions/SecurityDescriptor'
+      created:
+        type: string
+        format: date-time
+      updated:
+        type: string
+        format: date-time
+
+  SelectableProject:
+    type: object
+    properties:
+      projectId:
+        type: integer
+        minimum: 0
+      name:
+        type: string
+      isSelected:
+        type: boolean
+    required: [projectId, name, isSelected]
+
+  DeploymentEnvironmentWithSettings:
+    allOf:
+    - $ref: '#/definitions/DeploymentEnvironment'
+    - type: object
+      properties:
+        environmentAccessKey:
+          type: string
+        settings:
+          $ref: '#/definitions/DeploymentEnvironmentSettings'
+        selectedProjects:
+          description: Project IDs of selected projects
+          type: array
+          items:
+            type: integer
+            minimum: 1
+        projects:
+          description: Projects available for selection in UI
+          type: array
+          items:
+            $ref: '#/definitions/SelectableProject'
+
+  DeploymentCreate:
+    type: object
+    properties:
+      environmentName:
+        type: string
+        minLength: 1
+      accountName:
+        type: string
+        minLength: 1
+      projectSlug:
+        type: string
+        minLength: 1
+      buildVersion:
+        description: Build to deploy
+        type: string
+        minLength: 1
+      buildJobId:
+        description: >-
+          Optional job id with artifacts if build contains multiple jobs.
+        type: string
+      environmentVariables:
+        type: object
+        additionalProperties:
+          type: string
+    required: [environmentName, accountName, projectSlug, buildVersion]
+
+  Deployment:
+    type: object
+    properties:
+      deploymentId:
+        type: integer
+        minimum: 0
+      build:
+        $ref: '#/definitions/Build'
+      environment:
+        $ref: '#/definitions/DeploymentEnvironment'
+      jobs:
+        type: array
+        items:
+          $ref: '#/definitions/Job'
+      status:
+        $ref: '#/definitions/Status'
+      started:
+        type: string
+        format: date-time
+      finished:
+        type: string
+        format: date-time
+      created:
+        type: string
+        format: date-time
+      updated:
+        type: string
+        format: date-time
+
+  DeploymentEnvironmentDeployment:
+    type: object
+    properties:
+      # TODO: Confirm duplicate copy of environment here and in deployment
+      environment:
+        $ref: '#/definitions/DeploymentEnvironment'
+      deployment:
+        $ref: '#/definitions/Deployment'
+
+  ProjectDeploymentEnvironment:
+    type: object
+    properties:
+      project:
+        $ref: '#/definitions/Project'
+      deployment:
+        $ref: '#/definitions/DeploymentEnvironmentDeployment'
+    required: [project, deployment]
+
+  ProjectDeploymentEnvironments:
+    type: object
+    properties:
+      project:
+        $ref: '#/definitions/Project'
+      deployments:
+        type: array
+        items:
+          $ref: '#/definitions/DeploymentEnvironmentDeployment'
+
+  DeploymentEnvironmentDeployments:
+    type: object
+    properties:
+      environment:
+        $ref: '#/definitions/DeploymentEnvironment'
+      deployments:
+        type: array
+        items:
+          $ref: '#/definitions/ProjectDeploymentEnvironments'
+    required: [environment, deployments]
+
+  # Deployment Settings }}}
+  ### {{{ Notification Settings
+
+  NotificationProvider:
+    type: string
+    enum:
+    - Campfire
+    - Email
+    - GitHubPullRequest
+    - HipChat
+    - Slack
+    - Webhook
+    - VSOTeamRoom
+
+  NotificationSettings:
+    type: object
+    properties:
+      $type:
+        type: string
+      onBuildSuccess:
+        type: boolean
+      onBuildFailure:
+        type: boolean
+      onBuildStatusChanged:
+        type: boolean
+
+  NotificationProviderSettings:
+    type: object
+    discriminator: provider
+    properties:
+      provider:
+        $ref: '#/definitions/NotificationProvider'
+      settings:
+        $ref: '#/definitions/NotificationSettings'
+    required: [provider, settings]
+
+  CampfireNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models'
+        account:
+          type: string
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        room:
+          type: string
+        template:
+          type: string
+
+  # CampfireNotificationProviderSettings:
+  Campfire:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/CampfireNotificationSettings'
+
+  EmailNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.EmailNotificationSettings, Appveyor.Models'
+        subjectTemplate:
+          type: string
+        bodyTemplate:
+          type: string
+        recipients:
+          type: array
+          # TODO: Determine type
+          items: {}
+        recipientsValue:
+          type: string
+
+  # EmailNotificationProviderSettings:
+  Email:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/EmailNotificationSettings'
+
+  GitHubPullRequestNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models'
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        template:
+          type: string
+
+  # GitHubPullRequestNotificationProviderSettings:
+  GitHubPullRequest:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/GitHubPullRequestNotificationSettings'
+
+  HipChatNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models'
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        from:
+          type: string
+        room:
+          type: string
+        template:
+          type: string
+        serverUrl:
+          type: string
+          format: uri
+
+  # HipChatNotificationProviderSettings:
+  HipChat:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/HipChatNotificationSettings'
+
+  SlackNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.SlackNotificationSettings, Appveyor.Models'
+        incomingWebhookUrl:
+          type: string
+          format: uri
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        channel:
+          type: string
+        template:
+          type: string
+
+  # SlackNotificationProviderSettings:
+  Slack:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/SlackNotificationSettings'
+
+  WebhookNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models'
+        method:
+          $ref: '#/definitions/HttpMethodRestricted'
+        url:
+          type: string
+          format: uri
+        headers:
+          type: array
+          # TODO: Determine type
+          items: {}
+        headersValue:
+          type: string
+        addCustomRequestBody:
+          type: boolean
+        customRequestBodyContentType:
+          type: string
+          # Format not enforced by server, all strings permitted
+          #format: media-type
+        customRequestBody:
+          type: string
+
+  # WebhookNotificationProviderSettings:
+  Webhook:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/WebhookNotificationSettings'
+
+  VSOTeamRoomNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models'
+        vsoAccount:
+          type: string
+        username:
+          type: string
+        password:
+          $ref: '#/definitions/StoredValue'
+        room:
+          type: string
+        template:
+          type: string
+
+  # VSOTeamRoomNotificationProviderSettings:
+  VSOTeamRoom:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/VSOTeamRoomNotificationSettings'
+
+  # Notification Settings }}}
+  ### Environments and Deployments }}}
+
+responses:
+  Error:
+    description: Error
+    schema:
+      $ref: '#/definitions/Error'
+
+# Describe your paths here
+paths:
+  ### {{{ Team
+  /users:
+    get:
+      tags:
+      - Team
+      summary: Get users
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-users'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AVUser'
+          examples:
+            application/json:
+            - accountId: 2
+              accountName: FeodorFitsner
+              isOwner: false
+              isCollaborator: false
+              userId: 2019
+              fullName: NuGet
+              email: nuget@appveyor.com
+              roleId: 5
+              roleName: User
+              successfulBuildNotification: all
+              failedBuildNotification: all
+              notifyWhenBuildStatusChangedOnly: true
+              created: '2014-02-12T19:21:15.0618564+00:00'
+              updated: '2014-03-06T22:47:44.9706252+00:00'
+    post:
+      tags:
+      - Team
+      summary: Add user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#add-user'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserCreate'
+          x-examples:
+            application/json:
+              fullName: John Smith
+              email: john@smith.com
+              roleId: 4
+              generatePassword: false
+              password: password
+              confirmPassword: password
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+    put:
+      tags:
+      - Team
+      summary: Update user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#update-user'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AVUser'
+          x-examples:
+            application/json:
+              userId: 3019
+              fullName: John Smith
+              email: john@smith.com
+              password: null
+              roleId: 4
+              successfulBuildNotification: all
+              failedBuildNotification: all
+              notifyWhenBuildStatusChangedOnly: true
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /users/{userId}:
+    parameters:
+    - $ref: '#/parameters/userId'
+    get:
+      tags:
+      - Team
+      summary: Get user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-user'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: '#/definitions/AVUser'
+              roles:
+                type: array
+                items:
+                  $ref: '#/definitions/Role'
+          examples:
+            application/json:
+              user:
+                accountId: 2
+                accountName: FeodorFitsner
+                isOwner: false
+                isCollaborator: false
+                userId: 2019
+                fullName: NuGet
+                email: nuget@appveyor.com
+                roleId: 5
+                roleName: User
+                successfulBuildNotification: all
+                failedBuildNotification: all
+                notifyWhenBuildStatusChangedOnly: true
+                created: '2014-02-12T19:21:15.0618564+00:00'
+                updated: '2014-03-06T22:47:44.9706252+00:00'
+              roles:
+              - roleId: 4
+                name: Administrator
+                isSystem: true
+                created: '2013-09-26T19:23:39.3615105+00:00'
+              - roleId: 5
+                name: User
+                isSystem: true
+                created: '2013-09-26T19:23:39.3645117+00:00'
+    delete:
+      tags:
+      - Team
+      summary: Delete user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#delete-user'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /collaborators:
+    get:
+      tags:
+      - Team
+      summary: Get collaborators
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-collaborators'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AVUser'
+          examples:
+            application/json:
+            - accountId: 2
+              accountName: FeodorFitsner
+              isOwner: false
+              isCollaborator: true
+              userId: 2018
+              fullName: John Smith
+              email: john@smith.com
+              roleId: 3040
+              roleName: My Role
+              successfulBuildNotification: all
+              failedBuildNotification: all
+              notifyWhenBuildStatusChangedOnly: true
+              created: '2014-02-03T20:29:26.6807307+00:00'
+              updated: '2014-03-07T04:26:09.1051534+00:00'
+    post:
+      tags:
+      - Team
+      summary: Add collaborator
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#add-collaborator'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CollaboratorCreate'
+          x-examples:
+            application/json:
+              email: john@smith.com
+              roleId: 3040
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+    put:
+      tags:
+      - Team
+      summary: Update collaborator
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#update-collaborator'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CollaboratorUpdate'
+          x-examples:
+            application/json:
+              userId: 2018
+              roleId: 3040
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /collaborators/{userId}:
+    parameters:
+    - $ref: '#/parameters/userId'
+    get:
+      tags:
+      - Team
+      summary: Get collaborator
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-collaborator'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              collaborator:
+                $ref: '#/definitions/AVUser'
+              roles:
+                type: array
+                items:
+                  $ref: '#/definitions/Role'
+          examples:
+            application/json:
+              user:
+                accountId: 2
+                accountName: FeodorFitsner
+                isOwner: false
+                isCollaborator: true
+                userId: 2018
+                fullName: John Smith
+                email: john@smith.com
+                roleId: 3040
+                roleName: My Role
+                successfulBuildNotification: all
+                failedBuildNotification: all
+                notifyWhenBuildStatusChangedOnly: true
+                created: '2014-02-03T20:29:26.6807307+00:00'
+                updated: '2014-03-07T04:26:09.1051534+00:00'
+              roles:
+              - roleId: 4
+                name: Administrator
+                isSystem: true
+                created: '2013-09-26T19:23:39.3615105+00:00'
+              - roleId: 5
+                name: User
+                isSystem: true
+                created: '2013-09-26T19:23:39.3645117+00:00'
+              - roleId: 3040
+                name: My Role
+                isSystem: false
+                created: '2014-03-18T20:12:08.4749886+00:00'
+                updated: '2014-03-18T20:16:06.8803375+00:00'
+    delete:
+      tags:
+      - Team
+      summary: Delete collaborator
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#delete-collaborator'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /roles:
+    get:
+      tags:
+      - Team
+      summary: Get roles
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-roles'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+          examples:
+            application/json:
+            - roleId: 4
+              name: Administrator
+              isSystem: true
+              created: '2013-09-26T19:23:39.3615105+00:00'
+            - roleId: 5
+              name: User
+              isSystem: true
+              created: '2013-09-26T19:23:39.3645117+00:00'
+    post:
+      tags:
+      - Team
+      summary: Add role
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#add-role'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RoleCreate'
+          x-examples:
+            application/json:
+              name: My Role
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        # FIXME:  Docs say it returns RoleWithUser.  Is it really different?
+        '204':
+          description: Success
+    put:
+      tags:
+      - Team
+      summary: Update role
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#update-role'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RoleWithGroups'
+          x-examples:
+            application/json:
+              roleId: 3040
+              name: My Role
+              isSystem: false
+              created: '2014-03-18T20:12:08.4749886+00:00'
+              groups:
+              - name: Projects
+                permissions:
+                - name: ManageProjects
+                  description: Create, delete projects, update project settings
+                  allowed: true
+                - name: UpdateProjectSettings
+                  description: Update project settings
+                  allowed: true
+                - name: RunProjectBuild
+                  description: Run project builds
+                  allowed: false
+                - name: DeleteProjectBuilds
+                  description: Delete project builds
+                  allowed: false
+              - name: Environments
+                permissions:
+                - name: ManageEnvironments
+                  description: Create, delete projects, update environment settings
+                  allowed: false
+                - name: UpdateEnvironmentSettings
+                  description: Update environment settings
+                  allowed: false
+                - name: DeployToEnvironment
+                  description: Deploy to environment
+                  allowed: false
+              - name: Account
+                permissions:
+                - name: UpdateAccountDetails
+                  description: Update account details
+                  allowed: false
+              - name: Users
+                permissions:
+                - name: AddUser
+                  description: Add new user
+                  allowed: false
+                - name: UpdateUserDetails
+                  description: Update user details
+                  allowed: false
+                - name: DeleteUser
+                  description: Delete user
+                  allowed: false
+              - name: Roles
+                permissions:
+                - name: AddRole
+                  description: Add new role
+                  allowed: false
+                - name: UpdateRoleDetails
+                  description: Update role details
+                  allowed: false
+                - name: DeleteRole
+                  description: Delete role
+                  allowed: false
+              - name: User
+                permissions:
+                - name: ConfigureApiKeys
+                  description: Generate API keys
+                  allowed: false
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        # FIXME:  Docs say it returns RoleWithUser.  Is it really different?
+        '204':
+          description: Success
+
+  /roles/{roleId}:
+    parameters:
+    - $ref: '#/parameters/roleId'
+    get:
+      tags:
+      - Team
+      summary: Get role
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-role'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RoleWithGroups'
+          examples:
+            application/json:
+              roleId: 3040
+              name: My Role
+              isSystem: false
+              created: '2014-03-18T20:12:08.4749886+00:00'
+              groups:
+              - name: Projects
+                permissions:
+                - name: ManageProjects
+                  description: Create, delete projects, update project settings
+                  allowed: false
+                - name: UpdateProjectSettings
+                  description: Update project settings
+                  allowed: false
+                - name: RunProjectBuild
+                  description: Run project builds
+                  allowed: false
+                - name: DeleteProjectBuilds
+                  description: Delete project builds
+                  allowed: false
+              - name: Environments
+                permissions:
+                - name: ManageEnvironments
+                  description: Create, delete projects, update environment settings
+                  allowed: false
+                - name: UpdateEnvironmentSettings
+                  description: Update environment settings
+                  allowed: false
+                - name: DeployToEnvironment
+                  description: Deploy to environment
+                  allowed: false
+              - name: Account
+                permissions:
+                - name: UpdateAccountDetails
+                  description: Update account details
+                  allowed: false
+              - name: Users
+                permissions:
+                - name: AddUser
+                  description: Add new user
+                  allowed: false
+                - name: UpdateUserDetails
+                  description: Update user details
+                  allowed: false
+                - name: DeleteUser
+                  description: Delete user
+                  allowed: false
+              - name: Roles
+                permissions:
+                - name: AddRole
+                  description: Add new role
+                  allowed: false
+                - name: UpdateRoleDetails
+                  description: Update role details
+                  allowed: false
+                - name: DeleteRole
+                  description: Delete role
+                  allowed: false
+              - name: User
+                permissions:
+                - name: ConfigureApiKeys
+                  description: Generate API keys
+                  allowed: false
+    delete:
+      tags:
+      - Team
+      summary: Delete role
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#delete-role'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  ### Team }}}
+  ### {{{ Projects and Builds
+
+  /projects:
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get projects
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-projects'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+          examples:
+            application/json:
+            - projectId: 19096
+              accountId: 2
+              accountName: FeodorFitsner
+              builds:
+              - buildId: 23864
+                jobs: []
+                buildNumber: 3
+                version: 1.0.3
+                message: replaced with command [skip ci]
+                branch: master
+                commitId: c2892a70d60c96c1b65a7c665ab806b7731fea8a
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-08-15T22:05:54+00:00'
+                messages: []
+                status: success
+                started: '2014-08-15T22:36:38.1757886+00:00'
+                finished: '2014-08-15T22:37:00.6171479+00:00'
+                created: '2014-08-15T22:33:15.9833328+00:00'
+                updated: '2014-08-15T22:37:00.6171479+00:00'
+              name: appveyor-artifact-test
+              slug: appveyor-artifact-test
+              repositoryType: gitHub
+              repositoryScm: git
+              repositoryName: FeodorFitsner/appveyor-artifact-test
+              repositoryBranch: master
+              isPrivate: false
+              skipBranchesWithoutAppveyorYml: false
+              nuGetFeed:
+                id: appveyor-artifact-test-j8kk0o
+                name: Project appveyor-artifact-test
+                publishingEnabled: false
+                created: '2014-08-15T22:04:21.3111546+00:00'
+              created: '2014-08-15T22:04:19.2868375+00:00'
+    post:
+      tags:
+      - Projects and Builds
+      summary: Add project
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#add-project'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProjectCreate'
+          x-examples:
+            application/json:
+              repositoryProvider: gitHub
+              repositoryName: FeodorFitsner/demo-app
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+          examples:
+            application/json:
+              projectId: 43682
+              accountId: 2
+              accountName: appvyr
+              builds: []
+              name: demo-app
+              slug: demo-app-335
+              repositoryType: gitHub
+              repositoryScm: git
+              repositoryName: FeodorFitsner/demo-app
+              isPrivate: false
+              skipBranchesWithoutAppveyorYml: false
+              created: '2014-08-16T00:52:15.6604826+00:00'
+    put:
+      tags:
+      - Projects and Builds
+      summary: Update project
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Project'
+          x-examples:
+            application/json:
+              projectId: 43682
+              accountId: 2
+              accountName: appvyr
+              builds: []
+              name: demo-app
+              slug: demo-app-335
+              versionFormat: 1.0.{build}
+              nextBuildNumber: 1
+              repositoryType: gitHub
+              repositoryScm: git
+              repositoryName: FeodorFitsner/demo-app
+              repositoryBranch: master
+              webhookId: rca5vb5qqu
+              webhookUrl: https://ci.appveyor.com/api/github/webhook?id=rca5vb5qqu
+              isPrivate: false
+              ignoreAppveyorYml: false
+              skipBranchesWithoutAppveyorYml: false
+              configuration:
+                initScripts: []
+                includeBranches: []
+                excludeBranches: []
+                onBuildSuccessScripts: []
+                onBuildErrorScripts: []
+                patchAssemblyInfo: false
+                assemblyInfoFile: '**\AssemblyInfo.*'
+                assemblyVersionFormat: '{version}'
+                assemblyFileVersionFormat: '{version}'
+                assemblyInformationalVersionFormat: '{version}'
+                operatingSystem: []
+                services: []
+                shallowClone: false
+                environmentVariables: []
+                environmentVariablesMatrix: []
+                installScripts: []
+                hostsEntries: []
+                buildMode: msbuild
+                platform: []
+                configuration: []
+                packageWebApplicationProjects: false
+                packageWebApplicationProjectsXCopy: false
+                packageAzureCloudServiceProjects: false
+                packageNuGetProjects: false
+                msBuildVerbosity: minimal
+                buildScripts: []
+                beforeBuildScripts: []
+                afterBuildScripts: []
+                testMode: auto
+                testAssemblies: []
+                testCategories: []
+                testCategoriesMatrix: []
+                testScripts: []
+                beforeTestScripts: []
+                afterTestScripts: []
+                deployMode: providers
+                deployments: []
+                deployScripts: []
+                beforeDeployScripts: []
+                afterDeployScripts: []
+                matrixFastFinish: false
+                matrixAllowFailures: []
+                artifacts: []
+                notifications: []
+              nuGetFeed:
+                id: demo-app-tw5iw2wk3bl1
+                name: Project demo-app
+                publishingEnabled: false
+                created: '2014-08-16T00:52:16.9886427+00:00'
+              securityDescriptor:
+                accessRightDefinitions:
+                - name: View
+                  description: View
+                - name: RunBuild
+                  description: Run build
+                - name: Update
+                  description: Update settings
+                - name: Delete
+                  description: Delete project
+                roleAces:
+                - roleId: 4
+                  name: Administrator
+                  isAdmin: true
+                  accessRights:
+                  - name: View
+                    allowed: true
+                  - name: RunBuild
+                    allowed: true
+                  - name: Update
+                    allowed: true
+                  - name: Delete
+                    allowed: true
+                - roleId: 5
+                  name: User
+                  isAdmin: false
+                  accessRights:
+                  - name: View
+                  - name: RunBuild
+                  - name: Update
+                  - name: Delete
+              created: '2014-08-16T00:52:15.6604826+00:00'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /projects/{accountName}/{projectSlug}:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project last build
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-build'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              project:
+                $ref: '#/definitions/Project'
+              build:
+                $ref: '#/definitions/Build'
+          examples:
+            application/json:
+              project:
+                projectId: 38907
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: nuget-test
+                slug: nuget-test
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: FeodorFitsner/nuget-test
+                repositoryBranch: master
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                nuGetFeed:
+                  id: nuget-test-23spw2w
+                  name: Project nuget-test
+                  publishingEnabled: false
+                  created: '2014-07-19T10:23:05.5160273+00:00'
+                securityDescriptor: {}
+                created: '2014-07-19T10:23:03.8005134+00:00'
+                updated: '2014-08-01T05:25:15.4119745+00:00'
+              build:
+                buildId: 134173
+                jobs:
+                - jobId: 9r2qufuu8
+                  name: ''
+                  allowFailure: false
+                  messagesCount: 0
+                  compilationMessagesCount: 0
+                  compilationErrorsCount: 0
+                  compilationWarningsCount: 0
+                  testsCount: 0
+                  passedTestsCount: 0
+                  failedTestsCount: 0
+                  artifactsCount: 0
+                  status: success
+                  started: '2014-08-14T05:41:49.1061831+00:00'
+                  finished: '2014-08-14T05:42:45.1102797+00:00'
+                  created: '2014-08-14T05:39:27.3902557+00:00'
+                  updated: '2014-08-14T05:42:45.477213+00:00'
+                buildNumber: 45
+                version: 1.0.45
+                message: AssemblyInfo patching
+                branch: master
+                commitId: 85da1fb810ae89744abad83e75c13483dd740258
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-07-03T07:56:15+00:00'
+                messages: []
+                status: success
+                started: '2014-08-14T05:41:49.1686804+00:00'
+                finished: '2014-08-14T05:42:45.5709599+00:00'
+                created: '2014-08-14T05:39:26.2946368+00:00'
+                updated: '2014-08-14T05:42:45.5709599+00:00'
+    delete:
+      tags:
+      - Projects and Builds
+      summary: Delete project
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#delete-project'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /projects/{accountName}/{projectSlug}/branch/{buildBranch}:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    - $ref: '#/parameters/buildBranch'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project last branch build
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-branch-build'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectBuild'
+          # FIXME: Same example as /api/projects/{accountName}/{projectSlug}
+          examples:
+            application/json:
+              project:
+                projectId: 38907
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: nuget-test
+                slug: nuget-test
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: FeodorFitsner/nuget-test
+                repositoryBranch: master
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                nuGetFeed:
+                  id: nuget-test-23spw2w
+                  name: Project nuget-test
+                  publishingEnabled: false
+                  created: '2014-07-19T10:23:05.5160273+00:00'
+                securityDescriptor: {}
+                created: '2014-07-19T10:23:03.8005134+00:00'
+                updated: '2014-08-01T05:25:15.4119745+00:00'
+              build:
+                buildId: 134173
+                jobs:
+                - jobId: 9r2qufuu8
+                  name: ''
+                  allowFailure: false
+                  messagesCount: 0
+                  compilationMessagesCount: 0
+                  compilationErrorsCount: 0
+                  compilationWarningsCount: 0
+                  testsCount: 0
+                  passedTestsCount: 0
+                  failedTestsCount: 0
+                  artifactsCount: 0
+                  status: success
+                  started: '2014-08-14T05:41:49.1061831+00:00'
+                  finished: '2014-08-14T05:42:45.1102797+00:00'
+                  created: '2014-08-14T05:39:27.3902557+00:00'
+                  updated: '2014-08-14T05:42:45.477213+00:00'
+                buildNumber: 45
+                version: 1.0.45
+                message: AssemblyInfo patching
+                branch: master
+                commitId: 85da1fb810ae89744abad83e75c13483dd740258
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-07-03T07:56:15+00:00'
+                messages: []
+                status: success
+                started: '2014-08-14T05:41:49.1686804+00:00'
+                finished: '2014-08-14T05:42:45.5709599+00:00'
+                created: '2014-08-14T05:39:26.2946368+00:00'
+                updated: '2014-08-14T05:42:45.5709599+00:00'
+
+  /projects/{accountName}/{projectSlug}/build/{buildVersion}:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    - $ref: '#/parameters/buildVersion'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project build by version
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-build-by-version'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectBuild'
+          # FIXME: Same example as /api/projects/{accountName}/{projectSlug}
+          examples:
+            application/json:
+              project:
+                projectId: 38907
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: nuget-test
+                slug: nuget-test
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: FeodorFitsner/nuget-test
+                repositoryBranch: master
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                nuGetFeed:
+                  id: nuget-test-23spw2w
+                  name: Project nuget-test
+                  publishingEnabled: false
+                  created: '2014-07-19T10:23:05.5160273+00:00'
+                securityDescriptor: {}
+                created: '2014-07-19T10:23:03.8005134+00:00'
+                updated: '2014-08-01T05:25:15.4119745+00:00'
+              build:
+                buildId: 134173
+                jobs:
+                - jobId: 9r2qufuu8
+                  name: ''
+                  allowFailure: false
+                  messagesCount: 0
+                  compilationMessagesCount: 0
+                  compilationErrorsCount: 0
+                  compilationWarningsCount: 0
+                  testsCount: 0
+                  passedTestsCount: 0
+                  failedTestsCount: 0
+                  artifactsCount: 0
+                  status: success
+                  started: '2014-08-14T05:41:49.1061831+00:00'
+                  finished: '2014-08-14T05:42:45.1102797+00:00'
+                  created: '2014-08-14T05:39:27.3902557+00:00'
+                  updated: '2014-08-14T05:42:45.477213+00:00'
+                buildNumber: 45
+                version: 1.0.45
+                message: AssemblyInfo patching
+                branch: master
+                commitId: 85da1fb810ae89744abad83e75c13483dd740258
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-07-03T07:56:15+00:00'
+                messages: []
+                status: success
+                started: '2014-08-14T05:41:49.1686804+00:00'
+                finished: '2014-08-14T05:42:45.5709599+00:00'
+                created: '2014-08-14T05:39:26.2946368+00:00'
+                updated: '2014-08-14T05:42:45.5709599+00:00'
+
+  /projects/{accountName}/{projectSlug}/history:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    - $ref: '#/parameters/recordsNumber'
+    - $ref: '#/parameters/startBuildId'
+    - $ref: '#/parameters/branch'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project history
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-history'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectBuilds'
+          examples:
+            application/json:
+              project:
+                projectId: 42438
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: wix-test
+                slug: wix-test
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: FeodorFitsner/wix-test
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                created: '2014-08-09T00:30:43.3327131+00:00'
+              builds:
+              - buildId: 134174
+                jobs: []
+                buildNumber: 5
+                version: 1.0.5
+                message: Enabled diag mode
+                branch: master
+                commitId: d19740243e3ec5497345de0f7d828e66a7cd1a6b
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-08-10T14:08:16+00:00'
+                messages: []
+                status: success
+                started: '2014-08-14T05:42:17.2696755+00:00'
+                finished: '2014-08-14T05:43:47.4732355+00:00'
+                created: '2014-08-14T05:39:30.8845902+00:00'
+                updated: '2014-08-14T05:43:47.4732355+00:00'
+              - buildId: 129289
+                jobs: []
+                buildNumber: 3
+                version: 1.0.3
+                message: Added appveyor.yml
+                branch: master
+                commitId: 28c6eec932c0e21eca5bb5571a722f850aa8bf6f
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-08-09T00:33:34+00:00'
+                messages: []
+                status: success
+                started: '2014-08-09T15:42:45.7878479+00:00'
+                finished: '2014-08-09T15:44:15.5828009+00:00'
+                created: '2014-08-09T15:42:38.8315273+00:00'
+                updated: '2014-08-09T15:44:15.5828009+00:00'
+
+  /projects/{accountName}/{projectSlug}/deployments:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project deployments
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-deployments'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectDeploymentEnvironments'
+          examples:
+            application/json:
+              project:
+                projectId: 22321
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: simple-web
+                slug: simple-web
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: AppVeyor/simple-web
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                securityDescriptor: {}
+                created: '2014-05-08T18:38:57.9163293+00:00'
+                updated: '2014-07-14T10:16:26.9351867+00:00'
+              deployments:
+              - environment:
+                  deploymentEnvironmentId: 27
+                  name: agent test
+                  provider: Agent
+                  created: '2014-04-01T17:56:41.30982+00:00'
+                  updated: '2014-08-12T22:35:51.9723883+00:00'
+                deployment:
+                  deploymentId: 19475
+                  build:
+                    buildId: 132746
+                    jobs: []
+                    buildNumber: 38
+                    version: 1.0.38
+                    message: Removed Start-Website
+                    branch: master
+                    commitId: c397ba5d17dd17b994375405f560e4922207da1e
+                    authorName: Feodor Fitsner
+                    authorUsername: FeodorFitsner
+                    committerName: Feodor Fitsner
+                    committerUsername: FeodorFitsner
+                    committed: '2014-08-12T22:56:00+00:00'
+                    messages: []
+                    status: success
+                    started: '2014-08-12T22:56:25.8575967+00:00'
+                    finished: '2014-08-12T22:58:05.7595508+00:00'
+                    created: '2014-08-12T22:56:09.9208493+00:00'
+                    updated: '2014-08-12T22:58:05.7595508+00:00'
+                  environment:
+                    deploymentEnvironmentId: 27
+                    name: agent test
+                    provider: Agent
+                    created: '2014-04-01T17:56:41.30982+00:00'
+                    updated: '2014-08-12T22:35:51.9723883+00:00'
+                  jobs:
+                  - jobId: jnpbcc77s4w278e4
+                    name: Deployment
+                    messagesCount: 0
+                    status: success
+                    started: '2014-08-12T23:06:10.8776088+00:00'
+                    finished: '2014-08-12T23:06:24.3361102+00:00'
+                    created: '2014-08-12T23:06:07.9009315+00:00'
+                    updated: '2014-08-12T23:06:24.9390847+00:00'
+                  - jobId: nbgyf7pn65d4agyr
+                    name: TEST-AGENT-DEPL
+                    messagesCount: 0
+                    status: success
+                    started: '2014-08-12T23:06:14.8148958+00:00'
+                    finished: '2014-08-12T23:06:21.9647266+00:00'
+                    created: '2014-08-12T23:06:14.8148958+00:00'
+                    updated: '2014-08-12T23:06:22.3768791+00:00'
+                  status: success
+                  started: '2014-08-12T23:06:10.8776088+00:00'
+                  finished: '2014-08-12T23:06:25.0502019+00:00'
+                  created: '2014-08-12T23:06:07.9009315+00:00'
+                  updated: '2014-08-12T23:06:25.0502019+00:00'
+
+  /projects/{accountName}/{projectSlug}/settings:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project settings
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-settings'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectSettings'
+          examples:
+            application/json:
+              project:
+                projectId: 22321
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: simple-web
+                slug: simple-web
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: AppVeyor/simple-web
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                securityDescriptor:
+                  accessRightDefinitions:
+                  - name: View
+                    description: View
+                  - name: RunBuild
+                    description: Run build
+                  - name: Update
+                    description: Update settings
+                  - name: Delete
+                    description: Delete project
+                  roleAces:
+                  - roleId: 4
+                    name: Administrator
+                    isAdmin: true
+                    accessRights:
+                    - name: View
+                      allowed: true
+                    - name: RunBuild
+                      allowed: true
+                    - name: Update
+                      allowed: true
+                    - name: Delete
+                      allowed: true
+                  - roleId: 5
+                    name: User
+                    isAdmin: false
+                    accessRights:
+                    - name: View
+                    - name: RunBuild
+                    - name: Update
+                    - name: Delete
+                created: '2014-05-08T18:38:57.9163293+00:00'
+                updated: '2014-07-14T10:16:26.9351867+00:00'
+              settings:
+                projectId: 22321
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: simple-web
+                slug: simple-web
+                versionFormat: 1.0.{build}
+                nextBuildNumber: 41
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: AppVeyor/simple-web
+                repositoryBranch: master
+                webhookId: k783di7br
+                webhookUrl: https://ci.appveyor.com/api/github/webhook?id=k783di7br
+                isPrivate: false
+                ignoreAppveyorYml: false
+                skipBranchesWithoutAppveyorYml: false
+                configuration:
+                  initScripts: []
+                  includeBranches: []
+                  excludeBranches: []
+                  onBuildSuccessScripts: []
+                  onBuildErrorScripts: []
+                  patchAssemblyInfo: false
+                  assemblyInfoFile: '**\AssemblyInfo.*'
+                  assemblyVersionFormat: '{version}'
+                  assemblyFileVersionFormat: '{version}'
+                  assemblyInformationalVersionFormat: '{version}'
+                  operatingSystem: []
+                  services: []
+                  shallowClone: false
+                  environmentVariables: []
+                  environmentVariablesMatrix: []
+                  installScripts: []
+                  hostsEntries: []
+                  buildMode: msbuild
+                  platform: []
+                  configuration: []
+                  packageWebApplicationProjects: false
+                  packageWebApplicationProjectsXCopy: false
+                  packageAzureCloudServiceProjects: false
+                  packageNuGetProjects: false
+                  msBuildVerbosity: minimal
+                  buildScripts: []
+                  beforeBuildScripts: []
+                  afterBuildScripts: []
+                  testMode: auto
+                  testAssemblies: []
+                  testCategories: []
+                  testCategoriesMatrix: []
+                  testScripts: []
+                  beforeTestScripts: []
+                  afterTestScripts: []
+                  deployMode: providers
+                  deployments: []
+                  deployScripts: []
+                  beforeDeployScripts: []
+                  afterDeployScripts: []
+                  matrixFastFinish: false
+                  matrixAllowFailures: []
+                  artifacts: []
+                  notifications: []
+                nuGetFeed:
+                  id: simple-web-0r50wgb1st6q
+                  name: Project simple-web
+                  publishingEnabled: false
+                  created: '2014-05-08T18:38:59.2455842+00:00'
+                securityDescriptor:
+                  accessRightDefinitions:
+                  - name: View
+                    description: View
+                  - name: RunBuild
+                    description: Run build
+                  - name: Update
+                    description: Update settings
+                  - name: Delete
+                    description: Delete project
+                  roleAces:
+                  - roleId: 4
+                    name: Administrator
+                    isAdmin: true
+                    accessRights:
+                    - name: View
+                      allowed: true
+                    - name: RunBuild
+                      allowed: true
+                    - name: Update
+                      allowed: true
+                    - name: Delete
+                      allowed: true
+                  - roleId: 5
+                    name: User
+                    isAdmin: false
+                    accessRights:
+                    - name: View
+                    - name: RunBuild
+                    - name: Update
+                    - name: Delete
+                created: '2014-05-08T18:38:57.9163293+00:00'
+                updated: '2014-07-14T10:16:26.9351867+00:00'
+              images:
+              - name: test-win2012-r2
+              - name: Windows Server 2012
+              - name: Windows Server 2012 R2
+
+  /projects/{accountName}/{projectSlug}/settings/yaml:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Get project settings in YAML
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-settings-in-yaml'
+      produces:
+      - text/plain
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectSettings'
+          examples:
+            text/plain: |
+              version: 1.0.{build}
+              build:
+                project: MySolution.sln
+                verbosity: minimal
+                publish_wap: true
+                ...
+    put:
+      tags:
+      - Projects and Builds
+      summary: Update project settings in YAML
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project-settings-in-yaml'
+      consumes:
+      - text/plain
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProjectSettings'
+          x-examples:
+            text/plain: |
+              version: 1.0.{build}
+              build:
+                project: MySolution.sln
+                verbosity: minimal
+                publish_wap: true
+                ...
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /projects/{accountName}/{projectSlug}/settings/build-number:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    put:
+      tags:
+      - Projects and Builds
+      summary: Update project build number
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project-build-number'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              nextBuildNumber:
+                type: integer
+                minimum: 0
+            required: [nextBuildNumber]
+          x-examples:
+            application/json:
+              nextBuildNumber: 35
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /projects/{accountName}/{projectSlug}/buildcache:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    delete:
+      tags:
+      - Projects and Builds
+      summary: Delete project build cache
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#delete-project-build-cache'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /builds:
+    post:
+      tags:
+      - Projects and Builds
+      summary: Start build of branch most recent commit
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#start-build-of-branch-most-recent-commit'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/BuildCreate'
+          x-examples:
+            application/json:
+              accountName: your-account-name
+              projectSlug: project-slug-from-url
+              branch: master
+              environmentVariables:
+                my_var: value
+                another_var: another value
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Build'
+          examples:
+            application/json:
+              buildId: 136709
+              jobs: []
+              buildNumber: 7
+              version: 1.0.7
+              message: replaced with command [skip ci]
+              branch: master
+              commitId: c2892a70d60c96c1b65a7c665ab806b7731fea8a
+              authorName: Feodor Fitsner
+              authorUsername: FeodorFitsner
+              committerName: Feodor Fitsner
+              committerUsername: FeodorFitsner
+              committed: '2014-08-15T22:05:54+00:00'
+              messages: []
+              status: queued
+              created: '2014-08-16T00:40:38.1703914+00:00'
+
+  /builds/{accountName}/{projectSlug}/{buildVersion}:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    - $ref: '#/parameters/buildVersion'
+    delete:
+      tags:
+      - Projects and Builds
+      summary: Cancel build
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#cancel-build'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /buildjobs/{jobId}/log:
+    parameters:
+    - $ref: '#/parameters/jobId'
+    get:
+      tags:
+      - Projects and Builds
+      summary: Download build log
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
+      produces:
+      # Should be plain text, but isn't
+      #- text/plain
+      - application/octet-stream
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+
+  ### Projects and Builds }}}
+  ### {{{ Environments and Deployments
+
+  /environments:
+    get:
+      tags:
+      - Environments and Deployments
+      summary: Get environments
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-environments'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeploymentEnvironment'
+          examples:
+            application/json:
+            - deploymentEnvironmentId: 14
+              name: azure-blob-1
+              provider: AzureBlob
+              created: '2014-01-23T18:13:52.2268502+00:00'
+              updated: '2014-06-02T18:13:32.5106126+00:00'
+            - deploymentEnvironmentId: 12
+              name: azure-deploy-test
+              provider: AzureCS
+              created: '2014-01-23T06:46:31.1215919+00:00'
+              updated: '2014-08-11T18:48:06.2002179+00:00'
+    post:
+      tags:
+      - Environments and Deployments
+      summary: Add environment
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#add-environment'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeploymentEnvironmentCreate'
+          x-examples:
+            application/json:
+              name: production
+              provider: FTP
+              settings:
+                providerSettings:
+                - name: server
+                  value:
+                    value: ftp.myserver.com
+                    isEncrypted: false
+                - name: username
+                  value:
+                    value: ftp-user
+                    isEncrypted: false
+                - name: password
+                  value:
+                    value: password
+                    isEncrypted: true
+                environmentVariables:
+                - name: my-var
+                  value:
+                    value: '123'
+                    isEncrypted: false
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+          examples:
+            application/json:
+              deploymentEnvironmentId: 3018
+              name: production
+              provider: FTP
+              environmentAccessKey: gi3ttevuk7a123
+              settings:
+                providerSettings:
+                - name: server
+                  value:
+                    isEncrypted: false
+                    value: ftp.myserver.com
+                - name: username
+                  value:
+                    isEncrypted: false
+                    value: ftp-user
+                - name: password
+                  value:
+                    isEncrypted: true
+                    value: password
+                environmentVariables:
+                - name: my-var
+                  value:
+                    isEncrypted: false
+                    value: '123'
+              created: '2014-08-15T23:57:16.1585268+00:00'
+    put:
+      tags:
+      - Environments and Deployments
+      summary: Add environment
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#update-environment'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+          x-examples:
+            application/json:
+              deploymentEnvironmentId: 3018
+              name: production
+              environmentAccessKey: gi3ttevuk7123
+              settings:
+                providerSettings:
+                - name: server
+                  value:
+                    isEncrypted: false
+                    value: ftp.myserver.com
+                - name: username
+                  value:
+                    isEncrypted: false
+                    value: ftp-user
+                - name: password
+                  value:
+                    isEncrypted: true
+                    value: password
+                environmentVariables:
+                - name: my-var
+                  value:
+                    isEncrypted: false
+                    value: '123'
+                provider: FTP
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+          examples:
+            application/json:
+              deploymentEnvironmentId: 3018
+              name: production
+              provider: FTP
+              environmentAccessKey: gi3ttevuk7123
+              settings:
+                providerSettings:
+                - name: server
+                  value:
+                    isEncrypted: false
+                    value: ftp.myserver.com
+                - name: username
+                  value:
+                    isEncrypted: false
+                    value: ftp-user
+                - name: password
+                  value:
+                    isEncrypted: true
+                    value: password
+                environmentVariables:
+                - name: my-var
+                  value:
+                    isEncrypted: false
+                    value: '123'
+              created: '2014-08-15T23:57:16.1585268+00:00'
+              updated: '2014-08-16T00:00:37.6079863+00:00'
+
+  /environments/{deploymentEnvironmentId}/settings:
+    parameters:
+    - $ref: '#/parameters/deploymentEnvironmentId'
+    get:
+      tags:
+      - Environments and Deployments
+      summary: Get environment settings
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-environment-settings'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              environment:
+                $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+          examples:
+            application/json:
+              environment:
+                deploymentEnvironmentId: 14
+                name: azure-blob-1
+                provider: AzureBlob
+                environmentAccessKey: aaabbb12345
+                settings:
+                  providerSettings:
+                  - name: storage_account_name
+                    value:
+                      isEncrypted: false
+                      value: myaccount
+                  - name: storage_access_key
+                    value:
+                      isEncrypted: true
+                      value: 4sc1c7/Qp5buQcZ8N486Ks46mLFbXJVqcJjyv98w==
+                  - name: container
+                    value:
+                      isEncrypted: false
+                      value: test
+                  - name: folder
+                    value:
+                      isEncrypted: false
+                      value: $(appveyor_build_version)
+                  - name: artifact
+                    value:
+                      isEncrypted: false
+                  environmentVariables: []
+                created: '2014-01-23T18:13:52.2268502+00:00'
+                updated: '2014-06-02T18:13:32.5106126+00:00'
+
+  /environments/{deploymentEnvironmentId}/deployments:
+    parameters:
+    - $ref: '#/parameters/deploymentEnvironmentId'
+    get:
+      tags:
+      - Environments and Deployments
+      summary: Get environment deployments
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-environment-deployments'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/DeploymentEnvironmentDeployments'
+          examples:
+            application/json:
+              environment:
+                deploymentEnvironmentId: 14
+                name: azure-blob-1
+                provider: AzureBlob
+                created: '2014-01-23T18:13:52.2268502+00:00'
+                updated: '2014-06-02T18:13:32.5106126+00:00'
+              deployments:
+              - project:
+                  projectId: 15072
+                  accountId: 2
+                  accountName: FeodorFitsner
+                  builds: []
+                  name: simple-web
+                  slug: simple-web
+                  repositoryType: gitHub
+                  repositoryScm: git
+                  repositoryName: AppVeyor/simple-web
+                  isPrivate: false
+                  skipBranchesWithoutAppveyorYml: false
+                  securityDescriptor: {}
+                  created: '2014-05-06T16:38:14.7788393+00:00'
+                  updated: '2014-06-02T21:37:30.9378043+00:00'
+                deployment:
+                  deploymentId: 4120
+                  build:
+                    buildId: 18665
+                    jobs: []
+                    buildNumber: 25
+                    version: 1.0.25
+                    message: 'Merge pull request #3 from FeodorFitsner/master'
+                    messageExtended: Changes to AccountController
+                    branch: master
+                    commitId: ed40bd27f732d162b2185d75921b1cd57191f83b
+                    authorName: Feodor Fitsner
+                    authorUsername: FeodorFitsner
+                    committerName: Feodor Fitsner
+                    committerUsername: FeodorFitsner
+                    committed: '2014-05-08T19:11:38+00:00'
+                    messages: []
+                    status: success
+                    started: '2014-05-22T20:12:11.4475134+00:00'
+                    finished: '2014-05-22T20:12:33.7806881+00:00'
+                    created: '2014-05-22T20:09:53.759355+00:00'
+                    updated: '2014-05-22T20:12:33.7806881+00:00'
+                  environment:
+                    deploymentEnvironmentId: 14
+                    name: azure-blob-1
+                    provider: AzureBlob
+                    created: '2014-01-23T18:13:52.2268502+00:00'
+                    updated: '2014-06-02T18:13:32.5106126+00:00'
+                  jobs:
+                  - jobId: 1696fh3a2w5ng99y
+                    name: Deployment
+                    messagesCount: 0
+                    status: success
+                    started: '2014-07-27T09:59:58.3955159+00:00'
+                    finished: '2014-07-27T10:00:11.5995296+00:00'
+                    created: '2014-07-27T09:59:57.0171035+00:00'
+                    updated: '2014-07-27T10:00:16.163082+00:00'
+                  status: success
+                  started: '2014-06-02T18:20:07.9871288+00:00'
+                  finished: '2014-06-02T18:20:25.11916+00:00'
+                  created: '2014-06-02T18:20:07.2833871+00:00'
+                  updated: '2014-06-02T18:20:25.11916+00:00'
+
+  /environments/{deploymentEnvironmentId}:
+    parameters:
+    - $ref: '#/parameters/deploymentEnvironmentId'
+    delete:
+      tags:
+      - Environments and Deployments
+      summary: Delete environment
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#delete-environment'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /deployments/{deploymentId}:
+    parameters:
+    - $ref: '#/parameters/deploymentId'
+    get:
+      tags:
+      - Environments and Deployments
+      summary: Get deployment
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-deployment'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectDeploymentEnvironment'
+          examples:
+            application/json:
+              project:
+                projectId: 22321
+                accountId: 2
+                accountName: appvyr
+                builds: []
+                name: simple-web
+                slug: simple-web
+                repositoryType: gitHub
+                repositoryScm: git
+                repositoryName: AppVeyor/simple-web
+                isPrivate: false
+                skipBranchesWithoutAppveyorYml: false
+                securityDescriptor: {}
+                created: '2014-05-08T18:38:57.9163293+00:00'
+                updated: '2014-07-14T10:16:26.9351867+00:00'
+              deployment:
+                deploymentId: 19475
+                build:
+                  buildId: 132746
+                  jobs: []
+                  buildNumber: 38
+                  version: 1.0.38
+                  message: Removed Start-Website
+                  branch: master
+                  commitId: c397ba5d17dd17b994375405f560e4922207da1e
+                  authorName: Feodor Fitsner
+                  authorUsername: FeodorFitsner
+                  committerName: Feodor Fitsner
+                  committerUsername: FeodorFitsner
+                  committed: '2014-08-12T22:56:00+00:00'
+                  messages: []
+                  status: success
+                  started: '2014-08-12T22:56:25.8575967+00:00'
+                  finished: '2014-08-12T22:58:05.7595508+00:00'
+                  created: '2014-08-12T22:56:09.9208493+00:00'
+                  updated: '2014-08-12T22:58:05.7595508+00:00'
+                environment:
+                  deploymentEnvironmentId: 27
+                  name: agent test
+                  provider: Agent
+                  created: '2014-04-01T17:56:41.30982+00:00'
+                  updated: '2014-08-12T22:35:51.9723883+00:00'
+                jobs:
+                - jobId: jnpbcc77s4w278e4
+                  name: Deployment
+                  messagesCount: 0
+                  status: success
+                  started: '2014-08-12T23:06:10.8776088+00:00'
+                  finished: '2014-08-12T23:06:24.3361102+00:00'
+                  created: '2014-08-12T23:06:07.9009315+00:00'
+                  updated: '2014-08-12T23:06:24.9390847+00:00'
+                status: success
+                started: '2014-08-12T23:06:10.8776088+00:00'
+                finished: '2014-08-12T23:06:25.0502019+00:00'
+                created: '2014-08-12T23:06:07.9009315+00:00'
+                updated: '2014-08-12T23:06:25.0502019+00:00'
+
+  /deployments:
+    post:
+      tags:
+      - Environments and Deployments
+      summary: Start deployment
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#start-deployment'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeploymentCreate'
+          x-examples:
+            application/json:
+              environmentName: environment-to-deploy
+              accountName: your-account-name
+              projectSlug: project-slug-from-url
+              buildVersion: 1.2.0
+              buildJobId: sfke9239ydzf
+              environmentVariables:
+                server: myserver.com
+                another_var: another value
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Deployment'
+          examples:
+            application/json:
+              deploymentId: 19475
+              build:
+                buildId: 132746
+                jobs: []
+                buildNumber: 38
+                version: 1.0.38
+                message: Removed Start-Website
+                branch: master
+                commitId: c397ba5d17dd17b994375405f560e4922207da1e
+                authorName: Feodor Fitsner
+                authorUsername: FeodorFitsner
+                committerName: Feodor Fitsner
+                committerUsername: FeodorFitsner
+                committed: '2014-08-12T22:56:00+00:00'
+                messages: []
+                status: success
+                started: '2014-08-12T22:56:25.8575967+00:00'
+                finished: '2014-08-12T22:58:05.7595508+00:00'
+                created: '2014-08-12T22:56:09.9208493+00:00'
+                updated: '2014-08-12T22:58:05.7595508+00:00'
+              environment:
+                deploymentEnvironmentId: 27
+                name: agent test
+                provider: Agent
+                created: '2014-04-01T17:56:41.30982+00:00'
+                updated: '2014-08-12T22:35:51.9723883+00:00'
+              jobs:
+              - jobId: jnpbcc77s4w278e4
+                name: Deployment
+                messagesCount: 0
+                status: success
+                started: '2014-08-12T23:06:10.8776088+00:00'
+                finished: '2014-08-12T23:06:24.3361102+00:00'
+                created: '2014-08-12T23:06:07.9009315+00:00'
+                updated: '2014-08-12T23:06:24.9390847+00:00'
+              status: success
+              started: '2014-08-12T23:06:10.8776088+00:00'
+              finished: '2014-08-12T23:06:25.0502019+00:00'
+              created: '2014-08-12T23:06:07.9009315+00:00'
+              updated: '2014-08-12T23:06:25.0502019+00:00'
+
+  /deployments/stop:
+    delete:
+      tags:
+      - Environments and Deployments
+      summary: Cancel deployment
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/environments-deployments/#cancel-deployment'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              deploymentId:
+                type: integer
+                minimum: 0
+            required: [deploymentId]
+          x-examples:
+            application/json:
+              deploymentId: 123
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  ### Environments and Deployments }}}
+
+# Suppress incorrect swagger-editor warnings for discriminator subtypes
+# https://github.com/swagger-api/swagger-editor/issues/765#issuecomment-256618196
+x-suppress-warning:
+# Group permissions
+- $ref: '#/definitions/Account'
+- $ref: '#/definitions/BuildEnvironment'
+- $ref: '#/definitions/Environments'
+- $ref: '#/definitions/Projects'
+- $ref: '#/definitions/Roles'
+- $ref: '#/definitions/User'
+- $ref: '#/definitions/Users'
+# Notifications
+- $ref: '#/definitions/Campfire'
+- $ref: '#/definitions/Email'
+- $ref: '#/definitions/GitHubPullRequest'
+- $ref: '#/definitions/HipChat'
+- $ref: '#/definitions/Slack'
+- $ref: '#/definitions/Webhook'
+- $ref: '#/definitions/VSOTeamRoom'
+
+# vim: set foldmethod=marker :
