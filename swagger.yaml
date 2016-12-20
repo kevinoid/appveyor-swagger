@@ -1,6 +1,6 @@
 swagger: '2.0'
 
-# Document metadata
+# API metadata
 info:
   title: AppVeyor REST API
   version: 0.0.20161219
