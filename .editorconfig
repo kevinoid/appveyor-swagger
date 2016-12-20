@@ -1,0 +1,13 @@
+# Shared editor configuration <http://editorconfig.org>
+
+# This is the top-most EditorConfig file which should apply to files below
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,yaml,yml}]
+indent_size = 2
+indent_style = space
