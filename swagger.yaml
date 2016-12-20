@@ -4,7 +4,18 @@ swagger: '2.0'
 info:
   title: AppVeyor REST API
   version: 0.0.20161219
-  description: http://help.appveyor.com/discussions
+  description: |
+    The AppVeyor REST API provides a RESTful way to interact with the AppVeyor
+    service.  This includes managing projects, builds, deployments, and the
+    teams that build them.
+
+    Additional help and discussion of the AppVeyor REST API is available at
+    http://help.appveyor.com/discussions
+
+    This Swagger definition is an **unofficial** description of the AppVeyor
+    REST API maintained at https://github.com/kevinoid/appveyor-swagger
+    Please report any issues or suggestions for this Swagger definition at
+    https://github.com/kevinoid/appveyor-swagger/issues/new
   contact:
     name: AppVeyor Team
     email: team@appveyor.com
