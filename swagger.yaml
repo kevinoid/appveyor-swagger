@@ -1195,8 +1195,8 @@ definitions:
         minimum: 1
       buildCloud:
         type: array
-        # TODO: Determine item type
-        items: {}
+        items:
+          $ref: '#/definitions/StringValueObject'
       operatingSystem:
         title: Build worker image
         type: array
@@ -1529,8 +1529,8 @@ definitions:
           $ref: '#/definitions/Image'
       buildClouds:
         type: array
-        # TODO: Determine item type
-        items: {}
+        items:
+          $ref: '#/definitions/StringValueObject'
       defaultImageName:
         type: string
     example:
