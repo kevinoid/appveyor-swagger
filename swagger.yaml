@@ -2074,8 +2074,8 @@ definitions:
           format: uri
         headers:
           type: array
-          # TODO: Determine type
-          items: {}
+          items:
+            $ref: '#/definitions/StoredNameValue'
         headersValue:
           type: string
         addCustomRequestBody:
