@@ -193,6 +193,9 @@ definitions:
         minimum: 0
     # TODO: Check that these are required
     required: [email, roleId]
+    example:
+      email: john@smith.com
+      roleId: 3040
 
   CollaboratorUpdate:
     type: object
@@ -205,6 +208,9 @@ definitions:
         minimum: 0
     # TODO: Check that these are required
     required: [userId, roleId]
+    example:
+      userId: 2018
+      roleId: 3040
 
   # {{{ Permissions
 
@@ -462,6 +468,8 @@ definitions:
         type: string
         minLength: 1
     required: [name]
+    example:
+      name: My Role
 
   Role:
     type: object
@@ -489,6 +497,69 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/GroupPermissions'
+    example:
+      roleId: 3040
+      name: My Role
+      isSystem: false
+      created: '2014-03-18T20:12:08.4749886+00:00'
+      groups:
+      - name: Projects
+        permissions:
+        - name: ManageProjects
+          description: Create, delete projects, update project settings
+          allowed: true
+        - name: UpdateProjectSettings
+          description: Update project settings
+          allowed: true
+        - name: RunProjectBuild
+          description: Run project builds
+          allowed: false
+        - name: DeleteProjectBuilds
+          description: Delete project builds
+          allowed: false
+      - name: Environments
+        permissions:
+        - name: ManageEnvironments
+          description: Create, delete projects, update environment settings
+          allowed: false
+        - name: UpdateEnvironmentSettings
+          description: Update environment settings
+          allowed: false
+        - name: DeployToEnvironment
+          description: Deploy to environment
+          allowed: false
+      - name: Account
+        permissions:
+        - name: UpdateAccountDetails
+          description: Update account details
+          allowed: false
+      - name: Users
+        permissions:
+        - name: AddUser
+          description: Add new user
+          allowed: false
+        - name: UpdateUserDetails
+          description: Update user details
+          allowed: false
+        - name: DeleteUser
+          description: Delete user
+          allowed: false
+      - name: Roles
+        permissions:
+        - name: AddRole
+          description: Add new role
+          allowed: false
+        - name: UpdateRoleDetails
+          description: Update role details
+          allowed: false
+        - name: DeleteRole
+          description: Delete role
+          allowed: false
+      - name: User
+        permissions:
+        - name: ConfigureApiKeys
+          description: Generate API keys
+          allowed: false
 
   UserCreate:
     type: object
@@ -519,6 +590,13 @@ definitions:
         format: password
     # TODO: Check that these are required
     required: [fullName, email, roleId]
+    example:
+      fullName: John Smith
+      email: john@smith.com
+      roleId: 4
+      generatePassword: false
+      password: password
+      confirmPassword: password
 
   # Note:  Should be User, but User name must be used for UserGroupPermissions
   # due to how discriminator works.
@@ -571,6 +649,15 @@ definitions:
         readOnly: true
         type: string
         format: date-time
+    example:
+      userId: 3019
+      fullName: John Smith
+      email: john@smith.com
+      password: null
+      roleId: 4
+      successfulBuildNotification: all
+      failedBuildNotification: all
+      notifyWhenBuildStatusChangedOnly: true
 
   ### Teams }}}
   ### {{{ Projects and Builds
@@ -650,6 +737,13 @@ definitions:
         additionalProperties:
           type: string
     required: [accountName, projectSlug]
+    example:
+      accountName: your-account-name
+      projectSlug: project-slug-from-url
+      branch: master
+      environmentVariables:
+        my_var: value
+        another_var: another value
 
   Build:
     type: object
@@ -805,6 +899,9 @@ definitions:
         type: string
         format: password
     required: [repositoryProvider, repositoryName]
+    example:
+      repositoryProvider: gitHub
+      repositoryName: FeodorFitsner/demo-app
 
   Project:
     type: object
@@ -876,6 +973,106 @@ definitions:
       updated:
         type: string
         format: date-time
+    example:
+      projectId: 43682
+      accountId: 2
+      accountName: appvyr
+      builds: []
+      name: demo-app
+      slug: demo-app-335
+      versionFormat: 1.0.{build}
+      nextBuildNumber: 1
+      repositoryType: gitHub
+      repositoryScm: git
+      repositoryName: FeodorFitsner/demo-app
+      repositoryBranch: master
+      webhookId: rca5vb5qqu
+      webhookUrl: https://ci.appveyor.com/api/github/webhook?id=rca5vb5qqu
+      isPrivate: false
+      ignoreAppveyorYml: false
+      skipBranchesWithoutAppveyorYml: false
+      configuration:
+        initScripts: []
+        includeBranches: []
+        excludeBranches: []
+        onBuildSuccessScripts: []
+        onBuildErrorScripts: []
+        patchAssemblyInfo: false
+        assemblyInfoFile: '**\AssemblyInfo.*'
+        assemblyVersionFormat: '{version}'
+        assemblyFileVersionFormat: '{version}'
+        assemblyInformationalVersionFormat: '{version}'
+        operatingSystem: []
+        services: []
+        shallowClone: false
+        environmentVariables: []
+        environmentVariablesMatrix: []
+        installScripts: []
+        hostsEntries: []
+        buildMode: msbuild
+        platform: []
+        configuration: []
+        packageWebApplicationProjects: false
+        packageWebApplicationProjectsXCopy: false
+        packageAzureCloudServiceProjects: false
+        packageNuGetProjects: false
+        msBuildVerbosity: minimal
+        buildScripts: []
+        beforeBuildScripts: []
+        afterBuildScripts: []
+        testMode: auto
+        testAssemblies: []
+        testCategories: []
+        testCategoriesMatrix: []
+        testScripts: []
+        beforeTestScripts: []
+        afterTestScripts: []
+        deployMode: providers
+        deployments: []
+        deployScripts: []
+        beforeDeployScripts: []
+        afterDeployScripts: []
+        matrixFastFinish: false
+        matrixAllowFailures: []
+        artifacts: []
+        notifications: []
+      nuGetFeed:
+        id: demo-app-tw5iw2wk3bl1
+        name: Project demo-app
+        publishingEnabled: false
+        created: '2014-08-16T00:52:16.9886427+00:00'
+      securityDescriptor:
+        accessRightDefinitions:
+        - name: View
+          description: View
+        - name: RunBuild
+          description: Run build
+        - name: Update
+          description: Update settings
+        - name: Delete
+          description: Delete project
+        roleAces:
+        - roleId: 4
+          name: Administrator
+          isAdmin: true
+          accessRights:
+          - name: View
+            allowed: true
+          - name: RunBuild
+            allowed: true
+          - name: Update
+            allowed: true
+          - name: Delete
+            allowed: true
+        - roleId: 5
+          name: User
+          isAdmin: false
+          accessRights:
+          - name: View
+          - name: RunBuild
+          - name: Update
+          - name: Delete
+      created: '2014-08-16T00:52:15.6604826+00:00'
 
   ProjectBuild:
     type: object
@@ -1341,6 +1538,12 @@ definitions:
         items: {}
       defaultImageName:
         type: string
+    example:
+      version: 1.0.{build}
+      build:
+        project: MySolution.sln
+        verbosity: minimal
+        publish_wap: true
 
   ### Projects and Builds }}}
   ### {{{ Environments and Deployments
@@ -1461,6 +1664,28 @@ definitions:
       settings:
         $ref: '#/definitions/DeploymentEnvironmentSettings'
     required: [name, provider, settings]
+    example:
+      name: production
+      provider: FTP
+      settings:
+        providerSettings:
+        - name: server
+          value:
+            value: ftp.myserver.com
+            isEncrypted: false
+        - name: username
+          value:
+            value: ftp-user
+            isEncrypted: false
+        - name: password
+          value:
+            value: password
+            isEncrypted: true
+        environmentVariables:
+        - name: my-var
+          value:
+            value: '123'
+            isEncrypted: false
 
   DeploymentEnvironmentProjectsMode:
     description: |-
@@ -1528,6 +1753,30 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/SelectableProject'
+    example:
+      deploymentEnvironmentId: 3018
+      name: production
+      environmentAccessKey: gi3ttevuk7123
+      settings:
+        providerSettings:
+        - name: server
+          value:
+            isEncrypted: false
+            value: ftp.myserver.com
+        - name: username
+          value:
+            isEncrypted: false
+            value: ftp-user
+        - name: password
+          value:
+            isEncrypted: true
+            value: password
+        environmentVariables:
+        - name: my-var
+          value:
+            isEncrypted: false
+            value: '123'
+        provider: FTP
 
   DeploymentCreate:
     type: object
@@ -1554,6 +1803,15 @@ definitions:
         additionalProperties:
           type: string
     required: [environmentName, accountName, projectSlug, buildVersion]
+    example:
+      environmentName: environment-to-deploy
+      accountName: your-account-name
+      projectSlug: project-slug-from-url
+      buildVersion: 1.2.0
+      buildJobId: sfke9239ydzf
+      environmentVariables:
+        server: myserver.com
+        another_var: another value
 
   Deployment:
     type: object
@@ -1919,14 +2177,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/UserCreate'
-          x-examples:
-            application/json:
-              fullName: John Smith
-              email: john@smith.com
-              roleId: 4
-              generatePassword: false
-              password: password
-              confirmPassword: password
       responses:
         default:
           $ref: '#/responses/Error'
@@ -1944,16 +2194,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/AVUser'
-          x-examples:
-            application/json:
-              userId: 3019
-              fullName: John Smith
-              email: john@smith.com
-              password: null
-              roleId: 4
-              successfulBuildNotification: all
-              failedBuildNotification: all
-              notifyWhenBuildStatusChangedOnly: true
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2065,10 +2305,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/CollaboratorCreate'
-          x-examples:
-            application/json:
-              email: john@smith.com
-              roleId: 3040
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2086,10 +2322,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/CollaboratorUpdate'
-          x-examples:
-            application/json:
-              userId: 2018
-              roleId: 3040
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2200,9 +2432,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/RoleCreate'
-          x-examples:
-            application/json:
-              name: My Role
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2221,70 +2450,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/RoleWithGroups'
-          x-examples:
-            application/json:
-              roleId: 3040
-              name: My Role
-              isSystem: false
-              created: '2014-03-18T20:12:08.4749886+00:00'
-              groups:
-              - name: Projects
-                permissions:
-                - name: ManageProjects
-                  description: Create, delete projects, update project settings
-                  allowed: true
-                - name: UpdateProjectSettings
-                  description: Update project settings
-                  allowed: true
-                - name: RunProjectBuild
-                  description: Run project builds
-                  allowed: false
-                - name: DeleteProjectBuilds
-                  description: Delete project builds
-                  allowed: false
-              - name: Environments
-                permissions:
-                - name: ManageEnvironments
-                  description: Create, delete projects, update environment settings
-                  allowed: false
-                - name: UpdateEnvironmentSettings
-                  description: Update environment settings
-                  allowed: false
-                - name: DeployToEnvironment
-                  description: Deploy to environment
-                  allowed: false
-              - name: Account
-                permissions:
-                - name: UpdateAccountDetails
-                  description: Update account details
-                  allowed: false
-              - name: Users
-                permissions:
-                - name: AddUser
-                  description: Add new user
-                  allowed: false
-                - name: UpdateUserDetails
-                  description: Update user details
-                  allowed: false
-                - name: DeleteUser
-                  description: Delete user
-                  allowed: false
-              - name: Roles
-                permissions:
-                - name: AddRole
-                  description: Add new role
-                  allowed: false
-                - name: UpdateRoleDetails
-                  description: Update role details
-                  allowed: false
-                - name: DeleteRole
-                  description: Delete role
-                  allowed: false
-              - name: User
-                permissions:
-                - name: ConfigureApiKeys
-                  description: Generate API keys
-                  allowed: false
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2453,10 +2618,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/ProjectCreate'
-          x-examples:
-            application/json:
-              repositoryProvider: gitHub
-              repositoryName: FeodorFitsner/demo-app
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2492,107 +2653,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Project'
-          x-examples:
-            application/json:
-              projectId: 43682
-              accountId: 2
-              accountName: appvyr
-              builds: []
-              name: demo-app
-              slug: demo-app-335
-              versionFormat: 1.0.{build}
-              nextBuildNumber: 1
-              repositoryType: gitHub
-              repositoryScm: git
-              repositoryName: FeodorFitsner/demo-app
-              repositoryBranch: master
-              webhookId: rca5vb5qqu
-              webhookUrl: https://ci.appveyor.com/api/github/webhook?id=rca5vb5qqu
-              isPrivate: false
-              ignoreAppveyorYml: false
-              skipBranchesWithoutAppveyorYml: false
-              configuration:
-                initScripts: []
-                includeBranches: []
-                excludeBranches: []
-                onBuildSuccessScripts: []
-                onBuildErrorScripts: []
-                patchAssemblyInfo: false
-                assemblyInfoFile: '**\AssemblyInfo.*'
-                assemblyVersionFormat: '{version}'
-                assemblyFileVersionFormat: '{version}'
-                assemblyInformationalVersionFormat: '{version}'
-                operatingSystem: []
-                services: []
-                shallowClone: false
-                environmentVariables: []
-                environmentVariablesMatrix: []
-                installScripts: []
-                hostsEntries: []
-                buildMode: msbuild
-                platform: []
-                configuration: []
-                packageWebApplicationProjects: false
-                packageWebApplicationProjectsXCopy: false
-                packageAzureCloudServiceProjects: false
-                packageNuGetProjects: false
-                msBuildVerbosity: minimal
-                buildScripts: []
-                beforeBuildScripts: []
-                afterBuildScripts: []
-                testMode: auto
-                testAssemblies: []
-                testCategories: []
-                testCategoriesMatrix: []
-                testScripts: []
-                beforeTestScripts: []
-                afterTestScripts: []
-                deployMode: providers
-                deployments: []
-                deployScripts: []
-                beforeDeployScripts: []
-                afterDeployScripts: []
-                matrixFastFinish: false
-                matrixAllowFailures: []
-                artifacts: []
-                notifications: []
-              nuGetFeed:
-                id: demo-app-tw5iw2wk3bl1
-                name: Project demo-app
-                publishingEnabled: false
-                created: '2014-08-16T00:52:16.9886427+00:00'
-              securityDescriptor:
-                accessRightDefinitions:
-                - name: View
-                  description: View
-                - name: RunBuild
-                  description: Run build
-                - name: Update
-                  description: Update settings
-                - name: Delete
-                  description: Delete project
-                roleAces:
-                - roleId: 4
-                  name: Administrator
-                  isAdmin: true
-                  accessRights:
-                  - name: View
-                    allowed: true
-                  - name: RunBuild
-                    allowed: true
-                  - name: Update
-                    allowed: true
-                  - name: Delete
-                    allowed: true
-                - roleId: 5
-                  name: User
-                  isAdmin: false
-                  accessRights:
-                  - name: View
-                  - name: RunBuild
-                  - name: Update
-                  - name: Delete
-              created: '2014-08-16T00:52:15.6604826+00:00'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3222,14 +3282,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/ProjectSettings'
-          x-examples:
-            text/plain: |
-              version: 1.0.{build}
-              build:
-                project: MySolution.sln
-                verbosity: minimal
-                publish_wap: true
-                ...
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3257,8 +3309,7 @@ paths:
                 type: integer
                 minimum: 0
             required: [nextBuildNumber]
-          x-examples:
-            application/json:
+            example:
               nextBuildNumber: 35
       responses:
         default:
@@ -3295,14 +3346,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/BuildCreate'
-          x-examples:
-            application/json:
-              accountName: your-account-name
-              projectSlug: project-slug-from-url
-              branch: master
-              environmentVariables:
-                my_var: value
-                another_var: another value
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3407,29 +3450,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DeploymentEnvironmentCreate'
-          x-examples:
-            application/json:
-              name: production
-              provider: FTP
-              settings:
-                providerSettings:
-                - name: server
-                  value:
-                    value: ftp.myserver.com
-                    isEncrypted: false
-                - name: username
-                  value:
-                    value: ftp-user
-                    isEncrypted: false
-                - name: password
-                  value:
-                    value: password
-                    isEncrypted: true
-                environmentVariables:
-                - name: my-var
-                  value:
-                    value: '123'
-                    isEncrypted: false
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3475,31 +3495,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DeploymentEnvironmentWithSettings'
-          x-examples:
-            application/json:
-              deploymentEnvironmentId: 3018
-              name: production
-              environmentAccessKey: gi3ttevuk7123
-              settings:
-                providerSettings:
-                - name: server
-                  value:
-                    isEncrypted: false
-                    value: ftp.myserver.com
-                - name: username
-                  value:
-                    isEncrypted: false
-                    value: ftp-user
-                - name: password
-                  value:
-                    isEncrypted: true
-                    value: password
-                environmentVariables:
-                - name: my-var
-                  value:
-                    isEncrypted: false
-                    value: '123'
-                provider: FTP
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3774,16 +3769,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DeploymentCreate'
-          x-examples:
-            application/json:
-              environmentName: environment-to-deploy
-              accountName: your-account-name
-              projectSlug: project-slug-from-url
-              buildVersion: 1.2.0
-              buildJobId: sfke9239ydzf
-              environmentVariables:
-                server: myserver.com
-                another_var: another value
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3852,8 +3837,7 @@ paths:
                 type: integer
                 minimum: 0
             required: [deploymentId]
-          x-examples:
-            application/json:
+            example:
               deploymentId: 123
       responses:
         default:
