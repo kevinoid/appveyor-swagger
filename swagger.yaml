@@ -1372,10 +1372,13 @@ definitions:
       matrixFastFinish:
         type: boolean
       matrixAllowFailures:
+        description: >-
+          Although the names and values are not enforced, the combinations
+          which are meaningful are documented at
+          https://www.appveyor.com/docs/build-configuration/#allow-failing-jobs
         type: array
-        # TODO: Determine item type
-        # https://www.appveyor.com/docs/build-configuration/#allow-failing-jobs
-        items: {}
+        items:
+          $ref: '#/definitions/StoredNameValueMatrix'
       artifacts:
         type: array
         items:
