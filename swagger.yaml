@@ -1009,12 +1009,21 @@ definitions:
         items:
           $ref: '#/definitions/Build'
 
+  BuildCloudName:
+    type: string
+    enum: [gce]
+
   Image:
     type: object
     properties:
+      buildWorkerImageId:
+        type: integer
+        minimum: 0
       name:
         type: string
         minLength: 1
+      buildCloudName:
+        $ref: '#/definitions/BuildCloudName'
     required: [name]
 
   ScriptLanguage:
