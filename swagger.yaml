@@ -1122,6 +1122,12 @@ definitions:
         $ref: '#/definitions/StoredValue'
     required: [name, value]
 
+  StoredNameValueMatrix:
+    type: object
+    properties:
+      variables:
+        $ref: '#/definitions/StoredNameValue'
+
   HostEntry:
     type: object
     properties:
@@ -1239,10 +1245,7 @@ definitions:
       environmentVariablesMatrix:
         type: array
         items:
-          type: object
-          properties:
-            variables:
-              $ref: '#/definitions/StoredNameValue'
+          $ref: '#/definitions/StoredNameValueMatrix'
       installScripts:
         type: array
         items:
