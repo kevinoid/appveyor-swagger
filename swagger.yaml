@@ -670,8 +670,7 @@ definitions:
 
   Status:
     type: string
-    # TODO: Determine other possible values
-    enum: [queued, success]
+    enum: [cancelled, failed, queued, running, success]
 
   Job:
     type: object
