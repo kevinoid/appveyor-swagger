@@ -1213,7 +1213,7 @@ definitions:
         # https://github.com/OAI/OpenAPI-Specification/pull/741
     required: [host, ip]
 
-  Configuration:
+  ProjectConfiguration:
     type: object
     properties:
       doNotIncrementBuildNumberOnPullRequests:
@@ -1519,7 +1519,7 @@ definitions:
         customYmlName:
           type: string
         configuration:
-          $ref: '#/definitions/Configuration'
+          $ref: '#/definitions/ProjectConfiguration'
 
   ProjectSettings:
     type: object
