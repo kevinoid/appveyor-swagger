@@ -1963,8 +1963,8 @@ definitions:
           type: string
         recipients:
           type: array
-          # TODO: Determine type
-          items: {}
+          items:
+            $ref: '#/definitions/StringValueObject'
         recipientsValue:
           type: string
 
