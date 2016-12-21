@@ -1158,12 +1158,12 @@ definitions:
         type: boolean
       skipCommitsFiles:
         type: array
-        # TODO: Determine item type
-        items: {}
+        items:
+          $ref: '#/definitions/StringValueObject'
       onlyCommitsFiles:
         type: array
-        # TODO: Determine item type
-        items: {}
+        items:
+          $ref: '#/definitions/StringValueObject'
       cloneScripts:
         type: array
         items:
