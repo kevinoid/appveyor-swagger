@@ -668,6 +668,12 @@ definitions:
   ### Teams }}}
   ### {{{ Projects and Builds
 
+  StringValueObject:
+    type: object
+    properties:
+      value:
+        type: string
+
   Status:
     type: string
     enum: [cancelled, failed, queued, running, success]
@@ -1139,19 +1145,11 @@ definitions:
       includeBranches:
         type: array
         items:
-          type: object
-          properties:
-            value:
-              type: string
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       excludeBranches:
         type: array
         items:
-          type: object
-          properties:
-            value:
-              type: string
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       skipTags:
         type: boolean
       skipNonTags:
@@ -1248,12 +1246,7 @@ definitions:
       cacheEntries:
         type: array
         items:
-          type: object
-          properties:
-            value:
-              type: string
-              #format: path
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       configureNuGetProjectSource:
         type: boolean
       configureNuGetAccountSource:
@@ -1273,12 +1266,7 @@ definitions:
       configuration:
         type: array
         items:
-          type: object
-          properties:
-            value:
-              type: string
-              minLength: 1
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       msBuildProjectFileName:
         type: string
         # format: path
@@ -1319,25 +1307,14 @@ definitions:
       testAssemblies:
         type: array
         items:
-          type: object
-          properties:
-            value:
-              type: string
-              minLength: 1
-              #format: wildcard-path
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       testCategoriesMode:
         type: string
         enum: [exclude, include]
       testCategories:
         type: array
         items:
-          type: object
-          properties:
-            value:
-              type: string
-              minLength: 1
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       testCategoriesMatrix:
         type: array
         items:
@@ -1346,12 +1323,7 @@ definitions:
             categories:
               type: array
               items:
-                type: object
-                properties:
-                  value:
-                    type: string
-                    minLength: 1
-                required: [value]
+                $ref: '#/definitions/StringValueObject'
       testScripts:
         type: array
         items:
@@ -1612,12 +1584,7 @@ definitions:
         type: array
         # The web UI only displays a single branch.  Max length?
         items:
-          type: object
-          properties:
-            value:
-              type: string
-              minLength: 1
-          required: [value]
+          $ref: '#/definitions/StringValueObject'
       onEnvironmentVariables:
         type: array
         items:
