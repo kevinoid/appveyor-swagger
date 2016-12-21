@@ -16,6 +16,12 @@ info:
     REST API maintained at https://github.com/kevinoid/appveyor-swagger
     Please report any issues or suggestions for this Swagger definition at
     https://github.com/kevinoid/appveyor-swagger/issues/new
+
+    #### API Conventions
+
+    Fields which are missing from update operations (`PUT` requests) are
+    typically reset to their default values.  So although most fields are not
+    technically required, they should usually be specified in practice.
   contact:
     name: AppVeyor Team
     email: team@appveyor.com
