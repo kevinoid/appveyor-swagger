@@ -232,43 +232,65 @@ definitions:
 
   # {{{ Permissions
 
-  Permission:
+  PermissionName:
+    description: |
+      Available permission names.  The names correspond to the following groups:
+      #### AccountPermission
+      - ManageApplicationAuthorizations
+      - UpdateAccountDetails
+      - UpdateBillingDetails
+      #### BuildEnvironmentPermission
+      - ConfigureBuildEnvironment
+      #### EnvironmentsPermission
+      - DeployToEnvironment
+      - ManageEnvironments
+      - UpdateEnvironmentSettings
+      #### ProjectsPermission
+      - ManageProjects
+      - RunProjectBuild
+      - UpdateProjectSettings
+      #### RolesPermission
+      - AddRole
+      - DeleteRole
+      - UpdateRoleDetails
+      #### UserPermission
+      - ConfigureApiKeys
+      #### UsersPermission
+      - AddUser
+      - DeleteUser
+      - UpdateUserDetails
     type: string
-    # FIXME: Swagger does not allow anyOf in Schema yet
-    # https://github.com/OAI/OpenAPI-Specification/pull/741
-    # So enumerate all possibilities instead
-    #anyOf:
-    #- ProjectsPermission
-    #- EnvironmentsPermission
-    #- BuildEnvironmentPermission
-    #- AccountPermission
-    #- UsersPermission
-    #- RolesPermission
-    #- UserPermission
     enum:
-    - AddRole
-    - AddUser
-    - ConfigureApiKeys
-    - ConfigureBuildEnvironment
-    - DeleteRole
-    - DeleteUser
-    - DeployToEnvironment
+    # AccountPermission:
     - ManageApplicationAuthorizations
-    - ManageEnvironments
-    - ManageProjects
-    - RunProjectBuild
     - UpdateAccountDetails
     - UpdateBillingDetails
+    # BuildEnvironmentPermission:
+    - ConfigureBuildEnvironment
+    # EnvironmentsPermission:
+    - DeployToEnvironment
+    - ManageEnvironments
     - UpdateEnvironmentSettings
+    # ProjectsPermission:
+    - ManageProjects
+    - RunProjectBuild
     - UpdateProjectSettings
+    # RolesPermission:
+    - AddRole
+    - DeleteRole
     - UpdateRoleDetails
+    # UserPermission:
+    - ConfigureApiKeys
+    # UsersPermission:
+    - AddUser
+    - DeleteUser
     - UpdateUserDetails
 
   PermissionState:
     type: object
     properties:
       name:
-        $ref: '#/definitions/Permission'
+        $ref: '#/definitions/PermissionName'
       description:
         type: string
       allowed:
