@@ -22,6 +22,53 @@ info:
     Fields which are missing from update operations (`PUT` requests) are
     typically reset to their default values.  So although most fields are not
     technically required, they should usually be specified in practice.
+
+    #### Polymorphism
+
+    This Swagger definition attempts to provide stricter type definitions by
+    applying polymorphism using the
+    [`discriminator`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#user-content-schemaDiscriminator)
+    property.  Unfortunately, support for this property is currently spotty
+    and the complex inheritance used in this Swagger definition makes it
+    difficult to generate working code in strongly-typed languages with limited
+    inheritance features (e.g. Java).
+
+    ##### Codegen Issues
+
+    There are several obstacles of supporting this definition in
+    [swagger-codegen](https://github.com/swagger-api/swagger-codegen):
+
+    1.  `*PermissionState` classes do not inherit from `PermissionState`.
+        This makes the definition of the `permissions` property problematic.
+        This behavior is arguably [by
+        design](https://github.com/swagger-api/swagger-codegen/pull/1120#issuecomment-229352464).
+        If this interpretation prevails, it may make this implementation
+        permanently unworkable.
+
+        Same issue with `*NotificationSettings` not inheriting from
+        `NotificationSettings` making `NotificationProviderSettings.settings`
+        problematic.
+    2.  The argument and return type of the `permissions` property
+        (`getPermissions` and `setPermissions` methods) of `GroupPermissions`
+        is `List<PermissionState>` rather than
+        `List<? extends PermissionState>`.
+
+    Both of these problems could be avoided by removing `permissions` from
+    `GroupPermissions`, which would make its use slightly more annoying and
+    remove any knowledge of this property for clients which don't support
+    `discriminator`.
+
+    3.  Since most strongly typed languages have no notion of enum subclassing,
+        `*PermissionName` classes can not inherit from `PermissionName`.  This
+        makes the `name` property of `PermissionState` and its subclasses
+        conflict.
+
+    This could be fixed by removing `PermissionState` and relaxing the type
+    of `PermissionState.name` to `string`.
+
+    4.  Lack of deserialization support
+        ([swagger-api/swagger-codegen#1253](https://github.com/swagger-api/swagger-codegen/issues/1253),
+         [swagger-api/swagger-codegen#2449](https://github.com/swagger-api/swagger-codegen/issues/2449))
   contact:
     name: AppVeyor Team
     email: team@appveyor.com
@@ -230,6 +277,8 @@ definitions:
       userId: 2018
       roleId: 3040
 
+  # {{{ Permissions
+
   PermissionName:
     description: |
       Available permission names.  The names correspond to the following groups:
@@ -311,6 +360,7 @@ definitions:
 
   GroupPermissions:
     type: object
+    discriminator: name
     properties:
       name:
         $ref: '#/definitions/GroupName'
@@ -319,6 +369,186 @@ definitions:
         items:
           $ref: '#/definitions/PermissionState'
     required: [name, permissions]
+
+  AccountPermission:
+    type: string
+    enum:
+    - ManageApplicationAuthorizations
+    - UpdateAccountDetails
+    - UpdateBillingDetails
+
+  AccountPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/AccountPermission'
+
+  #AccountGroupPermissions:
+  Account:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/AccountPermissionState'
+
+  BuildEnvironmentPermission:
+    type: string
+    enum:
+    - ConfigureBuildEnvironment
+
+  BuildEnvironmentPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/BuildEnvironmentPermission'
+
+  #BuildEnvironmentGroupPermissions:
+  BuildEnvironment:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/BuildEnvironmentPermissionState'
+
+  EnvironmentsPermission:
+    type: string
+    enum:
+    - DeployToEnvironment
+    - ManageEnvironments
+    - UpdateEnvironmentSettings
+
+  EnvironmentsPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/EnvironmentsPermission'
+
+  #EnvironmentsGroupPermissions:
+  Environments:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/EnvironmentsPermissionState'
+
+  ProjectsPermission:
+    type: string
+    enum:
+    - ManageProjects
+    - RunProjectBuild
+    - UpdateProjectSettings
+
+  ProjectsPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/ProjectsPermission'
+
+  #ProjectsGroupPermissions:
+  Projects:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/ProjectsPermissionState'
+
+  RolesPermission:
+    type: string
+    enum:
+    - AddRole
+    - DeleteRole
+    - UpdateRoleDetails
+
+  RolesPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/RolesPermission'
+
+  #RolesGroupPermissions:
+  Roles:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/RolesPermissionState'
+
+  UserPermission:
+    type: string
+    enum:
+    - ConfigureApiKeys
+
+  UserPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/UserPermission'
+
+  #UserGroupPermissions:
+  User:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/UserPermissionState'
+
+  UsersPermission:
+    type: string
+    enum:
+    - AddUser
+    - DeleteUser
+    - UpdateUserDetails
+
+  UsersPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/UsersPermission'
+
+  #UsersGroupPermissions:
+  Users:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/UsersPermissionState'
+
+  # Permissions }}}
 
   RoleCreate:
     type: object
@@ -1410,6 +1640,10 @@ definitions:
   ### Projects and Builds }}}
   ### {{{ Environments and Deployments
 
+  HttpMethodRestricted:
+    type: string
+    enum: [GET, POST]
+
   ### {{{ Deployment Settings
 
   DeploymentProviderType:
@@ -1430,6 +1664,12 @@ definitions:
 
   DeploymentProvider:
     type: object
+    # FIXME: discriminator requires schema names that clash with existing
+    # non-DeploymentProvider schemas.
+    # https://github.com/OAI/OpenAPI-Specification/issues/707
+    # It is also not supported at all by most code generators.
+    # Future: https://github.com/swagger-api/swagger-codegen/pull/4252
+    #discriminator: provider
     properties:
       provider:
         $ref: '#/definitions/DeploymentProviderType'
@@ -1447,6 +1687,43 @@ definitions:
         items:
           $ref: '#/definitions/StoredNameValue'
     required: [provider]
+
+  # TODO: Not worth effort to specify without anyOf or discriminator support
+  # FTPDeploymentSetting:
+  #   type: string
+  #   enum:
+  #   - active_mode
+  #   - application
+  #   - artifact
+  #   - beta
+  #   - debug
+  #   - enable_ssl
+  #   - folder
+  #   - host
+  #   - password
+  #   - protocol
+  #   - server
+  #   - username
+  #
+  # FTPDeploymentSettingNameValue:
+  #   allOf:
+  #   - $ref: '#/definitions/StoredNameValue'
+  #   - properties:
+  #       name:
+  #         $ref: '#/definitions/FTPDeploymentSetting'
+  #
+  # FTPDeploymentProvider:
+  #   allOf:
+  #   - $ref: '#/definitions/DeploymentProvider'
+  #   - type: object
+  #     properties:
+  #       provider:
+  #         type: string
+  #         enum: [FTP]
+  #       providerSettings:
+  #         type: array
+  #         items:
+  #           $ref: '#/definitions/FTPDeploymentSettingNameValue'
 
   DeploymentEnvironmentSettings:
     type: object
@@ -1694,6 +1971,7 @@ definitions:
     required: [environment, deployments]
 
   # Deployment Settings }}}
+  ### {{{ Notification Settings
 
   NotificationProvider:
     type: string
@@ -1720,6 +1998,7 @@ definitions:
 
   NotificationProviderSettings:
     type: object
+    discriminator: provider
     properties:
       provider:
         $ref: '#/definitions/NotificationProvider'
@@ -1727,6 +2006,211 @@ definitions:
         $ref: '#/definitions/NotificationSettings'
     required: [provider, settings]
 
+  CampfireNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models'
+        account:
+          type: string
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        room:
+          type: string
+        template:
+          type: string
+
+  # CampfireNotificationProviderSettings:
+  Campfire:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/CampfireNotificationSettings'
+
+  EmailNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.EmailNotificationSettings, Appveyor.Models'
+        subjectTemplate:
+          type: string
+        bodyTemplate:
+          type: string
+        recipients:
+          type: array
+          items:
+            $ref: '#/definitions/StringValueObject'
+        recipientsValue:
+          type: string
+
+  # EmailNotificationProviderSettings:
+  Email:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/EmailNotificationSettings'
+
+  GitHubPullRequestNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models'
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        template:
+          type: string
+
+  # GitHubPullRequestNotificationProviderSettings:
+  GitHubPullRequest:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/GitHubPullRequestNotificationSettings'
+
+  HipChatNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models'
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        from:
+          type: string
+        room:
+          type: string
+        template:
+          type: string
+        serverUrl:
+          type: string
+          format: uri
+
+  # HipChatNotificationProviderSettings:
+  HipChat:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/HipChatNotificationSettings'
+
+  SlackNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.SlackNotificationSettings, Appveyor.Models'
+        incomingWebhookUrl:
+          type: string
+          format: uri
+        authToken:
+          $ref: '#/definitions/StoredValue'
+        channel:
+          type: string
+        template:
+          type: string
+
+  # SlackNotificationProviderSettings:
+  Slack:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/SlackNotificationSettings'
+
+  WebhookNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models'
+        method:
+          $ref: '#/definitions/HttpMethodRestricted'
+        url:
+          type: string
+          format: uri
+        headers:
+          type: array
+          items:
+            $ref: '#/definitions/StoredNameValue'
+        headersValue:
+          type: string
+        addCustomRequestBody:
+          type: boolean
+        customRequestBodyContentType:
+          type: string
+          # Format not enforced by server, all strings permitted
+          #format: media-type
+        customRequestBody:
+          type: string
+
+  # WebhookNotificationProviderSettings:
+  Webhook:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/WebhookNotificationSettings'
+
+  VSOTeamRoomNotificationSettings:
+    allOf:
+    - $ref: '#/definitions/NotificationSettings'
+    - type: object
+      properties:
+        $type:
+          type: string
+          enum:
+            - 'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models'
+        vsoAccount:
+          type: string
+        username:
+          type: string
+        password:
+          $ref: '#/definitions/StoredValue'
+        room:
+          type: string
+        template:
+          type: string
+
+  # VSOTeamRoomNotificationProviderSettings:
+  VSOTeamRoom:
+    allOf:
+    - $ref: '#/definitions/NotificationProviderSettings'
+    - type: object
+      properties:
+        settings:
+          $ref: '#/definitions/VSOTeamRoomNotificationSettings'
+
+  # Notification Settings }}}
   ### Environments and Deployments }}}
 
 responses:
@@ -3504,5 +3988,25 @@ paths:
           description: Success
 
   ### Deployment }}}
+
+# Suppress incorrect swagger-editor warnings for discriminator subtypes
+# https://github.com/swagger-api/swagger-editor/issues/765#issuecomment-256618196
+x-suppress-warning:
+# Group permissions
+- $ref: '#/definitions/Account'
+- $ref: '#/definitions/BuildEnvironment'
+- $ref: '#/definitions/Environments'
+- $ref: '#/definitions/Projects'
+- $ref: '#/definitions/Roles'
+- $ref: '#/definitions/User'
+- $ref: '#/definitions/Users'
+# Notifications
+- $ref: '#/definitions/Campfire'
+- $ref: '#/definitions/Email'
+- $ref: '#/definitions/GitHubPullRequest'
+- $ref: '#/definitions/HipChat'
+- $ref: '#/definitions/Slack'
+- $ref: '#/definitions/Webhook'
+- $ref: '#/definitions/VSOTeamRoom'
 
 # vim: set foldmethod=marker :

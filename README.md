@@ -11,6 +11,13 @@ issue](https://github.com/kevinoid/appveyor-swagger/issues/new).
 
 ## Implementation Notes
 
+`swagger-polymorphic.yaml` attempts to provide stricter type definitions by
+applying polymorphism using the
+[`discriminator`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#user-content-schemaDiscriminator)
+property.  Most tools provide limited or no support for this property.
+Therefore, this file is mostly kept for reference and in the hopes that future
+tools may be able to make use of it.
+
 The types could be made stricter by splitting the PUT types from the GET
 types.  This would allow making most properties required in the PUT types
 which could result in non-nullable codegen.  The down-side is that unless the
