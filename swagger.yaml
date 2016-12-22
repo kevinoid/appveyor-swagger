@@ -2143,6 +2143,7 @@ paths:
     get:
       tags:
       - Team
+      operationId: getUsers
       summary: Get users
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-users'
@@ -2174,6 +2175,7 @@ paths:
     post:
       tags:
       - Team
+      operationId: addUser
       summary: Add user
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#add-user'
@@ -2191,6 +2193,7 @@ paths:
     put:
       tags:
       - Team
+      operationId: updateUser
       summary: Update user
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#update-user'
@@ -2212,6 +2215,7 @@ paths:
     get:
       tags:
       - Team
+      operationId: getUser
       summary: Get user
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-user'
@@ -2258,6 +2262,7 @@ paths:
     delete:
       tags:
       - Team
+      operationId: deleteUser
       summary: Delete user
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#delete-user'
@@ -2271,6 +2276,7 @@ paths:
     get:
       tags:
       - Team
+      operationId: getCollaborators
       summary: Get collaborators
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-collaborators'
@@ -2302,6 +2308,7 @@ paths:
     post:
       tags:
       - Team
+      operationId: addCollaborator
       summary: Add collaborator
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#add-collaborator'
@@ -2319,6 +2326,7 @@ paths:
     put:
       tags:
       - Team
+      operationId: updateCollaborator
       summary: Update collaborator
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#update-collaborator'
@@ -2340,6 +2348,7 @@ paths:
     get:
       tags:
       - Team
+      operationId: getCollaborator
       summary: Get collaborator
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-collaborator'
@@ -2391,6 +2400,7 @@ paths:
     delete:
       tags:
       - Team
+      operationId: deleteCollaborator
       summary: Delete collaborator
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#delete-collaborator'
@@ -2404,6 +2414,7 @@ paths:
     get:
       tags:
       - Team
+      operationId: getRoles
       summary: Get roles
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-roles'
@@ -2429,6 +2440,7 @@ paths:
     post:
       tags:
       - Team
+      operationId: addRole
       summary: Add role
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#add-role'
@@ -2447,6 +2459,7 @@ paths:
     put:
       tags:
       - Team
+      operationId: updateRole
       summary: Update role
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#update-role'
@@ -2469,6 +2482,7 @@ paths:
     get:
       tags:
       - Team
+      operationId: getRole
       summary: Get role
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-role'
@@ -2546,6 +2560,7 @@ paths:
     delete:
       tags:
       - Team
+      operationId: deleteRole
       summary: Delete role
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#delete-role'
@@ -2562,6 +2577,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjects
       summary: Get projects
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-projects'
@@ -2615,6 +2631,7 @@ paths:
     post:
       tags:
       - Projects and Builds
+      operationId: addProject
       summary: Add project
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#add-project'
@@ -2650,6 +2667,7 @@ paths:
     put:
       tags:
       - Projects and Builds
+      operationId: updateProject
       summary: Update project
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project'
@@ -2672,6 +2690,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectLastBuild
       summary: Get project last build
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-build'
@@ -2748,6 +2767,7 @@ paths:
     delete:
       tags:
       - Projects and Builds
+      operationId: deleteProject
       summary: Delete project
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#delete-project'
@@ -2765,6 +2785,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectLastBuildBranch
       summary: Get project last branch build
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-branch-build'
@@ -2843,6 +2864,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectBuildByVersion
       summary: Get project build by version
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-build-by-version'
@@ -2923,6 +2945,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectHistory
       summary: Get project history
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-history'
@@ -2993,6 +3016,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectDeployments
       summary: Get project deployments
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-deployments'
@@ -3084,6 +3108,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectSettings
       summary: Get project settings
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-settings'
@@ -3254,6 +3279,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getProjectSettingsYaml
       summary: Get project settings in YAML
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-settings-in-yaml'
@@ -3277,6 +3303,7 @@ paths:
     put:
       tags:
       - Projects and Builds
+      operationId: updateProjectSettingsYaml
       summary: Update project settings in YAML
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project-settings-in-yaml'
@@ -3301,6 +3328,7 @@ paths:
     put:
       tags:
       - Projects and Builds
+      operationId: updateProjectBuildNumber
       summary: Update project build number
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project-build-number'
@@ -3330,6 +3358,7 @@ paths:
     delete:
       tags:
       - Projects and Builds
+      operationId: deleteProjectBuildCache
       summary: Delete project build cache
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#delete-project-build-cache'
@@ -3343,6 +3372,7 @@ paths:
     post:
       tags:
       - Projects and Builds
+      operationId: startBuild
       summary: Start build of branch most recent commit
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#start-build-of-branch-most-recent-commit'
@@ -3385,6 +3415,7 @@ paths:
     delete:
       tags:
       - Projects and Builds
+      operationId: cancelBuild
       summary: Cancel build
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#cancel-build'
@@ -3400,6 +3431,7 @@ paths:
     get:
       tags:
       - Projects and Builds
+      operationId: getBuildLog
       summary: Download build log
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
@@ -3420,6 +3452,7 @@ paths:
     get:
       tags:
       - Environments and Deployments
+      operationId: getEnvironments
       summary: Get environments
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-environments'
@@ -3447,6 +3480,7 @@ paths:
     post:
       tags:
       - Environments and Deployments
+      operationId: addEnvironment
       summary: Add environment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#add-environment'
@@ -3492,6 +3526,7 @@ paths:
     put:
       tags:
       - Environments and Deployments
+      operationId: updateEnvironment
       summary: Update environment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#update-environment'
@@ -3544,6 +3579,7 @@ paths:
     get:
       tags:
       - Environments and Deployments
+      operationId: getEnvironmentSettings
       summary: Get environment settings
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-environment-settings'
@@ -3595,6 +3631,7 @@ paths:
     get:
       tags:
       - Environments and Deployments
+      operationId: getEnvironmentDeployments
       summary: Get environment deployments
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-environment-deployments'
@@ -3678,6 +3715,7 @@ paths:
     delete:
       tags:
       - Environments and Deployments
+      operationId: deleteEnvironment
       summary: Delete environment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#delete-environment'
@@ -3693,6 +3731,7 @@ paths:
     get:
       tags:
       - Environments and Deployments
+      operationId: getDeployment
       summary: Get deployment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#get-deployment'
@@ -3766,6 +3805,7 @@ paths:
     post:
       tags:
       - Environments and Deployments
+      operationId: startDeployment
       summary: Start deployment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#start-deployment'
@@ -3829,6 +3869,7 @@ paths:
     delete:
       tags:
       - Environments and Deployments
+      operationId: cancelDeployment
       summary: Cancel deployment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#cancel-deployment'
