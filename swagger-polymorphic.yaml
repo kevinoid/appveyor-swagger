@@ -110,11 +110,19 @@ securityDefinitions:
   apiToken:
     description: >-
       API token can be acquired from https://ci.appveyor.com/api-token
-      It must be passed as `"Bearer <token>"` rather than just `"<token>"`
-      due to [lack of bearer token authentication support in the OpenAPI 2.0
-      Specification](https://github.com/OAI/OpenAPI-Specification/issues/583).
-      This is [corrected in OpenAPI
-      3.0](https://github.com/OAI/OpenAPI-Specification/pull/807).
+
+      This value must be passed to the server in the `Authorization` header
+      as `"Bearer <token>"`.  Since [bearer token authentication support is not
+      explicitly supported in OpenAPI
+      2.0](https://github.com/OAI/OpenAPI-Specification/issues/583), client
+      code will vary.  Clients created with
+      [swagger-codegen](https://github.com/swagger-api/swagger-codegen) should
+      set `apiKeyPrefix` to `"Bearer"` and set `apiKey` to the token.  Other
+      clients may need to set `apiKey` to the string `"Bearer <token>"`.
+
+      Note that this should be [fixed in OpenAPI
+      3.0](https://github.com/OAI/OpenAPI-Specification/pull/807)), whenever
+      that becomes available and supported.
     type: apiKey
     in: header
     name: Authorization
