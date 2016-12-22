@@ -3492,7 +3492,7 @@ paths:
     put:
       tags:
       - Environments and Deployments
-      summary: Add environment
+      summary: Update environment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#update-environment'
       parameters:
