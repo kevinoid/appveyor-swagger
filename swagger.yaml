@@ -76,15 +76,27 @@ security:
   - apiToken: []
 
 tags:
-- name: Environments and Deployments
-  externalDocs:
-    url: https://www.appveyor.com/docs/api/environments-deployments/
-- name: Projects and Builds
-  externalDocs:
-    url: https://www.appveyor.com/docs/api/projects-builds/
-- name: Team
+- name: Collaborator
   externalDocs:
     url: https://www.appveyor.com/docs/api/team/
+- name: Role
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/team/
+- name: User
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/team/
+- name: Build
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/projects-builds/
+- name: Project
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/projects-builds/
+- name: Deployment
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/environments-deployments/
+- name: Environment
+  externalDocs:
+    url: https://www.appveyor.com/docs/api/environments-deployments/
 
 parameters:
   ### {{{ Teams
@@ -2138,11 +2150,11 @@ responses:
 
 # Describe your paths here
 paths:
-  ### {{{ Team
+  ### {{{ User
   /users:
     get:
       tags:
-      - Team
+      - User
       operationId: getUsers
       summary: Get users
       externalDocs:
@@ -2174,7 +2186,7 @@ paths:
               updated: '2014-03-06T22:47:44.9706252+00:00'
     post:
       tags:
-      - Team
+      - User
       operationId: addUser
       summary: Add user
       externalDocs:
@@ -2192,7 +2204,7 @@ paths:
           description: Success
     put:
       tags:
-      - Team
+      - User
       operationId: updateUser
       summary: Update user
       externalDocs:
@@ -2214,7 +2226,7 @@ paths:
     - $ref: '#/parameters/userId'
     get:
       tags:
-      - Team
+      - User
       operationId: getUser
       summary: Get user
       externalDocs:
@@ -2261,7 +2273,7 @@ paths:
                 created: '2013-09-26T19:23:39.3645117+00:00'
     delete:
       tags:
-      - Team
+      - User
       operationId: deleteUser
       summary: Delete user
       externalDocs:
@@ -2272,10 +2284,13 @@ paths:
         '204':
           description: Success
 
+  ### User }}}
+  ### {{{ Collaborator
+
   /collaborators:
     get:
       tags:
-      - Team
+      - Collaborator
       operationId: getCollaborators
       summary: Get collaborators
       externalDocs:
@@ -2307,7 +2322,7 @@ paths:
               updated: '2014-03-07T04:26:09.1051534+00:00'
     post:
       tags:
-      - Team
+      - Collaborator
       operationId: addCollaborator
       summary: Add collaborator
       externalDocs:
@@ -2325,7 +2340,7 @@ paths:
           description: Success
     put:
       tags:
-      - Team
+      - Collaborator
       operationId: updateCollaborator
       summary: Update collaborator
       externalDocs:
@@ -2347,7 +2362,7 @@ paths:
     - $ref: '#/parameters/userId'
     get:
       tags:
-      - Team
+      - Collaborator
       operationId: getCollaborator
       summary: Get collaborator
       externalDocs:
@@ -2399,7 +2414,7 @@ paths:
                 updated: '2014-03-18T20:16:06.8803375+00:00'
     delete:
       tags:
-      - Team
+      - Collaborator
       operationId: deleteCollaborator
       summary: Delete collaborator
       externalDocs:
@@ -2410,10 +2425,13 @@ paths:
         '204':
           description: Success
 
+  ### Collaborator }}}
+  ### {{{ Role
+
   /roles:
     get:
       tags:
-      - Team
+      - Role
       operationId: getRoles
       summary: Get roles
       externalDocs:
@@ -2439,7 +2457,7 @@ paths:
               created: '2013-09-26T19:23:39.3645117+00:00'
     post:
       tags:
-      - Team
+      - Role
       operationId: addRole
       summary: Add role
       externalDocs:
@@ -2458,7 +2476,7 @@ paths:
           description: Success
     put:
       tags:
-      - Team
+      - Role
       operationId: updateRole
       summary: Update role
       externalDocs:
@@ -2481,7 +2499,7 @@ paths:
     - $ref: '#/parameters/roleId'
     get:
       tags:
-      - Team
+      - Role
       operationId: getRole
       summary: Get role
       externalDocs:
@@ -2559,7 +2577,7 @@ paths:
                   allowed: false
     delete:
       tags:
-      - Team
+      - Role
       operationId: deleteRole
       summary: Delete role
       externalDocs:
@@ -2570,13 +2588,13 @@ paths:
         '204':
           description: Success
 
-  ### Team }}}
-  ### {{{ Projects and Builds
+  ### Role }}}
+  ### {{{ Project
 
   /projects:
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjects
       summary: Get projects
       externalDocs:
@@ -2630,7 +2648,7 @@ paths:
               created: '2014-08-15T22:04:19.2868375+00:00'
     post:
       tags:
-      - Projects and Builds
+      - Project
       operationId: addProject
       summary: Add project
       externalDocs:
@@ -2666,7 +2684,7 @@ paths:
               created: '2014-08-16T00:52:15.6604826+00:00'
     put:
       tags:
-      - Projects and Builds
+      - Project
       operationId: updateProject
       summary: Update project
       externalDocs:
@@ -2689,7 +2707,7 @@ paths:
     - $ref: '#/parameters/projectSlug'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectLastBuild
       summary: Get project last build
       externalDocs:
@@ -2766,7 +2784,7 @@ paths:
                 updated: '2014-08-14T05:42:45.5709599+00:00'
     delete:
       tags:
-      - Projects and Builds
+      - Project
       operationId: deleteProject
       summary: Delete project
       externalDocs:
@@ -2784,7 +2802,7 @@ paths:
     - $ref: '#/parameters/buildBranch'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectLastBuildBranch
       summary: Get project last branch build
       externalDocs:
@@ -2863,7 +2881,7 @@ paths:
     - $ref: '#/parameters/buildVersion'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectBuildByVersion
       summary: Get project build by version
       externalDocs:
@@ -2944,7 +2962,7 @@ paths:
     - $ref: '#/parameters/branch'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectHistory
       summary: Get project history
       externalDocs:
@@ -3015,7 +3033,7 @@ paths:
     - $ref: '#/parameters/projectSlug'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectDeployments
       summary: Get project deployments
       externalDocs:
@@ -3107,7 +3125,7 @@ paths:
     - $ref: '#/parameters/projectSlug'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectSettings
       summary: Get project settings
       externalDocs:
@@ -3278,7 +3296,7 @@ paths:
     - $ref: '#/parameters/projectSlug'
     get:
       tags:
-      - Projects and Builds
+      - Project
       operationId: getProjectSettingsYaml
       summary: Get project settings in YAML
       externalDocs:
@@ -3302,7 +3320,7 @@ paths:
                 ...
     put:
       tags:
-      - Projects and Builds
+      - Project
       operationId: updateProjectSettingsYaml
       summary: Update project settings in YAML
       externalDocs:
@@ -3327,7 +3345,7 @@ paths:
     - $ref: '#/parameters/projectSlug'
     put:
       tags:
-      - Projects and Builds
+      - Project
       operationId: updateProjectBuildNumber
       summary: Update project build number
       externalDocs:
@@ -3357,7 +3375,7 @@ paths:
     - $ref: '#/parameters/projectSlug'
     delete:
       tags:
-      - Projects and Builds
+      - Project
       operationId: deleteProjectBuildCache
       summary: Delete project build cache
       externalDocs:
@@ -3368,10 +3386,13 @@ paths:
         '204':
           description: Success
 
+  ### Project }}}
+  ### {{{ Build
+
   /builds:
     post:
       tags:
-      - Projects and Builds
+      - Build
       operationId: startBuild
       summary: Start build of branch most recent commit
       externalDocs:
@@ -3414,7 +3435,7 @@ paths:
     - $ref: '#/parameters/buildVersion'
     delete:
       tags:
-      - Projects and Builds
+      - Build
       operationId: cancelBuild
       summary: Cancel build
       externalDocs:
@@ -3430,7 +3451,7 @@ paths:
     - $ref: '#/parameters/jobId'
     get:
       tags:
-      - Projects and Builds
+      - Build
       operationId: getBuildLog
       summary: Download build log
       externalDocs:
@@ -3445,13 +3466,13 @@ paths:
         '200':
           description: Success
 
-  ### Projects and Builds }}}
-  ### {{{ Environments and Deployments
+  ### Build }}}
+  ### {{{ Environment
 
   /environments:
     get:
       tags:
-      - Environments and Deployments
+      - Environment
       operationId: getEnvironments
       summary: Get environments
       externalDocs:
@@ -3479,7 +3500,7 @@ paths:
               updated: '2014-08-11T18:48:06.2002179+00:00'
     post:
       tags:
-      - Environments and Deployments
+      - Environment
       operationId: addEnvironment
       summary: Add environment
       externalDocs:
@@ -3525,7 +3546,7 @@ paths:
               created: '2014-08-15T23:57:16.1585268+00:00'
     put:
       tags:
-      - Environments and Deployments
+      - Environment
       operationId: updateEnvironment
       summary: Update environment
       externalDocs:
@@ -3578,7 +3599,7 @@ paths:
     - $ref: '#/parameters/deploymentEnvironmentId'
     get:
       tags:
-      - Environments and Deployments
+      - Environment
       operationId: getEnvironmentSettings
       summary: Get environment settings
       externalDocs:
@@ -3630,7 +3651,7 @@ paths:
     - $ref: '#/parameters/deploymentEnvironmentId'
     get:
       tags:
-      - Environments and Deployments
+      - Environment
       operationId: getEnvironmentDeployments
       summary: Get environment deployments
       externalDocs:
@@ -3714,7 +3735,7 @@ paths:
     - $ref: '#/parameters/deploymentEnvironmentId'
     delete:
       tags:
-      - Environments and Deployments
+      - Environment
       operationId: deleteEnvironment
       summary: Delete environment
       externalDocs:
@@ -3725,12 +3746,15 @@ paths:
         '204':
           description: Success
 
+  ### Environment }}}
+  ### {{{ Deployment
+
   /deployments/{deploymentId}:
     parameters:
     - $ref: '#/parameters/deploymentId'
     get:
       tags:
-      - Environments and Deployments
+      - Deployment
       operationId: getDeployment
       summary: Get deployment
       externalDocs:
@@ -3804,7 +3828,7 @@ paths:
   /deployments:
     post:
       tags:
-      - Environments and Deployments
+      - Deployment
       operationId: startDeployment
       summary: Start deployment
       externalDocs:
@@ -3868,7 +3892,7 @@ paths:
   /deployments/stop:
     delete:
       tags:
-      - Environments and Deployments
+      - Deployment
       operationId: cancelDeployment
       summary: Cancel deployment
       externalDocs:
@@ -3892,7 +3916,7 @@ paths:
         '204':
           description: Success
 
-  ### Environments and Deployments }}}
+  ### Deployment }}}
 
 # Suppress incorrect swagger-editor warnings for discriminator subtypes
 # https://github.com/swagger-api/swagger-editor/issues/765#issuecomment-256618196
