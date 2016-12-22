@@ -272,7 +272,9 @@ definitions:
       description:
         type: string
       allowed:
-        # Note: true==allow, false==deny, undefined==inherit
+        description: |
+          State of the named permission.  `true` to allow, `false` to deny,
+          missing to inherit.
         type: boolean
     required: [name]
 
