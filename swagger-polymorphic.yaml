@@ -1142,6 +1142,13 @@ definitions:
         type: string
     required: [language, script]
 
+  ArtifactType:
+    type: string
+    # Note: Empty string is also an allowed value but can't be used due to
+    # https://github.com/swagger-api/swagger-codegen/pull/4450
+    # Users can leave type null/undefined since "" is the default value.
+    enum: [WebDeployPackage]
+
   Artifact:
     type: object
     properties:
@@ -1153,9 +1160,8 @@ definitions:
         type: string
         minLength: 0
       type:
-        type: string
-        enum: ['', WebDeployPackage]
-    required: [path, name, type]
+        $ref: '#/definitions/ArtifactType'
+    required: [path, name]
 
   BuildMode:
     type: string
