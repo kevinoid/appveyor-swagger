@@ -748,6 +748,16 @@ definitions:
       failedBuildNotification: all
       notifyWhenBuildStatusChangedOnly: true
 
+  AVUserRoles:
+    type: object
+    properties:
+      collaborator:
+        $ref: '#/definitions/AVUser'
+      roles:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+
   ### Teams }}}
   ### {{{ Projects and Builds
 
@@ -1073,6 +1083,16 @@ definitions:
     required:
     - projectId
     - repositoryName
+
+  ProjectBuildNumberUpdate:
+    type: object
+    properties:
+      nextBuildNumber:
+        type: integer
+        minimum: 0
+    required: [nextBuildNumber]
+    example:
+      nextBuildNumber: 35
 
   ProjectBuild:
     type: object
@@ -1867,6 +1887,12 @@ definitions:
             value: '123'
         provider: FTP
 
+  DeploymentEnvironmentWithSettingsObject:
+    type: object
+    properties:
+      environment:
+        $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+
   DeploymentCreate:
     type: object
     properties:
@@ -1930,6 +1956,16 @@ definitions:
       updated:
         type: string
         format: date-time
+
+  DeploymentCancel:
+    type: object
+    properties:
+      deploymentId:
+        type: integer
+        minimum: 0
+    required: [deploymentId]
+    example:
+      deploymentId: 123
 
   DeploymentEnvironmentDeployment:
     type: object
@@ -2308,14 +2344,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: object
-            properties:
-              user:
-                $ref: '#/definitions/AVUser'
-              roles:
-                type: array
-                items:
-                  $ref: '#/definitions/Role'
+            $ref: '#/definitions/AVUserRoles'
           examples:
             application/json:
               user:
@@ -2444,14 +2473,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: object
-            properties:
-              collaborator:
-                $ref: '#/definitions/AVUser'
-              roles:
-                type: array
-                items:
-                  $ref: '#/definitions/Role'
+            $ref: '#/definitions/AVUserRoles'
           examples:
             application/json:
               user:
@@ -2789,12 +2811,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: object
-            properties:
-              project:
-                $ref: '#/definitions/Project'
-              build:
-                $ref: '#/definitions/Build'
+            $ref: '#/definitions/ProjectBuild'
           examples:
             application/json:
               project:
@@ -3426,14 +3443,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              nextBuildNumber:
-                type: integer
-                minimum: 0
-            required: [nextBuildNumber]
-            example:
-              nextBuildNumber: 35
+            $ref: '#/definitions/ProjectBuildNumberUpdate'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3681,10 +3691,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: object
-            properties:
-              environment:
-                $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+            $ref: '#/definitions/DeploymentEnvironmentWithSettingsObject'
           examples:
             application/json:
               environment:
@@ -3973,14 +3980,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              deploymentId:
-                type: integer
-                minimum: 0
-            required: [deploymentId]
-            example:
-              deploymentId: 123
+            $ref: '#/definitions/DeploymentCancel'
       responses:
         default:
           $ref: '#/responses/Error'
