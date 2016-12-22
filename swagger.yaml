@@ -1691,14 +1691,6 @@ definitions:
             value: '123'
             isEncrypted: false
 
-  DeploymentEnvironmentProjectsMode:
-    description: |-
-      0 is "Any project can be deployed to the environment"
-      1 is "Only selected projects can be deployed to the environment"
-      2 is "All except selected projects can be deployed to the environment"
-    type: integer
-    enum: [0, 1, 2]
-
   DeploymentEnvironment:
     description: >-
       Note that `projectsMode` is always 0 from /api/environments.  Non-zero
@@ -1715,7 +1707,17 @@ definitions:
       provider:
         $ref: '#/definitions/DeploymentProviderType'
       projectsMode:
-        $ref: '#/definitions/DeploymentEnvironmentProjectsMode'
+        # Note: May be able to define enumeration value names in OpenAPI v3
+        # https://github.com/OAI/OpenAPI-Specification/issues/681
+        #
+        # swagger-codegen fails when this enumeration is a toplevel definition
+        # due to https://github.com/swagger-api/swagger-parser/pull/363
+        description: |-
+          0 is "Any project can be deployed to the environment"
+          1 is "Only selected projects can be deployed to the environment"
+          2 is "All except selected projects can be deployed to the environment"
+        type: integer
+        enum: [0, 1, 2]
       securityDescriptor:
         $ref: '#/definitions/SecurityDescriptor'
       created:
