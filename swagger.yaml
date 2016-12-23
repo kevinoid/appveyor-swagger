@@ -1756,17 +1756,168 @@ definitions:
     - Webhook
     - VSOTeamRoom
 
+  NotificationSettingsType:
+    type: string
+    enum:
+    - 'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models'
+    - 'Appveyor.Models.EmailNotificationSettings, Appveyor.Models'
+    - 'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models'
+    - 'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models'
+    - 'Appveyor.Models.SlackNotificationSettings, Appveyor.Models'
+    - 'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models'
+    - 'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models'
+
   NotificationSettings:
+    description: |
+      This type is the union of the settings types for each of the various
+      notification types supported by the API.  The properties correspond to
+      the following notification types:
+
+      #### All Types
+      - onBuildSuccess
+      - onBuildFailure
+      - onBuildStatusChanged
+
+      #### Campfire
+      - account
+      - authToken
+      - room
+      - template
+
+      #### Email
+      - subjectTemplate
+      - bodyTemplate
+      - recipients
+      - recipientsValue
+
+      #### GitHubPullRequest
+      - authToken
+      - template
+
+      #### HipChat
+      - authToken
+      - from
+      - room
+      - template
+      - serverUrl
+
+      #### Slack
+      - incomingWebhookUrl
+      - authToken
+      - channel
+      - template
+
+      #### Webhook
+      - method
+      - url
+      - headers
+      - headersValue
+      - addCustomRequestBody
+      - customRequestBodyContentType
+      - customRequestBody
+
+      #### VSOTeamRoom
+      - vsoAccount
+      - username
+      - password
+      - room
+      - template
+
     type: object
     properties:
       $type:
-        type: string
+        $ref: '#/definitions/NotificationSettingsType'
       onBuildSuccess:
         type: boolean
       onBuildFailure:
         type: boolean
       onBuildStatusChanged:
         type: boolean
+
+      # Campfire
+      account:
+        type: string
+      authToken:
+        $ref: '#/definitions/StoredValue'
+      room:
+        type: string
+      template:
+        type: string
+
+      # Email
+      subjectTemplate:
+        type: string
+      bodyTemplate:
+        type: string
+      recipients:
+        type: array
+        items:
+          $ref: '#/definitions/StringValueObject'
+      recipientsValue:
+        type: string
+
+      # GitHubPullRequest
+      #authToken:
+      #  $ref: '#/definitions/StoredValue'
+      #template:
+      #  type: string
+
+      # HipChat
+      #authToken:
+      #  $ref: '#/definitions/StoredValue'
+      from:
+        type: string
+      #room:
+      #  type: string
+      #template:
+      #  type: string
+      serverUrl:
+        type: string
+        format: uri
+
+      # Slack
+      incomingWebhookUrl:
+        type: string
+        format: uri
+      #authToken:
+      #  $ref: '#/definitions/StoredValue'
+      channel:
+        type: string
+      #template:
+      #  type: string
+
+      # Webhook
+      method:
+        $ref: '#/definitions/HttpMethodRestricted'
+      url:
+        type: string
+        format: uri
+      headers:
+        type: array
+        items:
+          $ref: '#/definitions/StoredNameValue'
+      headersValue:
+        type: string
+      addCustomRequestBody:
+        type: boolean
+      customRequestBodyContentType:
+        type: string
+        # Format not enforced by server, all strings permitted
+        #format: media-type
+      customRequestBody:
+        type: string
+
+      # VSOTeamRoom
+      vsoAccount:
+        type: string
+      username:
+        type: string
+      password:
+        $ref: '#/definitions/StoredValue'
+      #room:
+      #  type: string
+      #template:
+      #  type: string
 
   NotificationProviderSettings:
     type: object
