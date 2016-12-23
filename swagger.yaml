@@ -1444,6 +1444,10 @@ definitions:
   ### Projects and Builds }}}
   ### {{{ Environments and Deployments
 
+  HttpMethodRestricted:
+    type: string
+    enum: [GET, POST]
+
   ### {{{ Deployment Settings
 
   DeploymentProviderType:
