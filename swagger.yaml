@@ -200,6 +200,16 @@ definitions:
     properties:
       message:
         type: string
+      modelState:
+        description: |
+          When present, this property is a map of property names in the format
+          `request.<capitalized name>` to an `Array` of validation error
+          message strings for the property.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
     required: [message]
 
   ### {{{ Teams
