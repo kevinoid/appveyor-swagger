@@ -695,8 +695,7 @@ definitions:
         type: string
         minLength: 1
         format: password
-    # TODO: Check that these are required
-    required: [fullName, email, roleId]
+    required: [fullName, email]
     example:
       fullName: John Smith
       email: john@smith.com
