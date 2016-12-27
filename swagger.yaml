@@ -363,6 +363,10 @@ definitions:
         readOnly: true
         type: string
         format: date-time
+      updated:
+        readOnly: true
+        type: string
+        format: date-time
     required: [name]
 
   RoleWithGroups:
