@@ -768,7 +768,7 @@ definitions:
   AVUserRoles:
     type: object
     properties:
-      collaborator:
+      user:
         $ref: '#/definitions/AVUser'
       roles:
         type: array
