@@ -2265,9 +2265,10 @@ paths:
       responses:
         default:
           $ref: '#/responses/Error'
-        # FIXME:  Docs say it returns RoleWithUser.  Is it really different?
-        '204':
+        '200':
           description: Success
+          schema:
+            $ref: '#/definitions/RoleWithGroups'
     put:
       tags:
       - Role
