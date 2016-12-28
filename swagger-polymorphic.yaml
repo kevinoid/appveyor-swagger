@@ -681,6 +681,9 @@ definitions:
         type: string
         format: email
       roleId:
+        description: |
+          Technically `roleId` has default value 0 and is not required, but
+          since role 0 never exists it would always cause a 404 response.
         type: integer
         minimum: 0
       generatePassword:
@@ -699,7 +702,7 @@ definitions:
         type: string
         minLength: 1
         format: password
-    required: [fullName, email]
+    required: [fullName, email, roleId]
     example:
       fullName: John Smith
       email: john@smith.com
