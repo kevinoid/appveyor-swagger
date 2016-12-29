@@ -276,6 +276,10 @@ definitions:
     type: string
     enum: [all, myCommits, none]
 
+  DeploymentNotificationFrequency:
+    type: string
+    enum: [all, none]
+
   CollaboratorCreate:
     type: object
     properties:
@@ -715,6 +719,22 @@ definitions:
       generatePassword: false
       password: password
       confirmPassword: password
+
+  UserAccountSettings:
+    type: object
+    properties:
+      successfulBuildNotification:
+        $ref: '#/definitions/BuildNotificationFrequency'
+      failedBuildNotification:
+        $ref: '#/definitions/BuildNotificationFrequency'
+      notifyWhenBuildStatusChangedOnly:
+        type: boolean
+      successfulDeploymentNotification:
+        $ref: '#/definitions/DeploymentNotificationFrequency'
+      failedDeploymentNotification:
+        $ref: '#/definitions/DeploymentNotificationFrequency'
+      notifyWhenDeploymentStatusChangedOnly:
+        type: boolean
 
   # Note:  Should be User, but User name must be used for UserGroupPermissions
   # in the polymorphic definition due to how discriminator works.
@@ -2384,6 +2404,38 @@ paths:
       summary: Delete user
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#delete-user'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /user/settings:
+    get:
+      tags:
+      - User
+      operationId: getUserSettings
+      summary: Get user settings
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserAccountSettings'
+    put:
+      tags:
+      - User
+      operationId: updateUserSettings
+      summary: Update user settings
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserAccountSettings'
       responses:
         default:
           $ref: '#/responses/Error'
