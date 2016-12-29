@@ -225,10 +225,9 @@ definitions:
         format: date-time
 
   ### {{{ Teams
-  NotificationFrequency:
+  BuildNotificationFrequency:
     type: string
-    # TODO: Determine other possible values
-    enum: [all]
+    enum: [all, myCommits, none]
 
   CollaboratorCreate:
     type: object
@@ -527,9 +526,9 @@ definitions:
           readOnly: true
           type: string
         successfulBuildNotification:
-          $ref: '#/definitions/NotificationFrequency'
+          $ref: '#/definitions/BuildNotificationFrequency'
         failedBuildNotification:
-          $ref: '#/definitions/NotificationFrequency'
+          $ref: '#/definitions/BuildNotificationFrequency'
         notifyWhenBuildStatusChangedOnly:
           type: boolean
     example:
