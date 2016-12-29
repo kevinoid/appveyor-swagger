@@ -259,6 +259,18 @@ definitions:
             type: string
     required: [message]
 
+  Timestamped:
+    type: object
+    properties:
+      created:
+        readOnly: true
+        type: string
+        format: date-time
+      updated:
+        readOnly: true
+        type: string
+        format: date-time
+
   ### {{{ Teams
   NotificationFrequency:
     type: string
@@ -579,25 +591,19 @@ definitions:
       name: My Role
 
   Role:
-    type: object
-    properties:
-      roleId:
-        type: integer
-        minimum: 0
-      name:
-        type: string
-        minLength: 1
-      isSystem:
-        type: boolean
-      created:
-        readOnly: true
-        type: string
-        format: date-time
-      updated:
-        readOnly: true
-        type: string
-        format: date-time
-    required: [name]
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        roleId:
+          type: integer
+          minimum: 0
+        name:
+          type: string
+          minLength: 1
+        isSystem:
+          type: boolean
+      required: [name]
 
   RoleWithGroups:
     allOf:
@@ -715,53 +721,47 @@ definitions:
   # in the polymorphic definition due to how discriminator works.
   # Item 1 of https://github.com/OAI/OpenAPI-Specification/issues/707
   AVUser:
-    type: object
-    properties:
-      accountId:
-        readOnly: true
-        type: integer
-        minimum: 0
-      accountName:
-        readOnly: true
-        type: string
-      isOwner:
-        readOnly: true
-        type: boolean
-      isCollaborator:
-        readOnly: true
-        type: boolean
-      userId:
-        type: integer
-        minimum: 0
-      fullName:
-        type: string
-      email:
-        type: string
-        format: email
-      password:
-        type: string
-        minLength: 1
-        format: password
-      roleId:
-        type: integer
-        minimum: 0
-      roleName:
-        readOnly: true
-        type: string
-      successfulBuildNotification:
-        $ref: '#/definitions/NotificationFrequency'
-      failedBuildNotification:
-        $ref: '#/definitions/NotificationFrequency'
-      notifyWhenBuildStatusChangedOnly:
-        type: boolean
-      created:
-        readOnly: true
-        type: string
-        format: date-time
-      updated:
-        readOnly: true
-        type: string
-        format: date-time
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        accountId:
+          readOnly: true
+          type: integer
+          minimum: 0
+        accountName:
+          readOnly: true
+          type: string
+        isOwner:
+          readOnly: true
+          type: boolean
+        isCollaborator:
+          readOnly: true
+          type: boolean
+        userId:
+          type: integer
+          minimum: 0
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+          format: password
+        roleId:
+          type: integer
+          minimum: 0
+        roleName:
+          readOnly: true
+          type: string
+        successfulBuildNotification:
+          $ref: '#/definitions/NotificationFrequency'
+        failedBuildNotification:
+          $ref: '#/definitions/NotificationFrequency'
+        notifyWhenBuildStatusChangedOnly:
+          type: boolean
     example:
       userId: 3019
       fullName: John Smith
@@ -796,52 +796,48 @@ definitions:
     enum: [cancelled, failed, queued, running, success]
 
   Job:
-    type: object
-    properties:
-      jobId:
-        type: string
-      name:
-        type: string
-      allowFailure:
-        type: boolean
-      messagesCount:
-        type: integer
-        minimum: 0
-      compilationMessagesCount:
-        type: integer
-        minimum: 0
-      compilationErrorsCount:
-        type: integer
-        minimum: 0
-      compilationWarningsCount:
-        type: integer
-        minimum: 0
-      testsCount:
-        type: integer
-        minimum: 0
-      passedTestsCount:
-        type: integer
-        minimum: 0
-      failedTestsCount:
-        type: integer
-        minimum: 0
-      artifactsCount:
-        type: integer
-        minimum: 0
-      status:
-        $ref: '#/definitions/Status'
-      started:
-        type: string
-        format: date-time
-      finished:
-        type: string
-        format: date-time
-      created:
-        type: string
-        format: date-time
-      updated:
-        type: string
-        format: date-time
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        jobId:
+          type: string
+        name:
+          type: string
+        allowFailure:
+          type: boolean
+        messagesCount:
+          type: integer
+          minimum: 0
+        compilationMessagesCount:
+          type: integer
+          minimum: 0
+        compilationErrorsCount:
+          type: integer
+          minimum: 0
+        compilationWarningsCount:
+          type: integer
+          minimum: 0
+        testsCount:
+          type: integer
+          minimum: 0
+        passedTestsCount:
+          type: integer
+          minimum: 0
+        failedTestsCount:
+          type: integer
+          minimum: 0
+        artifactsCount:
+          type: integer
+          minimum: 0
+        status:
+          $ref: '#/definitions/Status'
+        started:
+          type: string
+          format: date-time
+        finished:
+          type: string
+          format: date-time
 
   BuildCreate:
     type: object
@@ -874,67 +870,63 @@ definitions:
         another_var: another value
 
   Build:
-    type: object
-    properties:
-      buildId:
-        type: integer
-        minimum: 0
-      jobs:
-        type: array
-        items:
-          $ref: '#/definitions/Job'
-      buildNumber:
-        type: integer
-        minimum: 0
-      version:
-        type: string
-      message:
-        type: string
-      messageExtended:
-        type: string
-      branch:
-        type: string
-        # TODO: pattern restriction?
-      isTag:
-        type: boolean
-      commitId:
-        type: string
-        # TODO: pattern restriction?
-      authorName:
-        type: string
-      authorUsername:
-        type: string
-      committerName:
-        type: string
-      committerUsername:
-        type: string
-      committed:
-        type: string
-        format: date-time
-      pullRequestId:
-        type: integer
-        minimum: 1
-      pullRequestName:
-        type: string
-      messages:
-        type: array
-        items:
-          # TODO: Are these really strings?  No examples.
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        buildId:
+          type: integer
+          minimum: 0
+        jobs:
+          type: array
+          items:
+            $ref: '#/definitions/Job'
+        buildNumber:
+          type: integer
+          minimum: 0
+        version:
           type: string
-      status:
-        $ref: '#/definitions/Status'
-      started:
-        type: string
-        format: date-time
-      finished:
-        type: string
-        format: date-time
-      created:
-        type: string
-        format: date-time
-      updated:
-        type: string
-        format: date-time
+        message:
+          type: string
+        messageExtended:
+          type: string
+        branch:
+          type: string
+          # TODO: pattern restriction?
+        isTag:
+          type: boolean
+        commitId:
+          type: string
+          # TODO: pattern restriction?
+        authorName:
+          type: string
+        authorUsername:
+          type: string
+        committerName:
+          type: string
+        committerUsername:
+          type: string
+        committed:
+          type: string
+          format: date-time
+        pullRequestId:
+          type: integer
+          minimum: 1
+        pullRequestName:
+          type: string
+        messages:
+          type: array
+          items:
+            # TODO: Are these really strings?  No examples.
+            type: string
+        status:
+          $ref: '#/definitions/Status'
+        started:
+          type: string
+          format: date-time
+        finished:
+          type: string
+          format: date-time
 
   RepositoryAuthentication:
     type: string
@@ -1032,81 +1024,74 @@ definitions:
       repositoryName: FeodorFitsner/demo-app
 
   Project:
-    type: object
-    properties:
-      projectId:
-        type: integer
-        minimum: 0
-      accountId:
-        type: integer
-        minimum: 0
-      accountName:
-        type: string
-      builds:
-        type: array
-        items:
-          $ref: '#/definitions/Build'
-      name:
-        type: string
-      slug:
-        type: string
-        # TODO: urlsafe pattern restriction?
-      repositoryType:
-        $ref: '#/definitions/RepositoryProvider'
-      repositoryScm:
-        type: string
-        # TODO: Determine enumeration values
-        enum: [git]
-      repositoryName:
-        type: string
-        # TODO: pattern restriction?
-      repositoryBranch:
-        type: string
-        # TODO: pattern restriction?
-      isPrivate:
-        type: boolean
-      skipBranchesWithoutAppveyorYml:
-        type: boolean
-      enableSecureVariablesInPullRequests:
-        type: boolean
-      enableSecureVariablesInPullRequestsFromSameRepo:
-        type: boolean
-      enableDeploymentInPullRequests:
-        type: boolean
-      rollingBuilds:
-        type: boolean
-      alwaysBuildClosedPullRequests:
-        type: boolean
-      tags:
-        type: string
-        # TODO: pattern to restrict to comma-separated tokens?
-      nuGetFeed:
-        type: object
-        properties:
-          id:
-            type: string
-            # TODO: pattern restriction?
-          name:
-            type: string
-          publishingEnabled:
-            type: boolean
-          created:
-            type: string
-            format: date-time
-      securityDescriptor:
-        $ref: '#/definitions/SecurityDescriptor'
-      created:
-        description: Ignored in PUT requests
-        type: string
-        format: date-time
-      updated:
-        description: Ignored in PUT requests
-        type: string
-        format: date-time
-    # Note: requirements tested against PUT /api/projects 2016-12-21
-    required:
-    - projectId
-    - repositoryName
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        projectId:
+          type: integer
+          minimum: 0
+        accountId:
+          type: integer
+          minimum: 0
+        accountName:
+          type: string
+        builds:
+          type: array
+          items:
+            $ref: '#/definitions/Build'
+        name:
+          type: string
+        slug:
+          type: string
+          # TODO: urlsafe pattern restriction?
+        repositoryType:
+          $ref: '#/definitions/RepositoryProvider'
+        repositoryScm:
+          type: string
+          # TODO: Determine enumeration values
+          enum: [git]
+        repositoryName:
+          type: string
+          # TODO: pattern restriction?
+        repositoryBranch:
+          type: string
+          # TODO: pattern restriction?
+        isPrivate:
+          type: boolean
+        skipBranchesWithoutAppveyorYml:
+          type: boolean
+        enableSecureVariablesInPullRequests:
+          type: boolean
+        enableSecureVariablesInPullRequestsFromSameRepo:
+          type: boolean
+        enableDeploymentInPullRequests:
+          type: boolean
+        rollingBuilds:
+          type: boolean
+        alwaysBuildClosedPullRequests:
+          type: boolean
+        tags:
+          type: string
+          # TODO: pattern to restrict to comma-separated tokens?
+        nuGetFeed:
+          allOf:
+          - $ref: '#/definitions/Timestamped'
+          - type: object
+            properties:
+              id:
+                type: string
+                # TODO: pattern restriction?
+              name:
+                type: string
+              publishingEnabled:
+                type: boolean
+        securityDescriptor:
+          $ref: '#/definitions/SecurityDescriptor'
+      # Note: requirements tested against PUT /api/projects 2016-12-21
+      required:
+      - projectId
+      - repositoryName
 
   ProjectBuildNumberUpdate:
     type: object
@@ -1828,37 +1813,33 @@ definitions:
     description: >-
       Note that `projectsMode` is always 0 from /api/environments.  Non-zero
       values come from /api/environments/{deploymentEnvironmentId}/settings
-    type: object
-    properties:
-      deploymentEnvironmentId:
-        type: integer
-        minimum: 0
-      accountId:
-        type: integer
-      name:
-        type: string
-      provider:
-        $ref: '#/definitions/DeploymentProviderType'
-      projectsMode:
-        # Note: May be able to define enumeration value names in OpenAPI v3
-        # https://github.com/OAI/OpenAPI-Specification/issues/681
-        #
-        # swagger-codegen fails when this enumeration is a toplevel definition
-        # due to https://github.com/swagger-api/swagger-parser/pull/363
-        description: |-
-          0 is "Any project can be deployed to the environment"
-          1 is "Only selected projects can be deployed to the environment"
-          2 is "All except selected projects can be deployed to the environment"
-        type: integer
-        enum: [0, 1, 2]
-      securityDescriptor:
-        $ref: '#/definitions/SecurityDescriptor'
-      created:
-        type: string
-        format: date-time
-      updated:
-        type: string
-        format: date-time
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        deploymentEnvironmentId:
+          type: integer
+          minimum: 0
+        accountId:
+          type: integer
+        name:
+          type: string
+        provider:
+          $ref: '#/definitions/DeploymentProviderType'
+        projectsMode:
+          # Note: May be able to define enumeration value names in OpenAPI v3
+          # https://github.com/OAI/OpenAPI-Specification/issues/681
+          #
+          # swagger-codegen fails when this enumeration is a toplevel definition
+          # due to https://github.com/swagger-api/swagger-parser/pull/363
+          description: |-
+            0 is "Any project can be deployed to the environment"
+            1 is "Only selected projects can be deployed to the environment"
+            2 is "All except selected projects can be deployed to the environment"
+          type: integer
+          enum: [0, 1, 2]
+        securityDescriptor:
+          $ref: '#/definitions/SecurityDescriptor'
 
   SelectableProject:
     type: object
@@ -1959,33 +1940,29 @@ definitions:
         another_var: another value
 
   Deployment:
-    type: object
-    properties:
-      deploymentId:
-        type: integer
-        minimum: 0
-      build:
-        $ref: '#/definitions/Build'
-      environment:
-        $ref: '#/definitions/DeploymentEnvironment'
-      jobs:
-        type: array
-        items:
-          $ref: '#/definitions/Job'
-      status:
-        $ref: '#/definitions/Status'
-      started:
-        type: string
-        format: date-time
-      finished:
-        type: string
-        format: date-time
-      created:
-        type: string
-        format: date-time
-      updated:
-        type: string
-        format: date-time
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        deploymentId:
+          type: integer
+          minimum: 0
+        build:
+          $ref: '#/definitions/Build'
+        environment:
+          $ref: '#/definitions/DeploymentEnvironment'
+        jobs:
+          type: array
+          items:
+            $ref: '#/definitions/Job'
+        status:
+          $ref: '#/definitions/Status'
+        started:
+          type: string
+          format: date-time
+        finished:
+          type: string
+          format: date-time
 
   DeploymentCancel:
     type: object
