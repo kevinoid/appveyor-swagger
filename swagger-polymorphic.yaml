@@ -842,7 +842,7 @@ definitions:
 
   Status:
     type: string
-    enum: [cancelled, failed, queued, running, success]
+    enum: [cancelled, cancelling, failed, queued, running, success]
 
   Job:
     allOf:
