@@ -3740,9 +3740,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/DeploymentEnvironmentWithSettings'
+            $ref: '#/definitions/DeploymentEnvironmentWithSettings'
           examples:
             application/json:
               deploymentEnvironmentId: 3018
