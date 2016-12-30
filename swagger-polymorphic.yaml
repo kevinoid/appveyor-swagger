@@ -918,6 +918,23 @@ definitions:
         my_var: value
         another_var: another value
 
+  BuildMessageCategory:
+    type: string
+    # TODO: Find a way to enumerate these
+    enum:
+    - information
+
+  BuildMessage:
+    type: object
+    properties:
+      category:
+        $ref: '#/definitions/BuildMessageCategory'
+      message:
+        type: string
+      created:
+        type: string
+        format: date-time
+
   Build:
     allOf:
     - $ref: '#/definitions/Timestamped'
@@ -966,8 +983,7 @@ definitions:
         messages:
           type: array
           items:
-            # TODO: Are these really strings?  No examples.
-            type: string
+            $ref: '#/definitions/BuildMessage'
         status:
           $ref: '#/definitions/Status'
         started:
