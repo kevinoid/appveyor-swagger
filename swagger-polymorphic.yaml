@@ -2432,36 +2432,6 @@ paths:
         '204':
           description: Success
 
-  /user/settings:
-    get:
-      tags:
-      - User
-      operationId: getUserSettings
-      summary: Get current user settings
-      responses:
-        default:
-          $ref: '#/responses/Error'
-        '200':
-          description: Success
-          schema:
-            $ref: '#/definitions/UserAccountSettings'
-    put:
-      tags:
-      - User
-      operationId: updateUserSettings
-      summary: Update current user settings
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UserAccountSettings'
-      responses:
-        default:
-          $ref: '#/responses/Error'
-        '204':
-          description: Success
-
   ### User }}}
   ### {{{ Collaborator
 
