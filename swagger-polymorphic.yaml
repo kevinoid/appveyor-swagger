@@ -3459,9 +3459,16 @@ paths:
         default:
           $ref: '#/responses/Error'
         '200':
-          description: Success
+          description: |
+            Success
+
+            The schema type of this response could be specified as `file` to
+            denote opaque binary data.  The generated Java code for `file`
+            saves the response as a temporary file, making it a little more
+            difficult to use and less efficient for common cases.  If `string`
+            causes problems for other generators, can switch to `file` type.
           schema:
-            $ref: '#/definitions/ProjectSettings'
+            type: string
           examples:
             text/plain: |
               version: 1.0.{build}
@@ -3480,11 +3487,20 @@ paths:
       consumes:
       - text/plain
       parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/ProjectSettings'
+      - name: body
+        in: body
+        description: |
+          The body of requests should contain YAML data.  It is unclear how
+          to specify this since the OpenAPI spec requires `schema` without
+          `type` for `in: body` parameters and does not allow `type: file` in
+          `schema`.  See https://github.com/OAI/OpenAPI-Specification/issues/326
+          swagger-codegen (for Java, probably others) allows a binary
+          string body parameter with non-application/json `consumes` to be
+          passed through in the request body without conversion to JSON.
+        schema:
+          type: string
+          format: binary
+        required: true
       responses:
         default:
           $ref: '#/responses/Error'
