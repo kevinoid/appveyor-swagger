@@ -1012,7 +1012,7 @@ definitions:
 
   AccessRightType:
     type: string
-    enum: [Delete, RunBuild, Update, View]
+    enum: [Delete, Deploy, RunBuild, Update, View]
 
   AccessRightDefinition:
     type: object
