@@ -2108,7 +2108,7 @@ paths:
       tags:
       - User
       operationId: getUserSettings
-      summary: Get user settings
+      summary: Get current user settings
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2120,7 +2120,7 @@ paths:
       tags:
       - User
       operationId: updateUserSettings
-      summary: Update user settings
+      summary: Update current user settings
       parameters:
         - name: body
           in: body
