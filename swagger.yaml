@@ -152,7 +152,7 @@ parameters:
   jobId:
     name: jobId
     in: path
-    description: Build ID (`id` property of `Job`)
+    description: Build ID (`id` property of `BuildJob`)
     type: string
     required: true
   projectSlug:
@@ -614,7 +614,7 @@ definitions:
     type: string
     enum: [cancelled, cancelling, failed, queued, running, success]
 
-  Job:
+  BuildJob:
     allOf:
     - $ref: '#/definitions/Timestamped'
     - type: object
@@ -716,7 +716,7 @@ definitions:
         jobs:
           type: array
           items:
-            $ref: '#/definitions/Job'
+            $ref: '#/definitions/BuildJob'
         buildNumber:
           type: integer
           minimum: 0
@@ -1754,7 +1754,7 @@ definitions:
         jobs:
           type: array
           items:
-            $ref: '#/definitions/Job'
+            $ref: '#/definitions/BuildJob'
         status:
           $ref: '#/definitions/Status'
         started:
