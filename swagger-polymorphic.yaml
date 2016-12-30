@@ -183,6 +183,7 @@ parameters:
     in: query
     description: Repository Branch
     type: string
+    minLength: 1
   buildBranch:
     name: buildBranch
     in: path
@@ -210,14 +211,14 @@ parameters:
   recordsNumber:
     name: recordsNumber
     in: query
-    description: Records per page
+    description: Number of results to include in the response.
     type: integer
     minimum: 0
-    # TODO: Default?
+    required: true
   startBuildId:
+    description: Maximum `buildId` to include in the results (exclusive).
     name: startBuildId
     in: query
-    # TODO: Description?  Default?  What is it?
     type: integer
     minimum: 0
 
