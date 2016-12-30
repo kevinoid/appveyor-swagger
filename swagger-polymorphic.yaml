@@ -1044,6 +1044,24 @@ definitions:
         items:
           $ref: '#/definitions/RoleACE'
 
+  NuGetFeed:
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        accountId:
+          type: integer
+          minimum: 0
+        projectId:
+          type: integer
+          minimum: 0
+        publishingEnabled:
+          type: boolean
+
   ProjectCreate:
     description: >-
       `repositoryAuthentication` is only used for git, mercurial, subversion
@@ -1124,17 +1142,7 @@ definitions:
           type: string
           # TODO: pattern to restrict to comma-separated tokens?
         nuGetFeed:
-          allOf:
-          - $ref: '#/definitions/Timestamped'
-          - type: object
-            properties:
-              id:
-                type: string
-                # TODO: pattern restriction?
-              name:
-                type: string
-              publishingEnabled:
-                type: boolean
+          $ref: '#/definitions/NuGetFeed'
         securityDescriptor:
           $ref: '#/definitions/SecurityDescriptor'
       # Note: requirements tested against PUT /api/projects 2016-12-21
