@@ -152,7 +152,7 @@ parameters:
   jobId:
     name: jobId
     in: path
-    description: Build ID (`id` property of `BuildJob`)
+    description: Build ID (`jobId` property of `BuildJob`)
     type: string
     required: true
   projectSlug:
@@ -3305,14 +3305,14 @@ paths:
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
       produces:
-      # Should be plain text, but isn't
-      #- text/plain
       - application/octet-stream
       responses:
         default:
           $ref: '#/responses/Error'
         '200':
           description: Success
+          schema:
+            type: file
 
   ### Build }}}
   ### {{{ Environment
