@@ -505,13 +505,27 @@ definitions:
       failedBuildNotification:
         $ref: '#/definitions/BuildNotificationFrequency'
       notifyWhenBuildStatusChangedOnly:
+        description: |
+          Note that this value is `true` on user creation, but behaves as
+          `false` when not specified on update.
         type: boolean
+        default: false
       successfulDeploymentNotification:
         $ref: '#/definitions/DeploymentNotificationFrequency'
       failedDeploymentNotification:
         $ref: '#/definitions/DeploymentNotificationFrequency'
       notifyWhenDeploymentStatusChangedOnly:
+        description: |
+          Note that this value is `true` on user creation, but behaves as
+          `false` when not specified on update.
         type: boolean
+        default: false
+    # Tested against PUT /users 2016-12-29
+    required:
+    - successfulBuildNotification
+    - failedBuildNotification
+    - successfulDeploymentNotification
+    - failedDeploymentNotification
 
   # Note:  Should be User, but User name must be used for UserGroupPermissions
   # in the polymorphic definition due to how discriminator works.
@@ -557,6 +571,8 @@ definitions:
           type: integer
           # TODO: Limited to 5, 10, 20, 50, 100 in web UI.  Same in REST?
           minimum: 0
+      # Tested against PUT /users 2016-12-29
+      required: [fullName, email]
     example:
       userId: 3019
       fullName: John Smith
