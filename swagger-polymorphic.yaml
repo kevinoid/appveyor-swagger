@@ -742,6 +742,7 @@ definitions:
   AVUser:
     allOf:
     - $ref: '#/definitions/Timestamped'
+    - $ref: '#/definitions/UserAccountSettings'
     - type: object
       properties:
         accountId:
@@ -775,12 +776,6 @@ definitions:
         roleName:
           readOnly: true
           type: string
-        successfulBuildNotification:
-          $ref: '#/definitions/BuildNotificationFrequency'
-        failedBuildNotification:
-          $ref: '#/definitions/BuildNotificationFrequency'
-        notifyWhenBuildStatusChangedOnly:
-          type: boolean
     example:
       userId: 3019
       fullName: John Smith
