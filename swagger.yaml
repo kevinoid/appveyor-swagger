@@ -546,6 +546,10 @@ definitions:
         roleName:
           readOnly: true
           type: string
+        pageSize:
+          type: integer
+          # TODO: Limited to 5, 10, 20, 50, 100 in web UI.  Same in REST?
+          minimum: 0
     example:
       userId: 3019
       fullName: John Smith
