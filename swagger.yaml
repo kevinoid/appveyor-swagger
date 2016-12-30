@@ -364,6 +364,9 @@ definitions:
       name: My Role
 
   Role:
+    description: |
+      Technically `roleId` has default value 0 and is not required, but
+      since role 0 never exists it would always cause a 404 response.
     allOf:
     - $ref: '#/definitions/Timestamped'
     - type: object
@@ -373,10 +376,14 @@ definitions:
           minimum: 0
         name:
           type: string
+          # Tested with PUT /api/roles 2016-12-29
           minLength: 1
         isSystem:
           type: boolean
-      required: [name]
+          readOnly: true
+      # Tested with PUT /api/roles 2016-12-29
+      # Technically roleId
+      required: [roleId, name]
 
   RoleWithGroups:
     allOf:
