@@ -281,6 +281,9 @@ definitions:
     enum: [all, none]
 
   CollaboratorCreate:
+    description: |
+      Technically `roleId` has default value 0 and is not required, but
+      since role 0 never exists it would always cause a 404 response.
     type: object
     properties:
       email:
@@ -289,13 +292,17 @@ definitions:
       roleId:
         type: integer
         minimum: 0
-    # TODO: Check that these are required
+    # Tested with POST /collaborators 2016-12-29
     required: [email, roleId]
     example:
       email: john@smith.com
       roleId: 3040
 
   CollaboratorUpdate:
+    description: |
+      Technically `userId` and `roleId` have default value 0 and are not
+      required, but since user 0 and role 0 never exist it would always cause
+      a 404 response.
     type: object
     properties:
       userId:
@@ -304,7 +311,7 @@ definitions:
       roleId:
         type: integer
         minimum: 0
-    # TODO: Check that these are required
+    # Tested with POST /collaborators 2016-12-29
     required: [userId, roleId]
     example:
       userId: 2018
