@@ -2115,9 +2115,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/UserAccountSettings'
+            $ref: '#/definitions/UserAccountSettings'
     put:
       tags:
       - User
