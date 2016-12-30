@@ -569,8 +569,8 @@ definitions:
           type: string
         pageSize:
           type: integer
-          # TODO: Limited to 5, 10, 20, 50, 100 in web UI.  Same in REST?
           minimum: 0
+          readOnly: true
       # Tested against PUT /users 2016-12-29
       required: [fullName, email]
     example:
