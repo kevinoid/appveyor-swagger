@@ -1173,7 +1173,7 @@ definitions:
     properties:
       project:
         $ref: '#/definitions/Project'
-      build:
+      builds:
         type: array
         items:
           $ref: '#/definitions/Build'
