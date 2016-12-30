@@ -2486,9 +2486,7 @@ paths:
         '200':
           description: Success
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Project'
+            $ref: '#/definitions/Project'
           examples:
             application/json:
               projectId: 43682
