@@ -1579,7 +1579,7 @@ definitions:
         items:
           $ref: '#/definitions/NotificationProviderSettings'
 
-  ProjectWithConfiguration:
+  ProjectWithSettings:
     type: object
     allOf:
     - $ref: '#/definitions/Project'
@@ -1727,7 +1727,7 @@ definitions:
       project:
         $ref: '#/definitions/Project'
       settings:
-        $ref: '#/definitions/ProjectWithConfiguration'
+        $ref: '#/definitions/ProjectWithSettings'
       images:
         type: array
         items:
@@ -2867,7 +2867,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/ProjectWithConfiguration'
+            $ref: '#/definitions/ProjectWithSettings'
       responses:
         default:
           $ref: '#/responses/Error'
