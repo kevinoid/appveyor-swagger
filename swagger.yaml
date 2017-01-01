@@ -1792,19 +1792,18 @@ definitions:
   DeploymentEnvironmentDeployment:
     type: object
     properties:
-      # TODO: Confirm duplicate copy of environment here and in deployment
       environment:
         $ref: '#/definitions/DeploymentEnvironment'
       deployment:
         $ref: '#/definitions/Deployment'
 
-  ProjectDeploymentEnvironment:
+  ProjectDeployment:
     type: object
     properties:
       project:
         $ref: '#/definitions/Project'
       deployment:
-        $ref: '#/definitions/DeploymentEnvironmentDeployment'
+        $ref: '#/definitions/Deployment'
     required: [project, deployment]
 
   ProjectDeploymentEnvironments:
@@ -3623,7 +3622,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectDeploymentEnvironment'
+            $ref: '#/definitions/ProjectDeployment'
           examples:
             application/json:
               project:
