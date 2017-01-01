@@ -614,7 +614,7 @@ definitions:
     type: string
     enum: [cancelled, cancelling, failed, queued, running, success]
 
-  BuildJob:
+  Job:
     allOf:
     - $ref: '#/definitions/Timestamped'
     - type: object
@@ -623,6 +623,20 @@ definitions:
           type: string
         name:
           type: string
+        status:
+          $ref: '#/definitions/Status'
+        started:
+          type: string
+          format: date-time
+        finished:
+          type: string
+          format: date-time
+
+  BuildJob:
+    allOf:
+    - $ref: '#/definitions/Job'
+    - type: object
+      properties:
         allowFailure:
           type: boolean
         messagesCount:
@@ -649,14 +663,6 @@ definitions:
         artifactsCount:
           type: integer
           minimum: 0
-        status:
-          $ref: '#/definitions/Status'
-        started:
-          type: string
-          format: date-time
-        finished:
-          type: string
-          format: date-time
 
   BuildCreate:
     type: object
@@ -1739,6 +1745,15 @@ definitions:
         server: myserver.com
         another_var: another value
 
+  DeploymentJob:
+    allOf:
+    - $ref: '#/definitions/Job'
+    - type: object
+      properties:
+        messagesCount:
+          type: integer
+          minimum: 0
+
   Deployment:
     allOf:
     - $ref: '#/definitions/Timestamped'
@@ -1754,7 +1769,7 @@ definitions:
         jobs:
           type: array
           items:
-            $ref: '#/definitions/BuildJob'
+            $ref: '#/definitions/DeploymentJob'
         status:
           $ref: '#/definitions/Status'
         started:
