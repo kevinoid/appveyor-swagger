@@ -734,12 +734,10 @@ definitions:
           type: string
         branch:
           type: string
-          # TODO: pattern restriction?
         isTag:
           type: boolean
         commitId:
           type: string
-          # TODO: pattern restriction?
         authorName:
           type: string
         authorUsername:
