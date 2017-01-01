@@ -1824,7 +1824,7 @@ definitions:
       deployments:
         type: array
         items:
-          $ref: '#/definitions/ProjectDeploymentEnvironments'
+          $ref: '#/definitions/ProjectDeployment'
     required: [environment, deployments]
 
   # Deployment Settings }}}
