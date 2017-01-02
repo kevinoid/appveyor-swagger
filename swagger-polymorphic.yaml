@@ -77,6 +77,8 @@ info:
   license:
     name: AppVeyor End User License Agreement (EULA)
     url: https://www.appveyor.com/eula/
+  x-logo:
+    url: https://www.appveyor.com/assets/img/appveyor-logo-256.png
 
 # Link to published docs
 externalDocs:
