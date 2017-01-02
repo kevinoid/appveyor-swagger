@@ -699,6 +699,10 @@ definitions:
     # TODO: Find a way to enumerate these
     enum:
     - information
+    # This category was observed in compilationMessages:
+    # https://ci.appveyor.com/project/SonarSource/sonar-scanner-msbuild/build/1.0.1003/messages
+    # Not sure if it applies to build messages
+    - warning
 
   BuildMessage:
     type: object
@@ -783,6 +787,13 @@ definitions:
     - stash
     - subversion
     - vso
+
+  RepositoryScm:
+    type: string
+    enum:
+    - git
+    - mercurial
+    - subversion
 
   AccessRightType:
     type: string
@@ -891,29 +902,28 @@ definitions:
         accountId:
           type: integer
           minimum: 0
+          readOnly: true
         accountName:
           type: string
+          readOnly: true
         builds:
           type: array
           items:
             $ref: '#/definitions/Build'
+          readOnly: true
         name:
           type: string
         slug:
           type: string
-          # TODO: urlsafe pattern restriction?
+          readOnly: true
         repositoryType:
           $ref: '#/definitions/RepositoryProvider'
         repositoryScm:
-          type: string
-          # TODO: Determine enumeration values
-          enum: [git]
+          $ref: '#/definitions/RepositoryScm'
         repositoryName:
           type: string
-          # TODO: pattern restriction?
         repositoryBranch:
           type: string
-          # TODO: pattern restriction?
         isPrivate:
           type: boolean
         skipBranchesWithoutAppveyorYml:
@@ -930,7 +940,6 @@ definitions:
           type: boolean
         tags:
           type: string
-          # TODO: pattern to restrict to comma-separated tokens?
         nuGetFeed:
           $ref: '#/definitions/NuGetFeed'
         securityDescriptor:
