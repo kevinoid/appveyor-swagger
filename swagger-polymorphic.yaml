@@ -79,6 +79,7 @@ info:
     url: https://www.appveyor.com/eula/
   x-logo:
     url: https://www.appveyor.com/assets/img/appveyor-logo-256.png
+  x-unofficialSpec: true
 
 # Link to published docs
 externalDocs:
