@@ -539,10 +539,10 @@ definitions:
     - successfulDeploymentNotification
     - failedDeploymentNotification
 
-  # Note:  Should be User, but User name must be used for UserGroupPermissions
-  # in the polymorphic definition due to how discriminator works.
+  # Note:  I would prefer the name User, but User must be used for
+  # UserGroupPermissions in the due to how discriminator works.
   # Item 1 of https://github.com/OAI/OpenAPI-Specification/issues/707
-  AVUser:
+  UserAccount:
     allOf:
     - $ref: '#/definitions/Timestamped'
     - $ref: '#/definitions/UserAccountSettings'
@@ -595,11 +595,11 @@ definitions:
       failedBuildNotification: all
       notifyWhenBuildStatusChangedOnly: true
 
-  AVUserRoles:
+  UserAccountRoles:
     type: object
     properties:
       user:
-        $ref: '#/definitions/AVUser'
+        $ref: '#/definitions/UserAccount'
       roles:
         type: array
         items:
@@ -2050,7 +2050,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/AVUser'
+              $ref: '#/definitions/UserAccount'
           examples:
             application/json:
             - accountId: 2
@@ -2097,7 +2097,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/AVUser'
+            $ref: '#/definitions/UserAccount'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2120,7 +2120,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/AVUserRoles'
+            $ref: '#/definitions/UserAccountRoles'
           examples:
             application/json:
               user:
@@ -2179,7 +2179,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/AVUser'
+              $ref: '#/definitions/UserAccount'
           examples:
             application/json:
             - accountId: 2
@@ -2249,7 +2249,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/AVUserRoles'
+            $ref: '#/definitions/UserAccountRoles'
           examples:
             application/json:
               user:
