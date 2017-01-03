@@ -595,7 +595,7 @@ definitions:
       failedBuildNotification: all
       notifyWhenBuildStatusChangedOnly: true
 
-  UserAccountRoles:
+  UserAccountRolesResults:
     type: object
     properties:
       user:
@@ -668,7 +668,7 @@ definitions:
           type: integer
           minimum: 0
 
-  BuildAddition:
+  BuildStartRequest:
     type: object
     properties:
       accountName:
@@ -775,7 +775,7 @@ definitions:
           type: string
           format: date-time
 
-  RepositoryAuthentication:
+  RepositoryAuthenticationType:
     type: string
     enum: [credentials, ssh]
 
@@ -799,30 +799,30 @@ definitions:
     - mercurial
     - subversion
 
-  AccessRightType:
+  AccessRightName:
     type: string
     enum: [Delete, Deploy, RunBuild, Update, View]
 
-  AccessRightDefinition:
+  AceAccessRightDefinition:
     type: object
     properties:
       name:
-        $ref: '#/definitions/AccessRightType'
+        $ref: '#/definitions/AccessRightName'
       description:
         type: string
     required: [name]
 
-  AccessRight:
+  AceAccessRight:
     type: object
     properties:
       name:
-        $ref: '#/definitions/AccessRightType'
+        $ref: '#/definitions/AccessRightName'
       allowed:
         # Note: true==allow, false==deny, undefined==inherit
         type: boolean
     required: [name]
 
-  RoleACE:
+  RoleAce:
     type: object
     properties:
       roleId:
@@ -835,7 +835,7 @@ definitions:
       accessRights:
         type: array
         items:
-          $ref: '#/definitions/AccessRight'
+          $ref: '#/definitions/AceAccessRight'
 
   SecurityDescriptor:
     type: object
@@ -843,11 +843,11 @@ definitions:
       accessRightDefinitions:
         type: array
         items:
-          $ref: '#/definitions/AccessRightDefinition'
+          $ref: '#/definitions/AceAccessRightDefinition'
       roleAces:
         type: array
         items:
-          $ref: '#/definitions/RoleACE'
+          $ref: '#/definitions/RoleAce'
 
   NuGetFeed:
     allOf:
@@ -882,7 +882,7 @@ definitions:
         type: string
         minLength: 1
       repositoryAuthentication:
-        $ref: '#/definitions/RepositoryAuthentication'
+        $ref: '#/definitions/RepositoryAuthenticationType'
       repositoryUsername:
         description: Required if repositoryAuthentication is credentials
         type: string
@@ -963,7 +963,7 @@ definitions:
     example:
       nextBuildNumber: 35
 
-  ProjectBuild:
+  ProjectBuildResults:
     type: object
     properties:
       project:
@@ -985,7 +985,7 @@ definitions:
     type: string
     enum: [gce]
 
-  Image:
+  BuildWorkerImage:
     type: object
     properties:
       buildWorkerImageId:
@@ -1053,7 +1053,7 @@ definitions:
     type: string
     enum: [quiet, minimal, normal, detailed]
 
-  OSService:
+  OSServiceName:
     type: string
     enum:
     - iis
@@ -1069,7 +1069,7 @@ definitions:
     - mysql
     - postgresql
 
-  Platform:
+  PlatformName:
     type: string
     enum:
     - ARM
@@ -1122,6 +1122,10 @@ definitions:
         # https://github.com/OAI/OpenAPI-Specification/pull/741
     required: [host, ip]
 
+  ProjectBranchesMode:
+    type: string
+    enum: [exclude, include]
+
   ProjectConfiguration:
     type: object
     properties:
@@ -1132,8 +1136,7 @@ definitions:
         items:
           $ref: '#/definitions/Script'
       branchesMode:
-        type: string
-        enum: [exclude, include]
+        $ref: '#/definitions/ProjectBranchesMode'
       includeBranches:
         type: array
         items:
@@ -1205,7 +1208,7 @@ definitions:
           type: object
           properties:
             value:
-              $ref: '#/definitions/OSService'
+              $ref: '#/definitions/OSServiceName'
           required: [value]
       cloneFolder:
         type: string
@@ -1250,7 +1253,7 @@ definitions:
           type: object
           properties:
             value:
-              $ref: '#/definitions/Platform'
+              $ref: '#/definitions/PlatformName'
           required: [value]
       configuration:
         type: array
@@ -1366,7 +1369,7 @@ definitions:
         items:
           $ref: '#/definitions/NotificationProviderSettings'
 
-  ProjectWithSettings:
+  ProjectWithConfiguration:
     type: object
     allOf:
     - $ref: '#/definitions/Project'
@@ -1384,7 +1387,7 @@ definitions:
           type: string
           # TODO: pattern restriction to valid cron entry time
         repositoryAuthentication:
-          $ref: '#/definitions/RepositoryAuthentication'
+          $ref: '#/definitions/RepositoryAuthenticationType'
         repositoryUsername:
           type: string
         sshPublicKey:
@@ -1508,17 +1511,17 @@ definitions:
             - name: Delete
         created: '2014-08-16T00:52:15.6604826+00:00'
 
-  ProjectSettings:
+  ProjectSettingsResults:
     type: object
     properties:
       project:
         $ref: '#/definitions/Project'
       settings:
-        $ref: '#/definitions/ProjectWithSettings'
+        $ref: '#/definitions/ProjectWithConfiguration'
       images:
         type: array
         items:
-          $ref: '#/definitions/Image'
+          $ref: '#/definitions/BuildWorkerImage'
       buildClouds:
         type: array
         items:
@@ -1658,7 +1661,7 @@ definitions:
         securityDescriptor:
           $ref: '#/definitions/SecurityDescriptor'
 
-  SelectableProject:
+  DeploymentEnvironmentProject:
     type: object
     properties:
       projectId:
@@ -1689,7 +1692,7 @@ definitions:
           description: Projects available for selection in UI
           type: array
           items:
-            $ref: '#/definitions/SelectableProject'
+            $ref: '#/definitions/DeploymentEnvironmentProject'
     example:
       deploymentEnvironmentId: 3018
       name: production
@@ -1715,13 +1718,13 @@ definitions:
             value: '123'
         provider: FTP
 
-  DeploymentEnvironmentWithSettingsObject:
+  DeploymentEnvironmentSettingsResults:
     type: object
     properties:
       environment:
         $ref: '#/definitions/DeploymentEnvironmentWithSettings'
 
-  DeploymentAddition:
+  DeploymentStartRequest:
     type: object
     properties:
       environmentName:
@@ -1790,7 +1793,7 @@ definitions:
           type: string
           format: date-time
 
-  DeploymentCancel:
+  DeploymentCancellation:
     type: object
     properties:
       deploymentId:
@@ -1817,7 +1820,7 @@ definitions:
         $ref: '#/definitions/Deployment'
     required: [project, deployment]
 
-  ProjectDeploymentEnvironments:
+  ProjectDeploymentsResults:
     type: object
     properties:
       project:
@@ -1827,7 +1830,7 @@ definitions:
         items:
           $ref: '#/definitions/DeploymentEnvironmentDeployment'
 
-  DeploymentEnvironmentDeployments:
+  DeploymentEnvironmentDeploymentsResults:
     type: object
     properties:
       environment:
@@ -1840,7 +1843,7 @@ definitions:
 
   # Deployment Settings }}}
 
-  NotificationProvider:
+  NotificationProviderType:
     type: string
     enum:
     - Campfire
@@ -2018,7 +2021,7 @@ definitions:
     type: object
     properties:
       provider:
-        $ref: '#/definitions/NotificationProvider'
+        $ref: '#/definitions/NotificationProviderType'
       settings:
         $ref: '#/definitions/NotificationSettings'
     required: [provider, settings]
@@ -2120,7 +2123,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/UserAccountRoles'
+            $ref: '#/definitions/UserAccountRolesResults'
           examples:
             application/json:
               user:
@@ -2249,7 +2252,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/UserAccountRoles'
+            $ref: '#/definitions/UserAccountRolesResults'
           examples:
             application/json:
               user:
@@ -2563,7 +2566,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/ProjectWithSettings'
+            $ref: '#/definitions/ProjectWithConfiguration'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2587,7 +2590,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectBuild'
+            $ref: '#/definitions/ProjectBuildResults'
           examples:
             application/json:
               project:
@@ -2677,7 +2680,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectBuild'
+            $ref: '#/definitions/ProjectBuildResults'
           # FIXME: Same example as /api/projects/{accountName}/{projectSlug}
           examples:
             application/json:
@@ -2756,7 +2759,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectBuild'
+            $ref: '#/definitions/ProjectBuildResults'
           # FIXME: Same example as /api/projects/{accountName}/{projectSlug}
           examples:
             application/json:
@@ -2908,7 +2911,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectDeploymentEnvironments'
+            $ref: '#/definitions/ProjectDeploymentsResults'
           examples:
             application/json:
               project:
@@ -3000,7 +3003,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectSettings'
+            $ref: '#/definitions/ProjectSettingsResults'
           examples:
             application/json:
               project:
@@ -3275,7 +3278,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/BuildAddition'
+            $ref: '#/definitions/BuildStartRequest'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3481,7 +3484,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/DeploymentEnvironmentWithSettingsObject'
+            $ref: '#/definitions/DeploymentEnvironmentSettingsResults'
           examples:
             application/json:
               environment:
@@ -3530,7 +3533,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/DeploymentEnvironmentDeployments'
+            $ref: '#/definitions/DeploymentEnvironmentDeploymentsResults'
           examples:
             application/json:
               environment:
@@ -3706,7 +3709,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/DeploymentAddition'
+            $ref: '#/definitions/DeploymentStartRequest'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3770,7 +3773,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/DeploymentCancel'
+            $ref: '#/definitions/DeploymentCancellation'
       responses:
         default:
           $ref: '#/responses/Error'
