@@ -284,7 +284,7 @@ definitions:
     type: string
     enum: [all, none]
 
-  CollaboratorCreate:
+  CollaboratorAddition:
     description: |
       Technically `roleId` has default value 0 and is not required, but
       since role 0 never exists it would always cause a 404 response.
@@ -594,7 +594,7 @@ definitions:
 
   # Permissions }}}
 
-  RoleCreate:
+  RoleAddition:
     type: object
     properties:
       name:
@@ -699,7 +699,7 @@ definitions:
           description: Generate API keys
           allowed: false
 
-  UserCreate:
+  UserAddition:
     type: object
     properties:
       fullName:
@@ -897,7 +897,7 @@ definitions:
           type: integer
           minimum: 0
 
-  BuildCreate:
+  BuildAddition:
     type: object
     properties:
       accountName:
@@ -1096,7 +1096,7 @@ definitions:
         publishingEnabled:
           type: boolean
 
-  ProjectCreate:
+  ProjectAddition:
     description: >-
       `repositoryAuthentication` is only used for git, mercurial, subversion
       `repositoryProvider`.
@@ -1865,7 +1865,7 @@ definitions:
         items:
           $ref: '#/definitions/NotificationProviderSettings'
 
-  DeploymentEnvironmentCreate:
+  DeploymentEnvironmentAddition:
     type: object
     properties:
       name:
@@ -1993,7 +1993,7 @@ definitions:
       environment:
         $ref: '#/definitions/DeploymentEnvironmentWithSettings'
 
-  DeploymentCreate:
+  DeploymentAddition:
     type: object
     properties:
       environmentName:
@@ -2407,7 +2407,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UserCreate'
+            $ref: '#/definitions/UserAddition'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2536,7 +2536,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CollaboratorCreate'
+            $ref: '#/definitions/CollaboratorAddition'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2664,7 +2664,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/RoleCreate'
+            $ref: '#/definitions/RoleAddition'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2857,7 +2857,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/ProjectCreate'
+            $ref: '#/definitions/ProjectAddition'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3603,7 +3603,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/BuildCreate'
+            $ref: '#/definitions/BuildAddition'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3711,7 +3711,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/DeploymentEnvironmentCreate'
+            $ref: '#/definitions/DeploymentEnvironmentAddition'
       responses:
         default:
           $ref: '#/responses/Error'
@@ -4034,7 +4034,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/DeploymentCreate'
+            $ref: '#/definitions/DeploymentAddition'
       responses:
         default:
           $ref: '#/responses/Error'
