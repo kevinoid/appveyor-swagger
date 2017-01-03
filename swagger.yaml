@@ -1278,6 +1278,7 @@ definitions:
       msBuildVerbosity:
         $ref: '#/definitions/MSBuildVerbosity'
       buildScripts:
+        description: Only set/used when `buildMode` is `script`.
         type: array
         items:
           $ref: '#/definitions/Script'
@@ -1316,6 +1317,7 @@ definitions:
               items:
                 $ref: '#/definitions/StringValueObject'
       testScripts:
+        description: Only set/used when `testMode` is `script`.
         type: array
         items:
           $ref: '#/definitions/Script'
