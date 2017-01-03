@@ -1215,6 +1215,15 @@ definitions:
     type: string
     enum: [gce]
 
+  BuildWorkerImageName:
+    type: string
+    enum:
+    - Previous Visual Studio 2013
+    - Previous Visual Studio 2015
+    - Visual Studio 2013
+    - Visual Studio 2015
+    - WMF 5
+
   BuildWorkerImage:
     type: object
     properties:
@@ -1222,11 +1231,10 @@ definitions:
         type: integer
         minimum: 0
       name:
-        type: string
-        minLength: 1
+        $ref: '#/definitions/BuildWorkerImageName'
       buildCloudName:
         $ref: '#/definitions/BuildCloudName'
-    required: [name]
+    required: [buildWorkerImageId, name]
 
   ScriptLanguage:
     type: string
@@ -1265,15 +1273,6 @@ definitions:
   BuildMode:
     type: string
     enum: [msbuild, none, script]
-
-  BuildWorkerImage:
-    type: string
-    enum:
-    - Previous Visual Studio 2013
-    - Previous Visual Studio 2015
-    - Visual Studio 2013
-    - Visual Studio 2015
-    - WMF 5
 
   DeployMode:
     type: string
@@ -1429,7 +1428,7 @@ definitions:
           type: object
           properties:
             value:
-              $ref: '#/definitions/BuildWorkerImage'
+              $ref: '#/definitions/BuildWorkerImageName'
           required: [value]
       services:
         title: OS services to start during the build process
