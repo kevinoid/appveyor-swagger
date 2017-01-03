@@ -971,7 +971,7 @@ definitions:
       build:
         $ref: '#/definitions/Build'
 
-  ProjectBuilds:
+  ProjectHistory:
     type: object
     properties:
       project:
@@ -2837,7 +2837,7 @@ paths:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/ProjectBuilds'
+            $ref: '#/definitions/ProjectHistory'
           examples:
             application/json:
               project:
