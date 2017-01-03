@@ -5,9 +5,10 @@ info:
   title: AppVeyor REST API
   version: 0.0.20161219
   description: |
-    The AppVeyor REST API provides a RESTful way to interact with the AppVeyor
-    service.  This includes managing projects, builds, deployments, and the
-    teams that build them.
+    AppVeyor is a hosted continuous integration service which runs on Microsoft
+    Windows.  The AppVeyor REST API provides a RESTful way to interact with the
+    AppVeyor service.  This includes managing projects, builds, deployments,
+    and the teams that build them.
 
     Additional help and discussion of the AppVeyor REST API is available at
     http://help.appveyor.com/discussions
