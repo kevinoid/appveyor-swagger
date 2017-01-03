@@ -1017,7 +1017,7 @@ definitions:
         $ref: '#/definitions/ScriptLanguage'
       script:
         type: string
-    required: [language, script]
+    required: [script]
 
   ArtifactType:
     type: string
