@@ -37,6 +37,14 @@ It can then be used in [Node.js](https://nodejs.org/en/) projects with:
 var appveyorSwagger = require('appveyor-swagger');
 ```
 
+## Test Client
+
+There is a [AppVeyor API Client in
+Java](https://github.com/kevinoid/appveyor-swagger-java) which is generated
+from the definition in this project and used for demonstration and testing
+purposes.  It is a good example of how to generate and use a client based on
+this definition.
+
 ## Implementation Notes
 
 ### Schema Strictness
