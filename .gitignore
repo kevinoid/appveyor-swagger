@@ -1,3 +1,5 @@
 /doc/
 node_modules/
 npm-debug.log
+swagger-polymorphic.json
+swagger.json
