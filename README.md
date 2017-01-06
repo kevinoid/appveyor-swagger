@@ -9,6 +9,16 @@ definition and the AppVeyor REST API are errors in this definition and users
 are encouraged to [report the
 issue](https://github.com/kevinoid/appveyor-swagger/issues/new).
 
+## Documentation
+
+The documentation generated from the Swagger definition is available in the
+following formats:
+
+* [Swagger UI](https://github.com/swagger-api/swagger-ui/):
+  [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/swagger-ui/)
+* [Bootprint](https://github.com/bootprint/bootprint-openapi):
+  [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/bootprint/)
+
 ## Implementation Notes
 
 `swagger-polymorphic.yaml` attempts to provide stricter type definitions by
