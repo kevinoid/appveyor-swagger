@@ -1,6 +1,9 @@
 Unofficial AppVeyor REST API Swagger Definition
 ===============================================
 
+[![Build Status: Linux](https://img.shields.io/travis/kevinoid/appveyor-swagger.svg?style=flat&label=build+on+linux)](https://travis-ci.org/kevinoid/appveyor-swagger)
+[![Version on NPM](https://img.shields.io/npm/v/appveyor-swagger.svg?style=flat)](https://www.npmjs.com/package/appveyor-swagger)
+
 This project aims to provide a
 [Swagger](http://swagger.io)/[OpenAPI](https://www.openapis.org/) definition
 of the [AppVeyor REST API](https://www.appveyor.com/docs/api/).  It is
