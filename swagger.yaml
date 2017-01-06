@@ -589,7 +589,6 @@ definitions:
       userId: 3019
       fullName: John Smith
       email: john@smith.com
-      password: null
       roleId: 4
       successfulBuildNotification: all
       failedBuildNotification: all
