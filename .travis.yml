@@ -1,0 +1,7 @@
+# https://docs.travis-ci.com/user/customizing-the-build/
+language: node_js
+node_js:
+  - node
+sudo: false
+script:
+  - npm run test

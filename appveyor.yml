@@ -1,0 +1,22 @@
+# http://www.appveyor.com/docs/appveyor-yml
+
+environment:
+  matrix:
+    - nodejs_version: "7"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm -g install npm
+  - npm install
+
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+
+# Disable build step, which we don't need
+build: off
+
+# If any job fails, fail build immediately to avoid wasting time/resources.
+matrix:
+  fast_finish: true
