@@ -34,11 +34,15 @@
 
   <script type="text/javascript">
     $(function () {
-      var url = window.location.search.match(/url=([^&]+)/);
-      if (url && url.length > 1) {
-        url = decodeURIComponent(url[1]);
+      var urlmatch = window.location.search.match(/[?&]url=([^&]+)/);
+      var url;
+      if (urlmatch) {
+        url = decodeURIComponent(urlmatch[1]);
       } else {
-        url = "http://petstore.swagger.io/v2/swagger.json";
+        var vmatch = window.location.search.match(/[?&]v=([^&]+)/);
+        var version = vmatch ? decodeURIComponent(vmatch[1]) : "master";
+        url = "https://rawgit.com/kevinoid/appveyor-swagger/" + version +
+          "/swagger.yaml";
       }
 
       hljs.configure({
