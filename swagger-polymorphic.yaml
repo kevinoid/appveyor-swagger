@@ -3,7 +3,7 @@ swagger: '2.0'
 # API metadata
 info:
   title: AppVeyor REST API
-  version: 0.0.20161219
+  version: 0.0.20170106
   description: |
     AppVeyor is a hosted continuous integration service which runs on Microsoft
     Windows.  The AppVeyor REST API provides a RESTful way to interact with the
