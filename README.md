@@ -19,6 +19,21 @@ following formats:
 * [Bootprint](https://github.com/bootprint/bootprint-openapi):
   [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/bootprint/)
 
+## Installation
+
+The Swagger definition can be installed as an [an npm
+package](https://www.npmjs.com/package/appveyor-swagger) by running:
+
+```sh
+npm install appveyor-swagger
+```
+
+It can then be used in [Node.js](https://nodejs.org/en/) projects with:
+
+```js
+var appveyorSwagger = require('appveyor-swagger');
+```
+
 ## Implementation Notes
 
 `swagger-polymorphic.yaml` attempts to provide stricter type definitions by
