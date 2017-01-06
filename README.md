@@ -48,6 +48,13 @@ this definition.
 
 ## Implementation Notes
 
+### Schema Names
+
+The schema names used in the definition are based on the names returned in the
+XML API responses, where those names are not confusing and do not conflict
+with the requirements imposed by `discriminator`.  (The OpenAPI Spec requires
+`discriminator` property values match schema names).
+
 ### Schema Strictness
 
 There are many trade-offs between the schema strictness and the usability,
