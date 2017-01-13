@@ -20,8 +20,7 @@ following formats:
 * [Swagger UI](https://github.com/swagger-api/swagger-ui/):
   [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/swagger-ui/)
 * [Bootprint](https://github.com/bootprint/bootprint-openapi):
-  [AppVeyor API
-Docs](https://kevinoid.github.io/appveyor-swagger/bootprint/index.html)
+  [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/bootprint/)
 
 ## Installation
 
