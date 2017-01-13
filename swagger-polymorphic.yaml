@@ -183,6 +183,17 @@ parameters:
     type: string
     required: true
     minLength: 1
+  badgeRepoProvider:
+    name: badgeRepoProvider
+    in: path
+    description: Repository provider supported for badges
+    type: string
+    # Note: Values are case-insensitive.
+    #       Match capitalization of RepositoryProvider for ease of use.
+    enum:
+    - bitBucket
+    - gitHub
+    required: true
   branch:
     name: branch
     in: query
@@ -213,6 +224,20 @@ parameters:
     description: Project Slug
     type: string
     required: true
+  repoAccountName:
+    name: repoAccountName
+    in: path
+    description: Account name with repository provider
+    type: string
+    required: true
+    minLength: 1
+  repoSlug:
+    name: repoSlug
+    in: path
+    description: Slug (URL component) of repository.
+    type: string
+    required: true
+    minLength: 1
   recordsNumber:
     name: recordsNumber
     in: query
@@ -226,6 +251,51 @@ parameters:
     in: query
     type: integer
     minimum: 0
+  webhookId:
+    name: webhookId
+    in: path
+    description: >-
+      Project webhook ID (`webhookId` from `ProjectWithConfiguration`)
+    type: string
+    minLength: 1
+    required: true
+
+  ### {{{ Status badges
+  failingText:
+    name: failingText
+    in: query
+    description: Text to show in badge when build is failing.
+    type: string
+    # Parameter can be unspecified (not present), but can't be empty
+    minLength: 1
+  passingText:
+    name: passingText
+    in: query
+    description: Text to show in badge when build is passing.
+    type: string
+    # Parameter can be unspecified (not present), but can't be empty
+    minLength: 1
+  pendingText:
+    name: pendingText
+    in: query
+    description: Text to show in badge when build is pending.
+    type: string
+    # Parameter can be unspecified (not present), but can't be empty
+    minLength: 1
+  retina:
+    name: retina
+    in: query
+    description: >-
+      Return a larger image suitable for retina displays?  Exclusive with `svg`.
+    type: boolean
+    default: false
+  svg:
+    name: svg
+    in: query
+    description: Return an SVG image instead of PNG?  Exclusive with `retina`.
+    type: boolean
+    default: false
+  ### }}}
 
   ### }}}
   ### {{{ Environments and Deployments
@@ -3596,6 +3666,94 @@ paths:
           $ref: '#/responses/Error'
         '204':
           description: Success
+
+  /projects/status/{webhookId}:
+    parameters:
+    - $ref: '#/parameters/webhookId'
+    get:
+      tags:
+      - Project
+      operationId: getProjectStatusBadge
+      summary: Get project status badge image
+      externalDocs:
+        url: https://www.appveyor.com/docs/status-badges/
+      security: []
+      parameters:
+      - $ref: '#/parameters/svg'
+      - $ref: '#/parameters/retina'
+      - $ref: '#/parameters/passingText'
+      - $ref: '#/parameters/failingText'
+      - $ref: '#/parameters/pendingText'
+      produces:
+      - image/svg+xml
+      - image/png
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: file
+
+  /projects/status/{webhookId}/branch/{buildBranch}:
+    parameters:
+    - $ref: '#/parameters/webhookId'
+    - $ref: '#/parameters/buildBranch'
+    get:
+      tags:
+      - Project
+      operationId: getProjectBranchStatusBadge
+      summary: Get project branch status badge image
+      externalDocs:
+        url: https://www.appveyor.com/docs/status-badges/
+      security: []
+      parameters:
+      - $ref: '#/parameters/svg'
+      - $ref: '#/parameters/retina'
+      - $ref: '#/parameters/passingText'
+      - $ref: '#/parameters/failingText'
+      - $ref: '#/parameters/pendingText'
+      produces:
+      - image/svg+xml
+      - image/png
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: file
+
+  /projects/status/{badgeRepoProvider}/{repoAccountName}/{repoSlug}:
+    parameters:
+    - $ref: '#/parameters/badgeRepoProvider'
+    - $ref: '#/parameters/repoAccountName'
+    - $ref: '#/parameters/repoSlug'
+    get:
+      tags:
+      - Project
+      operationId: getPublicProjectStatusBadge
+      summary: Get status badge image for a project with a public repository
+      externalDocs:
+        url: https://www.appveyor.com/docs/status-badges/
+      security: []
+      parameters:
+      - $ref: '#/parameters/branch'
+      - $ref: '#/parameters/svg'
+      - $ref: '#/parameters/retina'
+      - $ref: '#/parameters/passingText'
+      - $ref: '#/parameters/failingText'
+      - $ref: '#/parameters/pendingText'
+      produces:
+      - image/svg+xml
+      - image/png
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: file
 
   ### Project }}}
   ### {{{ Build
