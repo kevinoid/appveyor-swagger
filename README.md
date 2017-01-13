@@ -17,6 +17,9 @@ issue](https://github.com/kevinoid/appveyor-swagger/issues/new).
 The documentation generated from the Swagger definition is available in the
 following formats:
 
+* [ReDoc](https://github.com/Rebilly/ReDoc):
+  [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/redoc/)
+  (Supports `discriminator`)
 * [Swagger UI](https://github.com/swagger-api/swagger-ui/):
   [AppVeyor API Docs](https://kevinoid.github.io/appveyor-swagger/swagger-ui/)
 * [Bootprint](https://github.com/bootprint/bootprint-openapi):
