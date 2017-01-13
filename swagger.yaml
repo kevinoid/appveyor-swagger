@@ -2584,6 +2584,7 @@ paths:
       summary: Get project last build
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-build'
+      security: []
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2674,6 +2675,7 @@ paths:
       summary: Get project last branch build
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-branch-build'
+      security: []
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2753,6 +2755,7 @@ paths:
       summary: Get project build by version
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-build-by-version'
+      security: []
       responses:
         default:
           $ref: '#/responses/Error'
@@ -2834,6 +2837,7 @@ paths:
       summary: Get project history
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-history'
+      security: []
       responses:
         default:
           $ref: '#/responses/Error'
@@ -3332,6 +3336,7 @@ paths:
       summary: Download build log
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
+      security: []
       produces:
       - application/octet-stream
       responses:
