@@ -2828,9 +2828,6 @@ paths:
     parameters:
     - $ref: '#/parameters/accountName'
     - $ref: '#/parameters/projectSlug'
-    - $ref: '#/parameters/recordsNumber'
-    - $ref: '#/parameters/startBuildId'
-    - $ref: '#/parameters/branch'
     get:
       tags:
       - Project
@@ -2839,6 +2836,10 @@ paths:
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-history'
       security: []
+      parameters:
+      - $ref: '#/parameters/recordsNumber'
+      - $ref: '#/parameters/startBuildId'
+      - $ref: '#/parameters/branch'
       responses:
         default:
           $ref: '#/responses/Error'
