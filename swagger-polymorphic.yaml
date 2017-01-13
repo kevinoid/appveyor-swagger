@@ -179,9 +179,10 @@ parameters:
   accountName:
     name: accountName
     in: path
-    description: Account Name
+    description: AppVeyor account name (`accountName` property of `UserAccount`)
     type: string
     required: true
+    minLength: 1
   branch:
     name: branch
     in: query
