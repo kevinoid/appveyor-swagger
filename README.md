@@ -48,6 +48,27 @@ this definition.
 
 ## Implementation Notes
 
+### Versioning
+
+The AppVeyor REST API does not provide any public versioning scheme that I am
+aware of.  Since versioning is necessary, both in the OpenAPI specification
+file and in the npm package, the following versioning scheme is adopted:
+
+* **Major Version** is kept at 0.  This is both to signal that the API is
+  unstable (via [semver
+rules](http://semver.org/spec/v2.0.0.html#semantic-versioning-specification-semver)) and to allow any numbering which may be introduced by AppVeyor to compare
+  as later than these unnumbered releases.
+* **Minor Version** is the REST API date as YYYYMMDD.  This denotes the version
+  of the AppVeyor REST API being described which is easy to read and reason
+  about.  Changes to this number may reflect incompatible changes to the API.
+* **Patch Version** is the serial number of the OpenAPI/Swagger description for
+  the minor date.  It resets to 0 each time the minor version is changed and
+  is incremented by 1 for each published version.  Although it does not
+  represent a change in the REST API, it is likely to reflect a change in the
+  generated/validation API of software using the specification.  Software using
+  this specification should *expect API changes even when the patch version
+  changes* and should not be depended upon such versions without testing.
+
 ### Schema Names
 
 The schema names used in the definition are based on the names returned in the
