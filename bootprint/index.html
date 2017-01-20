@@ -264,6 +264,21 @@
                         <td><p>Delete project build cache</p>
         </td>
                     </tr>
+                    <tr>
+                        <td><a href="#operation--projects-status--webhookId--get">GET /projects/status/{webhookId}</a></td>
+                        <td><p>Get project status badge image</p>
+        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#operation--projects-status--webhookId--branch--buildBranch--get">GET /projects/status/{webhookId}/branch/{buildBranch}</a></td>
+                        <td><p>Get project branch status badge image</p>
+        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#operation--projects-status--badgeRepoProvider---repoAccountName---repoSlug--get">GET /projects/status/{badgeRepoProvider}/{repoAccountName}/{repoSlug}</a></td>
+                        <td><p>Get status badge image for a project with a public repository</p>
+        </td>
+                    </tr>
                 </tbody>
             </table>
             <h3 id="tag-Deployment" class="swagger-summary-tag">Tag: Deployment</h3>
@@ -591,12 +606,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2171,6 +2189,611 @@
                         </section>
                 </div>
             </div>    
+        <span id="path--projects-status--badgeRepoProvider---repoAccountName---repoSlug-"></span>
+            <div id="operation--projects-status--badgeRepoProvider---repoAccountName---repoSlug--get" class="swagger--panel-operation-get panel">
+                <div class="panel-heading">
+                    <div class="operation-summary">Get status badge image for a project with a public repository</div>
+                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{badgeRepoProvider}/{repoAccountName}/{repoSlug}</strong></h3>
+                        Tags:
+                            <a href="#tag-Project">Project</a>
+                </div>
+                <div class="panel-body">
+                    <section class="sw-operation-description">
+                        
+                    </section>
+                    
+                        <section class="sw-request-params">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="sw-param-name"></th>
+                                    <th class="sw-param-description"></th>
+                                    <th class="sw-param-type"></th>
+                                    <th class="sw-param-data-type"></th>
+                                    <th class="sw-param-annotation"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td>
+                                                branch
+                                            <td><p>Repository Branch</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/branch">#/parameters/branch</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                svg
+                                            <td><p>Return an SVG image instead of PNG?  Exclusive with <code>retina</code>.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">boolean</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/svg">#/parameters/svg</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                retina
+                                            <td><p>Return a larger image suitable for retina displays?  Exclusive with <code>svg</code>.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">boolean</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/retina">#/parameters/retina</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                passingText
+                                            <td><p>Text to show in badge when build is passing.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/passingText">#/parameters/passingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                failingText
+                                            <td><p>Text to show in badge when build is failing.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/failingText">#/parameters/failingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                pendingText
+                                            <td><p>Text to show in badge when build is pending.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/pendingText">#/parameters/pendingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                badgeRepoProvider
+                                            <td><p>Repository provider supported for badges</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>    <span class="json-property-enum" title="Possible values">, x &isin; {
+                                                        <span class="json-property-enum-item">bitBucket</span>
+                                                    ,
+                                                        <span class="json-property-enum-item">gitHub</span>
+                                                    
+                                                }
+                                                </span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/badgeRepoProvider">#/parameters/badgeRepoProvider</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                repoAccountName
+                                            <td><p>Account name with repository provider</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/repoAccountName">#/parameters/repoAccountName</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                repoSlug
+                                            <td><p>Slug (URL component) of repository.</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/repoSlug">#/parameters/repoSlug</a></span>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    
+                        <section class="sw-responses">
+                                <p><span class="label label-default">image/svg+xml</span> <span class="label label-default">image/png</span> 
+                    </p>
+                    
+                            <dl>
+                                    <dt class="sw-response-200">
+                                        200 OK
+                                    
+                                    </dt>
+                                    <dd class="sw-response-200">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Success</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                            
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                                    <dt class="sw-response-default">
+                                        default 
+                                            <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/responses/Error">#/responses/Error</a></span>
+                                    
+                                    </dt>
+                                    <dd class="sw-response-default">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Error</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Error">Error</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                            </dl>
+                        </section>
+                </div>
+            </div>    
+        <span id="path--projects-status--webhookId-"></span>
+            <div id="operation--projects-status--webhookId--get" class="swagger--panel-operation-get panel">
+                <div class="panel-heading">
+                    <div class="operation-summary">Get project status badge image</div>
+                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{webhookId}</strong></h3>
+                        Tags:
+                            <a href="#tag-Project">Project</a>
+                </div>
+                <div class="panel-body">
+                    <section class="sw-operation-description">
+                        
+                    </section>
+                    
+                        <section class="sw-request-params">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="sw-param-name"></th>
+                                    <th class="sw-param-description"></th>
+                                    <th class="sw-param-type"></th>
+                                    <th class="sw-param-data-type"></th>
+                                    <th class="sw-param-annotation"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td>
+                                                svg
+                                            <td><p>Return an SVG image instead of PNG?  Exclusive with <code>retina</code>.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">boolean</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/svg">#/parameters/svg</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                retina
+                                            <td><p>Return a larger image suitable for retina displays?  Exclusive with <code>svg</code>.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">boolean</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/retina">#/parameters/retina</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                passingText
+                                            <td><p>Text to show in badge when build is passing.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/passingText">#/parameters/passingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                failingText
+                                            <td><p>Text to show in badge when build is failing.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/failingText">#/parameters/failingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                pendingText
+                                            <td><p>Text to show in badge when build is pending.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/pendingText">#/parameters/pendingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                webhookId
+                                            <td><p>Project webhook ID (<code>webhookId</code> from <code>ProjectWithConfiguration</code>)</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/webhookId">#/parameters/webhookId</a></span>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    
+                        <section class="sw-responses">
+                                <p><span class="label label-default">image/svg+xml</span> <span class="label label-default">image/png</span> 
+                    </p>
+                    
+                            <dl>
+                                    <dt class="sw-response-200">
+                                        200 OK
+                                    
+                                    </dt>
+                                    <dd class="sw-response-200">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Success</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                            
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                                    <dt class="sw-response-default">
+                                        default 
+                                            <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/responses/Error">#/responses/Error</a></span>
+                                    
+                                    </dt>
+                                    <dd class="sw-response-default">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Error</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Error">Error</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                            </dl>
+                        </section>
+                </div>
+            </div>    
+        <span id="path--projects-status--webhookId--branch--buildBranch-"></span>
+            <div id="operation--projects-status--webhookId--branch--buildBranch--get" class="swagger--panel-operation-get panel">
+                <div class="panel-heading">
+                    <div class="operation-summary">Get project branch status badge image</div>
+                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{webhookId}/branch/{buildBranch}</strong></h3>
+                        Tags:
+                            <a href="#tag-Project">Project</a>
+                </div>
+                <div class="panel-body">
+                    <section class="sw-operation-description">
+                        
+                    </section>
+                    
+                        <section class="sw-request-params">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="sw-param-name"></th>
+                                    <th class="sw-param-description"></th>
+                                    <th class="sw-param-type"></th>
+                                    <th class="sw-param-data-type"></th>
+                                    <th class="sw-param-annotation"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td>
+                                                svg
+                                            <td><p>Return an SVG image instead of PNG?  Exclusive with <code>retina</code>.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">boolean</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/svg">#/parameters/svg</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                retina
+                                            <td><p>Return a larger image suitable for retina displays?  Exclusive with <code>svg</code>.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">boolean</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/retina">#/parameters/retina</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                passingText
+                                            <td><p>Text to show in badge when build is passing.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/passingText">#/parameters/passingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                failingText
+                                            <td><p>Text to show in badge when build is failing.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/failingText">#/parameters/failingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                pendingText
+                                            <td><p>Text to show in badge when build is pending.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/pendingText">#/parameters/pendingText</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                webhookId
+                                            <td><p>Project webhook ID (<code>webhookId</code> from <code>ProjectWithConfiguration</code>)</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/webhookId">#/parameters/webhookId</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                buildBranch
+                                            <td><p>Build Branch</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/buildBranch">#/parameters/buildBranch</a></span>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    
+                        <section class="sw-responses">
+                                <p><span class="label label-default">image/svg+xml</span> <span class="label label-default">image/png</span> 
+                    </p>
+                    
+                            <dl>
+                                    <dt class="sw-response-200">
+                                        200 OK
+                                    
+                                    </dt>
+                                    <dd class="sw-response-200">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Success</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                            
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                                    <dt class="sw-response-default">
+                                        default 
+                                            <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/responses/Error">#/responses/Error</a></span>
+                                    
+                                    </dt>
+                                    <dd class="sw-response-default">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Error</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Error">Error</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                            </dl>
+                        </section>
+                </div>
+            </div>    
         <span id="path--projects--accountName---projectSlug-"></span>
             <div id="operation--projects--accountName---projectSlug--delete" class="swagger--panel-operation-delete panel">
                 <div class="panel-heading">
@@ -2199,12 +2822,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2305,12 +2931,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2421,12 +3050,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2552,12 +3184,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2683,12 +3318,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2791,12 +3429,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -2906,36 +3547,6 @@
                                 <tbody>
                                         <tr>
                                             <td>
-                                                accountName
-                                            <td><p>Account Name</p>
-                                        </td>
-                                            <td>path</td>
-                                            <td><span class="json-property-type">string</span>
-                                        <span class="json-property-range" title="Value limits"></span>
-                                        
-                                            </td>
-                                            <td>
-                                                    <span class="json-property-required"></span>
-                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/accountName">#/parameters/accountName</a></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                projectSlug
-                                            <td><p>Project Slug</p>
-                                        </td>
-                                            <td>path</td>
-                                            <td><span class="json-property-type">string</span>
-                                        <span class="json-property-range" title="Value limits"></span>
-                                        
-                                            </td>
-                                            <td>
-                                                    <span class="json-property-required"></span>
-                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/projectSlug">#/parameters/projectSlug</a></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
                                                 recordsNumber
                                             <td><p>Number of results to include in the response.</p>
                                         </td>
@@ -2978,6 +3589,39 @@
                                             </td>
                                             <td>
                                                     <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/branch">#/parameters/branch</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                accountName
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/accountName">#/parameters/accountName</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                projectSlug
+                                            <td><p>Project Slug</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/projectSlug">#/parameters/projectSlug</a></span>
                                             </td>
                                         </tr>
                                 </tbody>
@@ -3069,12 +3713,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -3202,12 +3849,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -3310,12 +3960,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -3451,12 +4104,15 @@
                                         <tr>
                                             <td>
                                                 accountName
-                                            <td><p>Account Name</p>
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
                                         <span class="json-property-range" title="Value limits"></span>
                                         
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
@@ -4440,10 +5096,34 @@
                         <td><a name="/parameters/accountName"></a>accountName</td>
                     <td>
                         accountName
-                    <td><p>Account Name</p>
+                    <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
                 </td>
                     <td>path</td>
                     <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                            <span class="json-property-required"></span>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/badgeRepoProvider"></a>badgeRepoProvider</td>
+                    <td>
+                        badgeRepoProvider
+                    <td><p>Repository provider supported for badges</p>
+                </td>
+                    <td>path</td>
+                    <td><span class="json-property-type">string</span>    <span class="json-property-enum" title="Possible values">, x &isin; {
+                                <span class="json-property-enum-item">bitBucket</span>
+                            ,
+                                <span class="json-property-enum-item">gitHub</span>
+                            
+                        }
+                        </span>
                 <span class="json-property-range" title="Value limits"></span>
                 
                     </td>
@@ -4529,6 +5209,42 @@
                     </td>
                 </tr>
                 <tr>
+                        <td><a name="/parameters/repoAccountName"></a>repoAccountName</td>
+                    <td>
+                        repoAccountName
+                    <td><p>Account name with repository provider</p>
+                </td>
+                    <td>path</td>
+                    <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                            <span class="json-property-required"></span>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/repoSlug"></a>repoSlug</td>
+                    <td>
+                        repoSlug
+                    <td><p>Slug (URL component) of repository.</p>
+                </td>
+                    <td>path</td>
+                    <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                            <span class="json-property-required"></span>
+                    </td>
+                </tr>
+                <tr>
                         <td><a name="/parameters/recordsNumber"></a>recordsNumber</td>
                     <td>
                         recordsNumber
@@ -4552,6 +5268,103 @@
                     <td>query</td>
                     <td><span class="json-property-type">integer</span>
                 <span class="json-property-range" title="Value limits">, { x ∈ ℤ | x ≥ 0 }</span>
+                
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/webhookId"></a>webhookId</td>
+                    <td>
+                        webhookId
+                    <td><p>Project webhook ID (<code>webhookId</code> from <code>ProjectWithConfiguration</code>)</p>
+                </td>
+                    <td>path</td>
+                    <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                            <span class="json-property-required"></span>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/failingText"></a>failingText</td>
+                    <td>
+                        failingText
+                    <td><p>Text to show in badge when build is failing.</p>
+                </td>
+                    <td>query</td>
+                    <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/passingText"></a>passingText</td>
+                    <td>
+                        passingText
+                    <td><p>Text to show in badge when build is passing.</p>
+                </td>
+                    <td>query</td>
+                    <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/pendingText"></a>pendingText</td>
+                    <td>
+                        pendingText
+                    <td><p>Text to show in badge when build is pending.</p>
+                </td>
+                    <td>query</td>
+                    <td><span class="json-property-type">string</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    <span class="json-property-range" title="String length limits">
+                            (at least 1 chars)
+                    </span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/retina"></a>retina</td>
+                    <td>
+                        retina
+                    <td><p>Return a larger image suitable for retina displays?  Exclusive with <code>svg</code>.</p>
+                </td>
+                    <td>query</td>
+                    <td><span class="json-property-type">boolean</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="/parameters/svg"></a>svg</td>
+                    <td>
+                        svg
+                    <td><p>Return an SVG image instead of PNG?  Exclusive with <code>retina</code>.</p>
+                </td>
+                    <td>query</td>
+                    <td><span class="json-property-type">boolean</span>
+                <span class="json-property-range" title="Value limits"></span>
                 
                     </td>
                     <td>
