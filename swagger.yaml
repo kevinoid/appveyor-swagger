@@ -789,14 +789,25 @@ definitions:
         type: string
         format: date-time
 
+  BuildLookupModel:
+    type: object
+    properties:
+      branch:
+        type: string
+      buildId:
+        type: integer
+        minimum: 0
+      message:
+        type: string
+      version:
+        type: string
+
   Build:
     allOf:
+    - $ref: '#/definitions/BuildLookupModel'
     - $ref: '#/definitions/Timestamped'
     - type: object
       properties:
-        buildId:
-          type: integer
-          minimum: 0
         jobs:
           type: array
           items:
@@ -804,13 +815,7 @@ definitions:
         buildNumber:
           type: integer
           minimum: 0
-        version:
-          type: string
-        message:
-          type: string
         messageExtended:
-          type: string
-        branch:
           type: string
         isTag:
           type: boolean
@@ -965,30 +970,38 @@ definitions:
       repositoryProvider: gitHub
       repositoryName: FeodorFitsner/demo-app
 
+  ProjectLookupModel:
+    type: object
+    properties:
+      projectId:
+        type: integer
+        minimum: 0
+      accountName:
+        type: string
+        readOnly: true
+      name:
+        type: string
+      slug:
+        type: string
+        readOnly: true
+    # Note: requirements tested against PUT /api/projects 2016-12-21
+    required:
+    - projectId
+
   Project:
     allOf:
+    - $ref: '#/definitions/ProjectLookupModel'
     - $ref: '#/definitions/Timestamped'
     - type: object
       properties:
-        projectId:
-          type: integer
-          minimum: 0
         accountId:
           type: integer
           minimum: 0
-          readOnly: true
-        accountName:
-          type: string
           readOnly: true
         builds:
           type: array
           items:
             $ref: '#/definitions/Build'
-          readOnly: true
-        name:
-          type: string
-        slug:
-          type: string
           readOnly: true
         repositoryType:
           $ref: '#/definitions/RepositoryProvider'
@@ -1020,7 +1033,6 @@ definitions:
           $ref: '#/definitions/SecurityDescriptor'
       # Note: requirements tested against PUT /api/projects 2016-12-21
       required:
-      - projectId
       - repositoryName
 
   ProjectBuildNumberUpdate:
@@ -1700,23 +1712,25 @@ definitions:
             value: '123'
             isEncrypted: false
 
+  DeploymentEnvironmentLookupModel:
+    type: object
+    properties:
+      deploymentEnvironmentId:
+        type: integer
+        minimum: 0
+      name:
+        type: string
+      provider:
+        $ref: '#/definitions/DeploymentProviderType'
+
   DeploymentEnvironment:
-    description: >-
-      Note that `projectsMode` is always 0 from /api/environments.  Non-zero
-      values come from /api/environments/{deploymentEnvironmentId}/settings
     allOf:
+    - $ref: '#/definitions/DeploymentEnvironmentLookupModel'
     - $ref: '#/definitions/Timestamped'
     - type: object
       properties:
-        deploymentEnvironmentId:
-          type: integer
-          minimum: 0
         accountId:
           type: integer
-        name:
-          type: string
-        provider:
-          $ref: '#/definitions/DeploymentProviderType'
         projectsMode:
           # Note: May be able to define enumeration value names in OpenAPI v3
           # https://github.com/OAI/OpenAPI-Specification/issues/681
@@ -1839,14 +1853,29 @@ definitions:
           type: integer
           minimum: 0
 
+  DeploymentLookupModel:
+    type: object
+    properties:
+      deploymentId:
+        type: integer
+        minimum: 0
+      build:
+        $ref: '#/definitions/BuildLookupModel'
+      status:
+        $ref: '#/definitions/Status'
+      started:
+        type: string
+        format: date-time
+      finished:
+        type: string
+        format: date-time
+
   Deployment:
     allOf:
+    - $ref: '#/definitions/DeploymentLookupModel'
     - $ref: '#/definitions/Timestamped'
     - type: object
       properties:
-        deploymentId:
-          type: integer
-          minimum: 0
         build:
           $ref: '#/definitions/Build'
         environment:
@@ -1855,14 +1884,6 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/DeploymentJob'
-        status:
-          $ref: '#/definitions/Status'
-        started:
-          type: string
-          format: date-time
-        finished:
-          type: string
-          format: date-time
 
   DeploymentCancellation:
     type: object
@@ -1874,14 +1895,6 @@ definitions:
     example:
       deploymentId: 123
 
-  DeploymentEnvironmentDeployment:
-    type: object
-    properties:
-      environment:
-        $ref: '#/definitions/DeploymentEnvironment'
-      deployment:
-        $ref: '#/definitions/Deployment'
-
   ProjectDeployment:
     type: object
     properties:
@@ -1891,6 +1904,14 @@ definitions:
         $ref: '#/definitions/Deployment'
     required: [project, deployment]
 
+  ProjectDeploymentModel:
+    allOf:
+    - $ref: '#/definitions/DeploymentLookupModel'
+    - type: object
+      properties:
+        environment:
+          $ref: '#/definitions/DeploymentEnvironmentLookupModel'
+
   ProjectDeploymentsResults:
     type: object
     properties:
@@ -1899,7 +1920,15 @@ definitions:
       deployments:
         type: array
         items:
-          $ref: '#/definitions/DeploymentEnvironmentDeployment'
+          $ref: '#/definitions/ProjectDeploymentModel'
+
+  EnvironmentDeploymentModel:
+    allOf:
+    - $ref: '#/definitions/DeploymentLookupModel'
+    - type: object
+      properties:
+        project:
+          $ref: '#/definitions/ProjectLookupModel'
 
   DeploymentEnvironmentDeploymentsResults:
     type: object
@@ -1909,7 +1938,7 @@ definitions:
       deployments:
         type: array
         items:
-          $ref: '#/definitions/ProjectDeployment'
+          $ref: '#/definitions/EnvironmentDeploymentModel'
     required: [environment, deployments]
 
   # Deployment Settings }}}
@@ -3526,19 +3555,15 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/DeploymentEnvironment'
+              $ref: '#/definitions/DeploymentEnvironmentLookupModel'
           examples:
             application/json:
             - deploymentEnvironmentId: 14
               name: azure-blob-1
               provider: AzureBlob
-              created: '2014-01-23T18:13:52.2268502+00:00'
-              updated: '2014-06-02T18:13:32.5106126+00:00'
             - deploymentEnvironmentId: 12
               name: azure-deploy-test
               provider: AzureCS
-              created: '2014-01-23T06:46:31.1215919+00:00'
-              updated: '2014-08-11T18:48:06.2002179+00:00'
     post:
       tags:
       - Environment
