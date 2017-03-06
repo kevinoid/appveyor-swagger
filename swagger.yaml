@@ -288,6 +288,18 @@ definitions:
             type: string
     required: [message]
 
+  Nonexistent:
+    description: |
+      A schema for values which are never present (e.g. an item type for
+      zero-length arrays).
+
+      Although the type of such values could be left unspecified according to
+      JSON Schema (and by extension OpenAPI 2.0), such unspecified types cause
+      tool failures (e.g. swagger-codegen).  So this type can be used as a
+      placeholder to prevent errors and document the behavior.
+    type: string
+    enum: [nonexistent]
+
   Timestamped:
     type: object
     properties:
@@ -999,9 +1011,11 @@ definitions:
           minimum: 0
           readOnly: true
         builds:
+          description: Always an empty array.
           type: array
           items:
-            $ref: '#/definitions/Build'
+            $ref: '#/definitions/Nonexistent'
+          maxItems: 0
           readOnly: true
         repositoryType:
           $ref: '#/definitions/RepositoryProvider'
