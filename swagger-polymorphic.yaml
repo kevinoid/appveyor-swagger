@@ -896,6 +896,9 @@ definitions:
       notifyWhenBuildStatusChangedOnly: true
 
   UserAccountRolesResults:
+    description: >-
+      The roles property contains all roles, not only the role for which the
+      user is a member.
     type: object
     properties:
       user:
@@ -1039,6 +1042,8 @@ definitions:
     - type: object
       properties:
         jobs:
+          description: >-
+            Always empty in getProjectHistory and startDeployment responses.
           type: array
           items:
             $ref: '#/definitions/BuildJob'
@@ -1229,6 +1234,7 @@ definitions:
           minimum: 0
           readOnly: true
         builds:
+          description: Only non-empty for response from getProjects.
           type: array
           items:
             $ref: '#/definitions/Build'
@@ -1240,6 +1246,7 @@ definitions:
         repositoryName:
           type: string
         repositoryBranch:
+          description: Not present in response from addProject.
           type: string
         isPrivate:
           type: boolean
@@ -1258,8 +1265,13 @@ definitions:
         tags:
           type: string
         nuGetFeed:
+          description: Not present in response from addProject.
           $ref: '#/definitions/NuGetFeed'
         securityDescriptor:
+          description: >-
+            Not present in response from addProject.
+            Not always present in response from getProjects (only after
+            updateProject or startBuild?).
           $ref: '#/definitions/SecurityDescriptor'
       # Note: requirements tested against PUT /api/projects 2016-12-21
       required:
