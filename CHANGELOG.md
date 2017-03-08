@@ -14,6 +14,9 @@
 ## [v0.20170107.1](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170107.1) (2017-01-20)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170107.0...v0.20170107.1)
 
+- Add `getProjectStatusBadge`, `getProjectBranchStatusBadge`, and `getPublicProjectStatusBadge` operations for getting project build status badge images.
+- Remove security for operations which do not require authentication.
+
 ## [v0.20170107.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170107.0) (2017-01-13)
 
 
