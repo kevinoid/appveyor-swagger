@@ -1410,8 +1410,12 @@ definitions:
       isEncrypted:
         type: boolean
       value:
+        description: |-
+          Encrypted values can be created using the encryptValue operation.
+
+          Empty environment variables are represented by missing (null) value
+          rather than an empty string.
         type: string
-        # Empty environment variable is represented without value prop
 
   StoredNameValue:
     type: object
@@ -1444,6 +1448,17 @@ definitions:
         # Can't use anyOf for format: ipv4 or format: ipv6 anyway.
         # https://github.com/OAI/OpenAPI-Specification/pull/741
     required: [host, ip]
+
+  EncryptRequest:
+    type: object
+    properties:
+      plainValue:
+        # Note:  Can send non-string values.
+        #        Result is same as sending string equivalent (e.g. "1" vs 1).
+        type: string
+        default: ""
+    example:
+      plainValue: encryptme
 
   ProjectBranchesMode:
     type: string
@@ -2905,6 +2920,35 @@ paths:
 
   ### Role }}}
   ### {{{ Project
+
+  /account/encrypt:
+    post:
+      # This operation is not documented anywhere, but is discussed publicly in
+      # http://help.appveyor.com/discussions/questions/1892-encryption-through-api
+      # https://github.com/appveyor/ci/issues/665
+      tags:
+      - Project
+      operationId: encryptValue
+      summary: Encrypt a value for use in StoredValue.
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/EncryptRequest'
+      produces:
+      - text/plain
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: string
+            # Could add format: byte since data is base64 encoded.
+            # Avoided since primary use is as string in StoredValue, not byte[].
+          examples:
+            text/plain: wsnoY4v1v1Uofj0xf8E6FA==
 
   /projects:
     get:
