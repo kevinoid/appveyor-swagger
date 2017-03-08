@@ -1,10 +1,18 @@
 # Change Log
 
-## [v0.20170107.1](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170107.1) (2017-01-20)
+## [v0.20170308.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170308.0) (2017-03-08)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170107.1...v0.20170308.0)
 
-- Add API endpoints for getting project build status badges.
-- Add empty `security` declaration to operations which do not require
-  authentication.
+- **API Breaking**  `getEnvironments`, `getEnvironmentDeployments`, and
+  `getProjectDeployments` responses now include fewer properties.  Introduce
+  `*LookupModel` schemas for these abbreviated types (based on the name in the
+  XML) and rework the existing schemas to use them where appropriate.
+- Add `encryptValue` operation to encrypt a string value for use in
+  `StoredValue` properties (e.g. environment variable values).
+- Add more documentation for properties with non-obvious behavior.
+
+## [v0.20170107.1](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170107.1) (2017-01-20)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170107.0...v0.20170107.1)
 
 ## [v0.20170107.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170107.0) (2017-01-13)
 
