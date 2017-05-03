@@ -1307,7 +1307,7 @@ definitions:
 
   BuildCloudName:
     type: string
-    enum: [gce]
+    enum: [gce, pro-win2016]
 
   BuildWorkerImageName:
     type: string
