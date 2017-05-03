@@ -270,12 +270,12 @@
         </td>
                     </tr>
                     <tr>
-                        <td><a href="#operation--projects-status--webhookId--get">GET /projects/status/{webhookId}</a></td>
+                        <td><a href="#operation--projects-status--statusBadgeId--get">GET /projects/status/{statusBadgeId}</a></td>
                         <td><p>Get project status badge image</p>
         </td>
                     </tr>
                     <tr>
-                        <td><a href="#operation--projects-status--webhookId--branch--buildBranch--get">GET /projects/status/{webhookId}/branch/{buildBranch}</a></td>
+                        <td><a href="#operation--projects-status--statusBadgeId--branch--buildBranch--get">GET /projects/status/{statusBadgeId}/branch/{buildBranch}</a></td>
                         <td><p>Get project branch status badge image</p>
         </td>
                     </tr>
@@ -2515,11 +2515,11 @@
                         </section>
                 </div>
             </div>    
-        <span id="path--projects-status--webhookId-"></span>
-            <div id="operation--projects-status--webhookId--get" class="swagger--panel-operation-get panel">
+        <span id="path--projects-status--statusBadgeId-"></span>
+            <div id="operation--projects-status--statusBadgeId--get" class="swagger--panel-operation-get panel">
                 <div class="panel-heading">
                     <div class="operation-summary">Get project status badge image</div>
-                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{webhookId}</strong></h3>
+                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{statusBadgeId}</strong></h3>
                         Tags:
                             <a href="#tag-Project">Project</a>
                 </div>
@@ -2621,8 +2621,8 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                webhookId
-                                            <td><p>Project webhook ID (<code>webhookId</code> from <code>ProjectWithConfiguration</code>)</p>
+                                                statusBadgeId
+                                            <td><p>ID of the status badge (<code>statusBadgeId</code> from <code>ProjectWithConfiguration</code>).</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
@@ -2634,7 +2634,7 @@
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
-                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/webhookId">#/parameters/webhookId</a></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/statusBadgeId">#/parameters/statusBadgeId</a></span>
                                             </td>
                                         </tr>
                                 </tbody>
@@ -2693,11 +2693,11 @@
                         </section>
                 </div>
             </div>    
-        <span id="path--projects-status--webhookId--branch--buildBranch-"></span>
-            <div id="operation--projects-status--webhookId--branch--buildBranch--get" class="swagger--panel-operation-get panel">
+        <span id="path--projects-status--statusBadgeId--branch--buildBranch-"></span>
+            <div id="operation--projects-status--statusBadgeId--branch--buildBranch--get" class="swagger--panel-operation-get panel">
                 <div class="panel-heading">
                     <div class="operation-summary">Get project branch status badge image</div>
-                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{webhookId}/branch/{buildBranch}</strong></h3>
+                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/status/{statusBadgeId}/branch/{buildBranch}</strong></h3>
                         Tags:
                             <a href="#tag-Project">Project</a>
                 </div>
@@ -2799,8 +2799,8 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                webhookId
-                                            <td><p>Project webhook ID (<code>webhookId</code> from <code>ProjectWithConfiguration</code>)</p>
+                                                statusBadgeId
+                                            <td><p>ID of the status badge (<code>statusBadgeId</code> from <code>ProjectWithConfiguration</code>).</p>
                                         </td>
                                             <td>path</td>
                                             <td><span class="json-property-type">string</span>
@@ -2812,7 +2812,7 @@
                                             </td>
                                             <td>
                                                     <span class="json-property-required"></span>
-                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/webhookId">#/parameters/webhookId</a></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/statusBadgeId">#/parameters/statusBadgeId</a></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -5366,10 +5366,10 @@
                     </td>
                 </tr>
                 <tr>
-                        <td><a name="/parameters/webhookId"></a>webhookId</td>
+                        <td><a name="/parameters/statusBadgeId"></a>statusBadgeId</td>
                     <td>
-                        webhookId
-                    <td><p>Project webhook ID (<code>webhookId</code> from <code>ProjectWithConfiguration</code>)</p>
+                        statusBadgeId
+                    <td><p>ID of the status badge (<code>statusBadgeId</code> from <code>ProjectWithConfiguration</code>).</p>
                 </td>
                     <td>path</td>
                     <td><span class="json-property-type">string</span>
@@ -5949,6 +5949,8 @@
                                 <h3 class="panel-title"><a name="/definitions/BuildCloudName"></a>BuildCloudName:
                                     <span class="json-property-type"><span class="json-property-type">string</span>    <span class="json-property-enum" title="Possible values">, x &isin; {
                                 <span class="json-property-enum-item">gce</span>
+                            ,
+                                <span class="json-property-enum-item">pro-win2016</span>
                             
                         }
                         </span>
@@ -6451,9 +6453,13 @@
                             ,
                                 <span class="json-property-enum-item">Previous Visual Studio 2015</span>
                             ,
+                                <span class="json-property-enum-item">Previous Visual Studio 2017</span>
+                            ,
                                 <span class="json-property-enum-item">Visual Studio 2013</span>
                             ,
                                 <span class="json-property-enum-item">Visual Studio 2015</span>
+                            ,
+                                <span class="json-property-enum-item">Visual Studio 2017</span>
                             ,
                                 <span class="json-property-enum-item">WMF 5</span>
                             
@@ -10413,6 +10419,26 @@
                                                                             </div>
                                                                         </section>                </div>
                                                 </dd>
+                                                <dt data-property-name="matrixExclude">
+                                                    <span class="json-property-name">matrixExclude:</span>
+                                                    <span class="json-property-type">object[]</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                                        <section class="json-schema-array-items">
+                                                                            <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/StoredNameValueMatrix">StoredNameValueMatrix</a>
+                                                                            </span>
+                                                                            <span class="json-property-range" title="Value limits"></span>
+                                                                            
+                                                                            <div class="json-inner-schema">
+                                                                                
+                                                                            </div>
+                                                                        </section>                </div>
+                                                </dd>
                                                 <dt data-property-name="artifacts">
                                                     <span class="json-property-name">artifacts:</span>
                                                     <span class="json-property-type">object[]</span>
@@ -10928,6 +10954,18 @@
                                                                     <dt data-property-name="webhookUrl">
                                                                         <span class="json-property-name">webhookUrl:</span>
                                                                         <span class="json-property-type">string</span>    <span class="json-property-format">(uri)</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
+                                                                    <dt data-property-name="statusBadgeId">
+                                                                        <span class="json-property-name">statusBadgeId:</span>
+                                                                        <span class="json-property-type">string</span>
                                                                         <span class="json-property-range" title="Value limits"></span>
                                                                         
                                                                     </dt>
