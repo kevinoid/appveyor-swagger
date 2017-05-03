@@ -251,11 +251,11 @@ parameters:
     in: query
     type: integer
     minimum: 0
-  webhookId:
-    name: webhookId
+  statusBadgeId:
+    name: statusBadgeId
     in: path
     description: >-
-      Project webhook ID (`webhookId` from `ProjectWithConfiguration`)
+      ID of the status badge (`statusBadgeId` from `ProjectWithConfiguration`).
     type: string
     minLength: 1
     required: true
@@ -1737,6 +1737,8 @@ definitions:
         webhookUrl:
           type: string
           format: uri
+        statusBadgeId:
+          type: string
         buildPriority:
           type: integer
           minimum: 1
@@ -3754,9 +3756,9 @@ paths:
         '204':
           description: Success
 
-  /projects/status/{webhookId}:
+  /projects/status/{statusBadgeId}:
     parameters:
-    - $ref: '#/parameters/webhookId'
+    - $ref: '#/parameters/statusBadgeId'
     get:
       tags:
       - Project
@@ -3782,9 +3784,9 @@ paths:
           schema:
             type: file
 
-  /projects/status/{webhookId}/branch/{buildBranch}:
+  /projects/status/{statusBadgeId}/branch/{buildBranch}:
     parameters:
-    - $ref: '#/parameters/webhookId'
+    - $ref: '#/parameters/statusBadgeId'
     - $ref: '#/parameters/buildBranch'
     get:
       tags:
