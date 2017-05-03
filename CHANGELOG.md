@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.20170503.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170503.0) (2017-05-03)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170308.0...v0.20170503.0)
+
+- **Breaking**  Rename path parameter for `getProjectStatusBadge` and
+  `getProjectBranchStatusBadge` to `statusBadgeId` to match its new source,
+  which is the new `statusBadgeId` property of `ProjectWithConfiguration`
+  objects.  The value of this property matches `webhookId` (the previous
+  parameter source) for existing projects but will differ for new projects.
+- Add enumeration values for `BuildCloudName` and `BuildWorkerImageName`.
+- Add `matrixExclude` property to `ProjectConfiguration`.
+- Additional property documentation strings.
+- Bump dependency versions.
+
 ## [v0.20170308.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170308.0) (2017-03-08)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170107.1...v0.20170308.0)
 
