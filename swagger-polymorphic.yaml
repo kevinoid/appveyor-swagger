@@ -1314,8 +1314,10 @@ definitions:
     enum:
     - Previous Visual Studio 2013
     - Previous Visual Studio 2015
+    - Previous Visual Studio 2017
     - Visual Studio 2013
     - Visual Studio 2015
+    - Visual Studio 2017
     - WMF 5
 
   BuildWorkerImage:
