@@ -2074,7 +2074,9 @@ definitions:
             type: integer
             minimum: 1
         projects:
-          description: Projects available for selection in UI
+          description: |
+            Projects available for selection in UI.
+            Only present in response from getEnvironmentSettings.
           type: array
           items:
             $ref: '#/definitions/DeploymentEnvironmentProject'
