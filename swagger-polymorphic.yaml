@@ -1731,8 +1731,12 @@ definitions:
           type: integer
           # Web UI enforces minimum of 0, REST API does not
         scheduleCrontabExpression:
+          externalDocs:
+            url: 'https://appveyor-staging.azurewebsites.net/docs/build-configuration/#scheduled-builds'
+          description: >-
+            Build schedule as an NCrontab Expression.  See
+            https://github.com/atifaziz/NCrontab/wiki/Crontab-Expression
           type: string
-          # TODO: pattern restriction to valid cron entry time
         repositoryAuthentication:
           $ref: '#/definitions/RepositoryAuthenticationType'
         repositoryUsername:
