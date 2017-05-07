@@ -5984,6 +5984,19 @@
                                                 
                                                         <section class="json-schema-properties">
                                                             <dl>
+                                                                    <dt data-property-name="osType">
+                                                                        <span class="json-property-name">osType:</span>
+                                                                        <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/OSType">OSType</a>
+                                                                        </span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
                                                                     <dt data-property-name="allowFailure">
                                                                         <span class="json-property-name">allowFailure:</span>
                                                                         <span class="json-property-type">boolean</span>
@@ -6431,6 +6444,19 @@
                                                 <dt data-property-name="buildCloudName">
                                                     <span class="json-property-name">buildCloudName:</span>
                                                     <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/BuildCloudName">BuildCloudName</a>
+                                                    </span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
+                                                <dt data-property-name="osType">
+                                                    <span class="json-property-name">osType:</span>
+                                                    <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/OSType">OSType</a>
                                                     </span>
                                                     <span class="json-property-range" title="Value limits"></span>
                                                     
@@ -8639,6 +8665,23 @@
                             
                     </div>
                 </div>        
+                <div id="definition-OSType" class="panel panel-definition">
+                        <div class="panel-heading">
+                                <h3 class="panel-title"><a name="/definitions/OSType"></a>OSType:
+                                    <span class="json-property-type"><span class="json-property-type">string</span>    <span class="json-property-enum" title="Possible values">, x &isin; {
+                                <span class="json-property-enum-item">Windows</span>
+                            
+                        }
+                        </span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                </span>
+                                </h3>
+                        </div>
+                    <div class="panel-body">
+                            
+                    </div>
+                </div>        
                 <div id="definition-PermissionName" class="panel panel-definition">
                         <div class="panel-heading">
                                 <h3 class="panel-title"><a name="/definitions/PermissionName"></a>PermissionName:
@@ -8969,6 +9012,18 @@
                                                                     </dd>
                                                                     <dt data-property-name="rollingBuilds">
                                                                         <span class="json-property-name">rollingBuilds:</span>
+                                                                        <span class="json-property-type">boolean</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
+                                                                    <dt data-property-name="rollingBuildsDoNotCancelRunningBuilds">
+                                                                        <span class="json-property-name">rollingBuildsDoNotCancelRunningBuilds:</span>
                                                                         <span class="json-property-type">boolean</span>
                                                                         <span class="json-property-range" title="Value limits"></span>
                                                                         
@@ -10897,7 +10952,8 @@
                                                                         
                                                                     </dt>
                                                                     <dd>
-                                                                        
+                                                                        <p>Build schedule as an NCrontab Expression.  See <a href="https://github.com/atifaziz/NCrontab/wiki/Crontab-Expression">https://github.com/atifaziz/NCrontab/wiki/Crontab-Expression</a></p>
+                                                        
                                                                         <div class="json-inner-schema">
                                                                             
                                                                         </div>
