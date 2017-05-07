@@ -709,11 +709,17 @@ definitions:
           type: string
           format: date-time
 
+  OSType:
+    type: string
+    enum: [Windows]
+
   BuildJob:
     allOf:
     - $ref: '#/definitions/Job'
     - type: object
       properties:
+        osType:
+          $ref: '#/definitions/OSType'
         allowFailure:
           type: boolean
         messagesCount:
@@ -1100,6 +1106,8 @@ definitions:
         $ref: '#/definitions/BuildWorkerImageName'
       buildCloudName:
         $ref: '#/definitions/BuildCloudName'
+      osType:
+        $ref: '#/definitions/OSType'
     required: [buildWorkerImageId, name]
 
   ScriptLanguage:
