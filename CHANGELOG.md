@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.20170507.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170507.0) (2017-05-07)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170503.0...v0.20170507.0)
+
+- Add `osType` to `BuildJob` and `BuildWorkerImage`.
+- Add `rollingBuildsDoNotCancelRunningBuilds` to `Project`.
+- Better document `scheduleCrontabExpression`.
+
 ## [v0.20170503.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170503.0) (2017-05-03)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170308.0...v0.20170503.0)
 
