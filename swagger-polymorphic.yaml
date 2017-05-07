@@ -1266,6 +1266,8 @@ definitions:
           type: boolean
         rollingBuilds:
           type: boolean
+        rollingBuildsDoNotCancelRunningBuilds:
+          type: boolean
         alwaysBuildClosedPullRequests:
           type: boolean
         tags:
