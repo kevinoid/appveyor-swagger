@@ -1,5 +1,9 @@
 # Change Log
 
+## [v0.20170518.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170518.0) (2017-05-18)
+
+- Add `Ubuntu` to `OSType`, `BuildCloudName`, `BuildWorkerImageName`
+
 ## [v0.20170507.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170507.0) (2017-05-07)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170503.0...v0.20170507.0)
 
