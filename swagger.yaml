@@ -711,7 +711,7 @@ definitions:
 
   OSType:
     type: string
-    enum: [Windows]
+    enum: [Ubuntu, Windows]
 
   BuildJob:
     allOf:
@@ -1085,7 +1085,7 @@ definitions:
 
   BuildCloudName:
     type: string
-    enum: [gce, pro-win2016]
+    enum: [gce, pro-win2016, ubuntu]
 
   BuildWorkerImageName:
     type: string
@@ -1093,6 +1093,7 @@ definitions:
     - Previous Visual Studio 2013
     - Previous Visual Studio 2015
     - Previous Visual Studio 2017
+    - Ubuntu
     - Visual Studio 2013
     - Visual Studio 2015
     - Visual Studio 2017
