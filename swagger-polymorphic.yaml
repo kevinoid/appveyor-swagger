@@ -1327,6 +1327,7 @@ definitions:
     - Visual Studio 2013
     - Visual Studio 2015
     - Visual Studio 2017
+    - Visual Studio 2017 Preview
     - WMF 5
 
   BuildWorkerImage:
