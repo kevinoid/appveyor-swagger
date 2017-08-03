@@ -1483,6 +1483,10 @@ definitions:
     properties:
       doNotIncrementBuildNumberOnPullRequests:
         type: boolean
+      hotFixScripts:
+        type: array
+        items:
+          $ref: '#/definitions/Script'
       initScripts:
         type: array
         items:
@@ -1536,6 +1540,14 @@ definitions:
       assemblyFileVersionFormat:
         type: string
       assemblyInformationalVersionFormat:
+        type: string
+      patchDotnetCsproj:
+        type: boolean
+      dotnetCsprojFile:
+        type: string
+      dotnetCsprojVersionFormat:
+        type: string
+      dotnetCsprojPackageVersionFormat:
         type: string
       maxJobs:
         type: integer
