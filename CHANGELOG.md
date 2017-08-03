@@ -1,5 +1,11 @@
 # Change Log
 
+## [v0.20170803.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170803.0) (2017-06-22)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170622.0...v0.20170803.0)
+
+- Add `dotnetCsprojFile`, `dotnetCsprojPackageVersionFormat`,
+  `dotnetCsprojVersionFormat`, `hotFixScripts` to `ProjectConfiguration`.
+
 ## [v0.20170622.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170622.0) (2017-06-22)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170518.0...v0.20170622.0)
 
