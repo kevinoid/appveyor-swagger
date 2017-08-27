@@ -1034,6 +1034,8 @@ definitions:
           type: boolean
         enableDeploymentInPullRequests:
           type: boolean
+        saveBuildCacheInPullRequests:
+          type: boolean
         rollingBuilds:
           type: boolean
         rollingBuildsDoNotCancelRunningBuilds:
