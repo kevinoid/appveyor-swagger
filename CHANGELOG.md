@@ -1,6 +1,11 @@
 # Change Log
 
-## [v0.20170803.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170803.0) (2017-06-22)
+## [v0.20170827.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170827.0) (2017-08-27)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170803.0...v0.20170827.0)
+
+- Add `saveBuildCacheInPullRequests` to `Project`.
+
+## [v0.20170803.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170803.0) (2017-08-03)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170622.0...v0.20170803.0)
 
 - Add `dotnetCsprojFile`, `dotnetCsprojPackageVersionFormat`,
