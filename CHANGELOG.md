@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20171019.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171019.0) (2017-10-19)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170827.0...v0.20171019.0)
+
+- Add `pro-vs2017` to `BuildCloudName`.
+
 ## [v0.20170827.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20170827.0) (2017-08-27)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20170803.0...v0.20170827.0)
 
