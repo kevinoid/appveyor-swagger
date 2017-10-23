@@ -1549,6 +1549,12 @@ definitions:
         type: string
       dotnetCsprojVersionFormat:
         type: string
+      dotnetCsprojAssemblyVersionFormat:
+        type: string
+      dotnetCsprojFileVersionFormat:
+        type: string
+      dotnetCsprojInformationalVersionFormat:
+        type: string
       dotnetCsprojPackageVersionFormat:
         type: string
       maxJobs:
