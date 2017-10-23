@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.20171023.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171023.0) (2017-10-23)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171021.0...v0.20171023.0)
+
+- Add `dotnetCsprojAssemblyVersionFormat` to `ProjectConfiguration`.
+- Add `dotnetCsprojFileVersionFormat` to `ProjectConfiguration`.
+- Add `dotnetCsprojInformationalVersionFormat` to `ProjectConfiguration`.
+
 ## [v0.20171021.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171021.0) (2017-10-21)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171019.0...v0.20171021.0)
 
