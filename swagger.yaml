@@ -3483,6 +3483,26 @@ paths:
               value:
                 isEncrypted: false
                 value: current-value
+    put:
+      tags:
+      - Project
+      operationId: updateProjectEnvironmentVariables
+      summary: Update project environment variables
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project-environment-variables'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StoredNameValue'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
 
   /projects/{accountName}/{projectSlug}/buildcache:
     parameters:
