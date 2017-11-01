@@ -1,5 +1,11 @@
 # Change Log
 
+## [v0.20171031.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171031.0) (2017-10-31)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171023.0...v0.20171031.0)
+
+- Add `getProjectEnvironmentVariables` operation.
+- Add `updateProjectEnvironmentVariables` operation.
+
 ## [v0.20171023.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171023.0) (2017-10-23)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171021.0...v0.20171023.0)
 
