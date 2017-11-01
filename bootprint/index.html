@@ -265,6 +265,16 @@
         </td>
                     </tr>
                     <tr>
+                        <td><a href="#operation--projects--accountName---projectSlug--settings-environment-variables-get">GET /projects/{accountName}/{projectSlug}/settings/environment-variables</a></td>
+                        <td><p>Get project environment variables</p>
+        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#operation--projects--accountName---projectSlug--settings-environment-variables-put">PUT /projects/{accountName}/{projectSlug}/settings/environment-variables</a></td>
+                        <td><p>Update project environment variables</p>
+        </td>
+                    </tr>
+                    <tr>
                         <td><a href="#operation--projects--accountName---projectSlug--buildcache-delete">DELETE /projects/{accountName}/{projectSlug}/buildcache</a></td>
                         <td><p>Delete project build cache</p>
         </td>
@@ -3923,6 +3933,267 @@
                                 <div class="panel-body">
                                             <a class="json-schema-ref" href="#/definitions/ProjectBuildNumberUpdate">ProjectBuildNumberUpdate</a>
                                 </div>
+                            </div></div>
+                                        </div>
+                            </section>        
+                        <section class="sw-request-params">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="sw-param-name"></th>
+                                    <th class="sw-param-description"></th>
+                                    <th class="sw-param-type"></th>
+                                    <th class="sw-param-data-type"></th>
+                                    <th class="sw-param-annotation"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td>
+                                                accountName
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/accountName">#/parameters/accountName</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                projectSlug
+                                            <td><p>Project Slug</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/projectSlug">#/parameters/projectSlug</a></span>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    
+                        <section class="sw-responses">
+                                <p><a href="#sw-default-produces">Uses default content-types: </a>
+                                    <span class="label label-default">application/json</span> <span class="label label-default">application/xml</span> 
+                                </p>
+                            
+                            <dl>
+                                    <dt class="sw-response-204">
+                                        204 No Content
+                                    
+                                    </dt>
+                                    <dd class="sw-response-204">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Success</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                            </div>
+                                            
+                                            </div>                </dd>
+                                    <dt class="sw-response-default">
+                                        default 
+                                            <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/responses/Error">#/responses/Error</a></span>
+                                    
+                                    </dt>
+                                    <dd class="sw-response-default">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Error</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Error">Error</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                            </dl>
+                        </section>
+                </div>
+            </div>    
+        <span id="path--projects--accountName---projectSlug--settings-environment-variables"></span>
+            <div id="operation--projects--accountName---projectSlug--settings-environment-variables-get" class="swagger--panel-operation-get panel">
+                <div class="panel-heading">
+                    <div class="operation-summary">Get project environment variables</div>
+                    <h3 class="panel-title"><span class="operation-name">GET</span> <strong>/projects/{accountName}/{projectSlug}/settings/environment-variables</strong></h3>
+                        Tags:
+                            <a href="#tag-Project">Project</a>
+                </div>
+                <div class="panel-body">
+                    <section class="sw-operation-description">
+                        
+                    </section>
+                    
+                        <section class="sw-request-params">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="sw-param-name"></th>
+                                    <th class="sw-param-description"></th>
+                                    <th class="sw-param-type"></th>
+                                    <th class="sw-param-data-type"></th>
+                                    <th class="sw-param-annotation"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td>
+                                                accountName
+                                            <td><p>AppVeyor account name (<code>accountName</code> property of <code>UserAccount</code>)</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            <span class="json-property-range" title="String length limits">
+                                                    (at least 1 chars)
+                                            </span>
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/accountName">#/parameters/accountName</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                projectSlug
+                                            <td><p>Project Slug</p>
+                                        </td>
+                                            <td>path</td>
+                                            <td><span class="json-property-type">string</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/projectSlug">#/parameters/projectSlug</a></span>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    
+                        <section class="sw-responses">
+                                <p><a href="#sw-default-produces">Uses default content-types: </a>
+                                    <span class="label label-default">application/json</span> <span class="label label-default">application/xml</span> 
+                                </p>
+                            
+                            <dl>
+                                    <dt class="sw-response-200">
+                                        200 OK
+                                    
+                                    </dt>
+                                    <dd class="sw-response-200">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Success</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                    <div class="col-md-6 sw-response-examples">
+                                                        <div class="label label-default">Example for application/json</div>
+                                                        <pre>[<br>    {<br>        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"api_key"</span></span>,<br>        "<span class="hljs-attribute">value</span>": <span class="hljs-value">{<br>            "<span class="hljs-attribute">isEncrypted</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,<br>            "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"very-secret-key-in-clear-text"</span><br>        </span>}<br>    </span>},<br>    {<br>        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"var1"</span></span>,<br>        "<span class="hljs-attribute">value</span>": <span class="hljs-value">{<br>            "<span class="hljs-attribute">isEncrypted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,<br>            "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"current-value"</span><br>        </span>}<br>    </span>}<br>]</pre>
+                                                    </div>
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                            
+                                                                            <section class="json-schema-array-items">
+                                                                                <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/StoredNameValue">StoredNameValue</a>
+                                                                                </span>
+                                                                                <span class="json-property-range" title="Value limits"></span>
+                                                                                
+                                                                                <div class="json-inner-schema">
+                                                                                    
+                                                                                </div>
+                                                                            </section>    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                                    <dt class="sw-response-default">
+                                        default 
+                                            <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/responses/Error">#/responses/Error</a></span>
+                                    
+                                    </dt>
+                                    <dd class="sw-response-default">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Error</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Error">Error</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                            </dl>
+                        </section>
+                </div>
+            </div>    <div id="operation--projects--accountName---projectSlug--settings-environment-variables-put" class="swagger--panel-operation-put panel">
+                <div class="panel-heading">
+                    <div class="operation-summary">Update project environment variables</div>
+                    <h3 class="panel-title"><span class="operation-name">PUT</span> <strong>/projects/{accountName}/{projectSlug}/settings/environment-variables</strong></h3>
+                        Tags:
+                            <a href="#tag-Project">Project</a>
+                </div>
+                <div class="panel-body">
+                    <section class="sw-operation-description">
+                        
+                    </section>
+                        
+                            <section class="sw-request-body">
+                                
+                                    <p><a href="#sw-default-consumes">Uses default content-types: </a>
+                                    <span class="label label-default">application/json</span> 
+                                    </p>
+                                                <div class="row">
+                                            <div class="col-md-6">
+                                                <p></p>
+                                            </div>
+                                            <div class="col-md-6 sw-request-model">
+                            <div  class="panel panel-definition">
+                                <div class="panel-body">
+                                        
+                                                        <section class="json-schema-array-items">
+                                                            <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/StoredNameValue">StoredNameValue</a>
+                                                            </span>
+                                                            <span class="json-property-range" title="Value limits"></span>
+                                                            
+                                                            <div class="json-inner-schema">
+                                                                
+                                                            </div>
+                                                        </section>    </div>
                             </div></div>
                                         </div>
                             </section>        
