@@ -3782,6 +3782,37 @@ paths:
         '204':
           description: Success
 
+  /projects/{accountName}/{projectSlug}/settings/environment-variables:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    get:
+      tags:
+      - Project
+      operationId: getProjectEnvironmentVariables
+      summary: Get project environment variables
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-environment-variables'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StoredNameValue'
+          examples:
+            application/json:
+            - name: api_key
+              value:
+                isEncrypted: true
+                value: very-secret-key-in-clear-text
+            - name: var1
+              value:
+                isEncrypted: false
+                value: current-value
+
   /projects/{accountName}/{projectSlug}/buildcache:
     parameters:
     - $ref: '#/parameters/accountName'
