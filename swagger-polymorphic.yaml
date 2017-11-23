@@ -1276,6 +1276,12 @@ definitions:
           type: boolean
         tags:
           type: string
+          description: |-
+            Comma-separated list of project tags for dynamic grouping.
+            Appears that any input is accepted.  The returned value only
+            contains case-preserving but insensitive unique values where
+            spaces around "," are removed but otherwise preserved.  Empty
+            values and items are allowed.
         nuGetFeed:
           description: Not present in response from addProject.
           $ref: '#/definitions/NuGetFeed'
