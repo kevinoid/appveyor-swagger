@@ -1158,6 +1158,7 @@ definitions:
     - WebDeployPackage
     - Zip
 
+  # Note: Called ArtifactEntry in XML
   Artifact:
     type: object
     properties:
