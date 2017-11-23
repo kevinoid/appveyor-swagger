@@ -136,6 +136,16 @@ parameters:
     type: string
     required: true
     minLength: 1
+  artifactFileName:
+    name: artifactFileName
+    in: path
+    description: |-
+      File name (or path) of a build artifact file.
+      Corresponds to the `fileName` property of `ArtifactModel`.
+      URL-encoding of slashes in parameter values is optional.
+    type: string
+    required: true
+    minLength: 1
   badgeRepoProvider:
     name: badgeRepoProvider
     in: path
@@ -3754,6 +3764,30 @@ paths:
               name: out\example.zip
               type: Zip
               size: 15600
+
+  /buildjobs/{jobId}/artifacts/{artifactFileName}:
+    parameters:
+    - $ref: '#/parameters/jobId'
+    - $ref: '#/parameters/artifactFileName'
+    get:
+      tags:
+      - Build
+      operationId: getBuildArtifact
+      summary: Download build artifact
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/samples/download-artifacts-advanced-ps/'
+      security: []
+      produces:
+      # Note: API does not currently guess artifact content type.
+      # All are sent as application/octet-stream
+      - application/octet-stream
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: file
 
   /buildjobs/{jobId}/log:
     parameters:
