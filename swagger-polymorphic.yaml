@@ -1180,6 +1180,8 @@ definitions:
         projectId:
           type: integer
           minimum: 0
+        isPrivateProject:
+          type: boolean
         publishingEnabled:
           type: boolean
 
