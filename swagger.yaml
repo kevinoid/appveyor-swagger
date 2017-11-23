@@ -1178,6 +1178,25 @@ definitions:
         $ref: '#/definitions/ArtifactType'
     required: [path]
 
+  ArtifactModel:
+    type: object
+    properties:
+      fileName:
+        type: string
+      name:
+        title: Deployment name
+        type: string
+      type:
+        $ref: '#/definitions/ArtifactType'
+      size:
+        type: integer
+        minimum: 0
+      url:
+        description: |
+          This property has not been observed in JSON responses, but is
+          present and nil in XML responses.
+        type: string
+
   BuildMode:
     type: string
     enum: [msbuild, none, script]
@@ -3704,6 +3723,37 @@ paths:
           $ref: '#/responses/Error'
         '204':
           description: Success
+
+  /buildjobs/{jobId}/artifacts:
+    parameters:
+    - $ref: '#/parameters/jobId'
+    get:
+      tags:
+      - Build
+      operationId: getBuildArtifacts
+      summary: Get build artifacts
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/samples/download-artifacts-advanced-ps/'
+      security: []
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ArtifactModel'
+          examples:
+            application/json:
+            - fileName: README.md
+              name: README.md
+              type: File
+              size: 3600
+            - fileName: out/example.Release.x64.zip
+              name: out\example.zip
+              type: Zip
+              size: 15600
 
   /buildjobs/{jobId}/log:
     parameters:
