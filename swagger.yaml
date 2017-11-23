@@ -3681,6 +3681,7 @@ paths:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
       security: []
       produces:
+      # Note:  Should be text/plain, but server always sends as octet-stream.
       - application/octet-stream
       responses:
         default:
