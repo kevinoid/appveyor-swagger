@@ -1163,6 +1163,11 @@ definitions:
     type: object
     properties:
       path:
+        description: |
+          Path glob of artifact files.
+          Note that updateProject does not require path, but omitting path
+          results in post-build error "Collecting artifacts... Value cannot
+          be null.  Parameter name: input"
         type: string
         # format: globpath
       name:
@@ -1171,7 +1176,7 @@ definitions:
         minLength: 0
       type:
         $ref: '#/definitions/ArtifactType'
-    required: [path, name]
+    required: [path]
 
   BuildMode:
     type: string
