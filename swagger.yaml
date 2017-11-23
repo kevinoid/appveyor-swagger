@@ -1139,10 +1139,24 @@ definitions:
 
   ArtifactType:
     type: string
-    # Note: Empty string is also an allowed value but can't be used due to
-    # https://github.com/swagger-api/swagger-codegen/pull/4450
-    # Users can leave type null/undefined since "" is the default value.
-    enum: [WebDeployPackage]
+    description: |-
+      Possible values from `Push-AppveyorArtifact` cmdlet `-Type` parameter.
+
+      The web UI only allows selection of `Auto`, `WebDeployPackage`, and
+      unspecified (which it sends as the empty string but functions like
+      omitting the property) for `updateProject`.
+
+      Any string can be sent and will be saved/returned, but only these
+      values have a function (as far as I am aware).
+    enum:
+    - Auto
+    - AzureCloudService
+    - AzureCloudServiceConfig
+    - File
+    - NuGetPackage
+    - SsdtPackage
+    - WebDeployPackage
+    - Zip
 
   Artifact:
     type: object
