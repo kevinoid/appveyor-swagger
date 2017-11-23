@@ -183,6 +183,14 @@ parameters:
     type: string
     required: true
     minLength: 1
+  all:
+    name: all
+    in: query
+    description: |-
+      Include not only `successful`, but also jobs with `failed`, and
+      `cancelled` status.
+    type: boolean
+    default: false
   artifactFileName:
     name: artifactFileName
     in: path
@@ -222,12 +230,26 @@ parameters:
     description: Build Version (`version` property of `Build`)
     type: string
     required: true
+  job:
+    name: job
+    in: query
+    description: Name of the build job.
+    type: string
   jobId:
     name: jobId
     in: path
     description: Build ID (`jobId` property of `BuildJob`)
     type: string
     required: true
+  pr:
+    name: pr
+    in: query
+    description: |
+      Include PR builds in the search results?
+      `true` - take artifact from PR builds only;
+      `false` - do not look for artifact in PR builds;
+      default/unspecified - look for artifact in both PR an non-PR builds.
+    type: boolean
   projectSlug:
     name: projectSlug
     in: path
@@ -269,6 +291,12 @@ parameters:
     type: string
     minLength: 1
     required: true
+  tag:
+    name: tag
+    in: query
+    description: A git (or other VCS) tag
+    type: string
+    minLength: 1
 
   ### {{{ Status badges
   failingText:
@@ -3495,6 +3523,38 @@ paths:
                 finished: '2014-08-09T15:44:15.5828009+00:00'
                 created: '2014-08-09T15:42:38.8315273+00:00'
                 updated: '2014-08-09T15:44:15.5828009+00:00'
+
+  /projects/{accountName}/{projectSlug}/artifacts/{artifactFileName}:
+    parameters:
+    - $ref: '#/parameters/accountName'
+    - $ref: '#/parameters/projectSlug'
+    - $ref: '#/parameters/artifactFileName'
+    - $ref: '#/parameters/branch'
+    - $ref: '#/parameters/tag'
+    - $ref: '#/parameters/job'
+    - $ref: '#/parameters/all'
+    - $ref: '#/parameters/pr'
+    get:
+      tags:
+      - Project
+      operationId: getProjectArtifact
+      summary: Get last successful build artifact
+      description: |-
+        The `job` parameter is mandatory if the build contains multiple jobs.
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/packaging-artifacts/#permalink-to-the-last-successful-build-artifact'
+      security: []
+      produces:
+      # Note: API does not currently guess artifact content type.
+      # All are sent as application/octet-stream
+      - application/octet-stream
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: file
 
   /projects/{accountName}/{projectSlug}/deployments:
     parameters:
