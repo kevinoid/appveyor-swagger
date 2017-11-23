@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.20171123.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171123.0) (2017-11-23)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171031.0...v0.20171123.0)
+
+- Add `getBuildArtifacts` operation and `ArtifactModel` schema for response.
+- Add `getBuildArtifact` operation.
+- Add `getProjectArtifact` operation.
+- Add `tags` property to `DeploymentEnvironment`.
+- Add `isPrivateProject` property to `NuGetFeed`.
+- Add enumeration values to `ArtifactType` based on `Push-AppveyorArtifact`
+  cmdlet on build workers.
+- Remove `name` property requirement from `Artifact`.
+
 ## [v0.20171031.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171031.0) (2017-10-31)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171023.0...v0.20171031.0)
 
