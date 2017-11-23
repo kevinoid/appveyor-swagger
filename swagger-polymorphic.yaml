@@ -2092,6 +2092,14 @@ definitions:
           enum: [0, 1, 2]
         securityDescriptor:
           $ref: '#/definitions/SecurityDescriptor'
+        tags:
+          description: |-
+            Comma-separated list of environment tags for dynamic grouping.
+            Appears that any input is accepted.  The returned value only
+            contains case-preserving but insensitive unique values where
+            spaces around "," are removed but otherwise preserved.  Empty
+            values and items are allowed.
+          type: string
 
   DeploymentEnvironmentProject:
     type: object
