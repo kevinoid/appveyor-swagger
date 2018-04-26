@@ -1164,7 +1164,7 @@ definitions:
 
   ScriptLanguage:
     type: string
-    enum: [cmd, ps]
+    enum: [cmd, ps, pwsh]
 
   Script:
     type: object
