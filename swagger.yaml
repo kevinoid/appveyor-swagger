@@ -1523,6 +1523,8 @@ definitions:
         type: boolean
       packageAspNetCoreProjects:
         type: boolean
+      packageDotnetConsoleProjects:
+        type: boolean
       includeNuGetReferences:
         type: boolean
       msBuildInParallel:
