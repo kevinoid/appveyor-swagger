@@ -1513,6 +1513,8 @@ definitions:
         type: boolean
       packageWebApplicationProjectsBeanstalk:
         type: boolean
+      packageWebApplicationProjectsOctopus:
+        type: boolean
       packageAzureCloudServiceProjects:
         type: boolean
       packageNuGetProjects:
