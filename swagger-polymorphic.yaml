@@ -1751,6 +1751,8 @@ definitions:
         type: boolean
       packageNuGetSymbols:
         type: boolean
+      packageAspNetCoreProjects:
+        type: boolean
       includeNuGetReferences:
         type: boolean
       msBuildInParallel:
