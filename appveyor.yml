@@ -1,11 +1,7 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
-environment:
-  matrix:
-    - nodejs_version: "7"
-
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node
   - npm -g install npm
   - npm install
 
