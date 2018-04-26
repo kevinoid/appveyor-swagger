@@ -1741,6 +1741,8 @@ definitions:
         type: boolean
       packageWebApplicationProjectsXCopy:
         type: boolean
+      packageWebApplicationProjectsBeanstalk:
+        type: boolean
       packageAzureCloudServiceProjects:
         type: boolean
       packageNuGetProjects:
