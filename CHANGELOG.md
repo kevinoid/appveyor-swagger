@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.20180426.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180426.0) (2018-04-26)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171123.0...v0.20180426.0)
+
+- Add `recordsNumber` query param to `getProjectDeployments`.
+- Add `OctopusPackage` to `ArtifactType` enum.
+- Add `ElasticBeanstalkPackage` to `ArtifactType` enum.
+- Add `matrixExcept` to `ProjectConfiguration`.
+- Add `matrixOnly` to `ProjectConfiguration`.
+- Add `packageDotnetConsoleProjects` to `ProjectConfiguration`.
+- Add `packageAspNetCoreProjects` to `ProjectConfiguration`.
+- Add `packageWebApplicationProjectsOctopus` to `ProjectConfiguration`.
+- Add `packageWebApplicationProjectsBeanstalk` to `ProjectConfiguration`.
+- Add `stacks` array to `ProjectConfiguration`.
+- Add `rollingBuildsOnlyForPullRequests` to `Project`.
+- Add `pwsh` to `ScriptLanguages`.
+
 ## [v0.20171123.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20171123.0) (2017-11-23)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20171031.0...v0.20171123.0)
 
