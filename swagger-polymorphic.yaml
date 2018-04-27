@@ -3598,6 +3598,7 @@ paths:
     parameters:
     - $ref: '#/parameters/accountName'
     - $ref: '#/parameters/projectSlug'
+    - $ref: '#/parameters/recordsNumber'
     get:
       tags:
       - Project
