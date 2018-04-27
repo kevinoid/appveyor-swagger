@@ -1206,6 +1206,7 @@ definitions:
     - ElasticBeanstalkPackage
     - File
     - NuGetPackage
+    - OctopusPackage
     - SsdtPackage
     - WebDeployPackage
     - Zip
