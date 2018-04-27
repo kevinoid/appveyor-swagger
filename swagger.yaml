@@ -1203,6 +1203,7 @@ definitions:
     - Auto
     - AzureCloudService
     - AzureCloudServiceConfig
+    - ElasticBeanstalkPackage
     - File
     - NuGetPackage
     - SsdtPackage
