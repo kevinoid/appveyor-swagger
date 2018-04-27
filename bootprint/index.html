@@ -3767,8 +3767,8 @@
                                             </td>
                                             <td><p>Include PR builds in the search results?
                                         <code>true</code> - take artifact from PR builds only;
-                                        <code>false</code> - do not look for artifact in PR builds;
-                                        default/unspecified - look for artifact in both PR an non-PR builds.</p>
+                                        <code>false</code> - do not look for artifact in PR builds;</p>
+                                        <p>default/unspecified - look for artifact in both PR an non-PR builds.</p>
                                         </td>
                                             <td>query</td>
                                             <td>
@@ -4311,6 +4311,23 @@
                                             <td>
                                                     <span class="json-property-required"></span>
                                                     <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/projectSlug">#/parameters/projectSlug</a></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                recordsNumber
+                                            </td>
+                                            <td><p>Number of results to include in the response.</p>
+                                        </td>
+                                            <td>query</td>
+                                            <td>
+                                        <span class="json-property-type">integer</span>
+                                        <span class="json-property-range" title="Value limits">, { x ∈ ℤ | x ≥ 0 }</span>
+                                        
+                                            </td>
+                                            <td>
+                                                    <span class="json-property-required"></span>
+                                                    <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/parameters/recordsNumber">#/parameters/recordsNumber</a></span>
                                             </td>
                                         </tr>
                                 </tbody>
@@ -6518,8 +6535,8 @@
                     </td>
                     <td><p>Include PR builds in the search results?
                 <code>true</code> - take artifact from PR builds only;
-                <code>false</code> - do not look for artifact in PR builds;
-                default/unspecified - look for artifact in both PR an non-PR builds.</p>
+                <code>false</code> - do not look for artifact in PR builds;</p>
+                <p>default/unspecified - look for artifact in both PR an non-PR builds.</p>
                 </td>
                     <td>query</td>
                     <td>
@@ -7090,9 +7107,13 @@
                             ,
                                 <span class="json-property-enum-item">AzureCloudServiceConfig</span>
                             ,
+                                <span class="json-property-enum-item">ElasticBeanstalkPackage</span>
+                            ,
                                 <span class="json-property-enum-item">File</span>
                             ,
                                 <span class="json-property-enum-item">NuGetPackage</span>
+                            ,
+                                <span class="json-property-enum-item">OctopusPackage</span>
                             ,
                                 <span class="json-property-enum-item">SsdtPackage</span>
                             ,
@@ -10725,6 +10746,19 @@
                                                                             
                                                                         </div>
                                                                     </dd>
+                                                                    <dt data-property-name="rollingBuildsOnlyForPullRequests">
+                                                                        <span class="json-property-name">rollingBuildsOnlyForPullRequests:</span>
+                                                                        
+                                                                        <span class="json-property-type">boolean</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
                                                                     <dt data-property-name="alwaysBuildClosedPullRequests">
                                                                         <span class="json-property-name">alwaysBuildClosedPullRequests:</span>
                                                                         
@@ -11568,6 +11602,28 @@
                                                                             </div>
                                                                         </section>                </div>
                                                 </dd>
+                                                <dt data-property-name="stacks">
+                                                    <span class="json-property-name">stacks:</span>
+                                                    
+                                                    <span class="json-property-type">object[]</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                                        <section class="json-schema-array-items">
+                                                                            
+                                                                            <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/UnknownType">UnknownType</a>
+                                                                            </span>
+                                                                            <span class="json-property-range" title="Value limits"></span>
+                                                                            
+                                                                            <div class="json-inner-schema">
+                                                                                
+                                                                            </div>
+                                                                        </section>                </div>
+                                                </dd>
                                                 <dt data-property-name="cloneFolder">
                                                     <span class="json-property-name">cloneFolder:</span>
                                                     
@@ -11884,6 +11940,32 @@
                                                         
                                                     </div>
                                                 </dd>
+                                                <dt data-property-name="packageWebApplicationProjectsBeanstalk">
+                                                    <span class="json-property-name">packageWebApplicationProjectsBeanstalk:</span>
+                                                    
+                                                    <span class="json-property-type">boolean</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
+                                                <dt data-property-name="packageWebApplicationProjectsOctopus">
+                                                    <span class="json-property-name">packageWebApplicationProjectsOctopus:</span>
+                                                    
+                                                    <span class="json-property-type">boolean</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
                                                 <dt data-property-name="packageAzureCloudServiceProjects">
                                                     <span class="json-property-name">packageAzureCloudServiceProjects:</span>
                                                     
@@ -11912,6 +11994,32 @@
                                                 </dd>
                                                 <dt data-property-name="packageNuGetSymbols">
                                                     <span class="json-property-name">packageNuGetSymbols:</span>
+                                                    
+                                                    <span class="json-property-type">boolean</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
+                                                <dt data-property-name="packageAspNetCoreProjects">
+                                                    <span class="json-property-name">packageAspNetCoreProjects:</span>
+                                                    
+                                                    <span class="json-property-type">boolean</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
+                                                <dt data-property-name="packageDotnetConsoleProjects">
+                                                    <span class="json-property-name">packageDotnetConsoleProjects:</span>
                                                     
                                                     <span class="json-property-type">boolean</span>
                                                     <span class="json-property-range" title="Value limits"></span>
@@ -12409,6 +12517,50 @@
                                                 </dd>
                                                 <dt data-property-name="matrixExclude">
                                                     <span class="json-property-name">matrixExclude:</span>
+                                                    
+                                                    <span class="json-property-type">object[]</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                                        <section class="json-schema-array-items">
+                                                                            
+                                                                            <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/StoredNameValueMatrix">StoredNameValueMatrix</a>
+                                                                            </span>
+                                                                            <span class="json-property-range" title="Value limits"></span>
+                                                                            
+                                                                            <div class="json-inner-schema">
+                                                                                
+                                                                            </div>
+                                                                        </section>                </div>
+                                                </dd>
+                                                <dt data-property-name="matrixOnly">
+                                                    <span class="json-property-name">matrixOnly:</span>
+                                                    
+                                                    <span class="json-property-type">object[]</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                                        <section class="json-schema-array-items">
+                                                                            
+                                                                            <span class="json-property-type">    <a class="json-schema-ref" href="#/definitions/StoredNameValueMatrix">StoredNameValueMatrix</a>
+                                                                            </span>
+                                                                            <span class="json-property-range" title="Value limits"></span>
+                                                                            
+                                                                            <div class="json-inner-schema">
+                                                                                
+                                                                            </div>
+                                                                        </section>                </div>
+                                                </dd>
+                                                <dt data-property-name="matrixExcept">
+                                                    <span class="json-property-name">matrixExcept:</span>
                                                     
                                                     <span class="json-property-type">object[]</span>
                                                     <span class="json-property-range" title="Value limits"></span>
@@ -13449,6 +13601,8 @@
                                 <span class="json-property-enum-item">cmd</span>
                             ,
                                 <span class="json-property-enum-item">ps</span>
+                            ,
+                                <span class="json-property-enum-item">pwsh</span>
                             
                         }
                         </span>
@@ -13777,6 +13931,32 @@
                                                 </dd>
                                         </dl>
                                     </section>
+                    </div>
+                </div>        
+                <div id="definition-UnknownType" class="panel panel-definition">
+                        <div class="panel-heading">
+                                <h3 class="panel-title"><a name="/definitions/UnknownType"></a>UnknownType:
+                                    <span class="json-property-type">
+                <span class="json-property-type">string</span>    <span class="json-property-enum" title="Possible values">, x &isin; {
+                                <span class="json-property-enum-item">unknown</span>
+                            
+                        }
+                        </span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                </span>
+                                </h3>
+                        </div>
+                    <div class="panel-body">
+                                <section class="json-schema-description">
+                                    <p>A schema for values which have an undocumented/unknown type.</p>
+                            <p>Although the type of such values could be left unspecified according to
+                            JSON Schema (and by extension OpenAPI 2.0), such unspecified types cause
+                            tool failures (e.g. swagger-codegen).  So this type can be used as a
+                            placeholder to prevent errors and document the behavior.</p>
+                            
+                                </section>
+                            
                     </div>
                 </div>        
                 <div id="definition-UserAccount" class="panel panel-definition">
