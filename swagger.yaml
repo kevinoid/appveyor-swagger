@@ -1625,6 +1625,11 @@ definitions:
         items:
           # Note:  Has not been observed in a response.  Guess item type.
           $ref: '#/definitions/StoredNameValueMatrix'
+      matrixExcept:
+        type: array
+        items:
+          # Note:  Has not been observed in a response.  Guess item type.
+          $ref: '#/definitions/StoredNameValueMatrix'
       artifacts:
         type: array
         items:
