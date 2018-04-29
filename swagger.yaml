@@ -404,6 +404,8 @@ definitions:
       - UpdateBillingDetails
       #### BuildEnvironmentPermission
       - ConfigureBuildEnvironment
+      #### DenyPermission
+      - DenyAllProjectsEnvironments
       #### EnvironmentsPermission
       - DeployToEnvironment
       - ManageEnvironments
@@ -430,6 +432,8 @@ definitions:
     - UpdateBillingDetails
     # BuildEnvironmentPermission:
     - ConfigureBuildEnvironment
+    # DenyPermission:
+    - DenyAllProjectsEnvironments
     # EnvironmentsPermission:
     - DeployToEnvironment
     - ManageEnvironments
@@ -468,6 +472,7 @@ definitions:
     enum:
     - Account
     - BuildEnvironment
+    - Deny
     - Environments
     - Projects
     - Roles
@@ -532,6 +537,11 @@ definitions:
       isSystem: false
       created: '2014-03-18T20:12:08.4749886+00:00'
       groups:
+      - name: Deny
+        permissions:
+        - name: DenyAllProjectsEnvironments
+          description: Deny all projects and environments, unless explicitly allowed
+          allowed: false
       - name: Projects
         permissions:
         - name: ManageProjects

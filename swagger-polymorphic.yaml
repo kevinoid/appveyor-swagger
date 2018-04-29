@@ -453,6 +453,8 @@ definitions:
       - UpdateBillingDetails
       #### BuildEnvironmentPermission
       - ConfigureBuildEnvironment
+      #### DenyPermission
+      - DenyAllProjectsEnvironments
       #### EnvironmentsPermission
       - DeployToEnvironment
       - ManageEnvironments
@@ -479,6 +481,8 @@ definitions:
     - UpdateBillingDetails
     # BuildEnvironmentPermission:
     - ConfigureBuildEnvironment
+    # DenyPermission:
+    - DenyAllProjectsEnvironments
     # EnvironmentsPermission:
     - DeployToEnvironment
     - ManageEnvironments
@@ -517,6 +521,7 @@ definitions:
     enum:
     - Account
     - BuildEnvironment
+    - Deny
     - Environments
     - Projects
     - Roles
@@ -584,6 +589,30 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/BuildEnvironmentPermissionState'
+
+  DenyPermission:
+    type: string
+    enum:
+    - DenyAllProjectsEnvironments
+
+  DenyPermissionState:
+    allOf:
+    - $ref: '#/definitions/PermissionState'
+    - type: object
+      properties:
+        name:
+          $ref: '#/definitions/DenyPermission'
+
+  #DenyGroupPermissions:
+  Deny:
+    allOf:
+    - $ref: '#/definitions/GroupPermissions'
+    - type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/DenyPermissionState'
 
   EnvironmentsPermission:
     type: string
@@ -762,6 +791,11 @@ definitions:
       isSystem: false
       created: '2014-03-18T20:12:08.4749886+00:00'
       groups:
+      - name: Deny
+        permissions:
+        - name: DenyAllProjectsEnvironments
+          description: Deny all projects and environments, unless explicitly allowed
+          allowed: false
       - name: Projects
         permissions:
         - name: ManageProjects
@@ -4681,6 +4715,7 @@ x-suppress-warning:
 # Group permissions
 - $ref: '#/definitions/Account'
 - $ref: '#/definitions/BuildEnvironment'
+- $ref: '#/definitions/Deny'
 - $ref: '#/definitions/Environments'
 - $ref: '#/definitions/Projects'
 - $ref: '#/definitions/Roles'
