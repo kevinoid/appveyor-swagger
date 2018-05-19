@@ -1161,6 +1161,7 @@ definitions:
   BuildWorkerImageName:
     type: string
     enum:
+    - Previous Ubuntu
     - Previous Visual Studio 2013
     - Previous Visual Studio 2015
     - Previous Visual Studio 2017
