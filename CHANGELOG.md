@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20180519.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180519.0) (2018-05-19)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180429.0...v0.20180519.0)
+
+- Add `"Previous Ubuntu"` to `BuildWorkerImageName` enum.
+
 ## [v0.20180429.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180429.0) (2018-04-29)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180426.0...v0.20180429.0)
 
