@@ -226,7 +226,9 @@ parameters:
   recordsNumber:
     name: recordsNumber
     in: query
-    description: Number of results to include in the response.
+    description: "Number of results to include in the response.
+      (Note: getProjectDeployments currently returns Internal Server Error for
+      recordsNumber < 11.)"
     type: integer
     minimum: 0
     required: true
