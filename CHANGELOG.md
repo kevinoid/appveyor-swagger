@@ -1,5 +1,11 @@
 # Change Log
 
+## [v0.20180607.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180607.0) (2018-06-07)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180519.0...v0.20180607.0)
+
+- Add `created` to `ArtifactModel`.
+- Update devDependency versions and package-lock.json.
+
 ## [v0.20180519.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180519.0) (2018-05-19)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180429.0...v0.20180519.0)
 
