@@ -1511,6 +1511,9 @@ definitions:
       size:
         type: integer
         minimum: 0
+      created:
+        type: string
+        format: date-time
       url:
         description: |
           This property has not been observed in JSON responses, but is
