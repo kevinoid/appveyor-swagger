@@ -3,6 +3,10 @@
 install:
   - ps: Install-Product node
   - npm -g install npm
+  # Ignore package-lock.json.  This is done for a few reasons:
+  # - To test against current versions of dependencies.
+  # - To test installability for dependents (doesn't use package-lock.json).
+  - if exist package-lock.json del package-lock.json
   - npm install
 
 test_script:
