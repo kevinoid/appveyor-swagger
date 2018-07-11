@@ -3658,7 +3658,7 @@ paths:
             - name: api_key
               value:
                 isEncrypted: true
-                value: very-secret-key-in-clear-text
+                value: very-secret-key-encrypted
             - name: var1
               value:
                 isEncrypted: false
