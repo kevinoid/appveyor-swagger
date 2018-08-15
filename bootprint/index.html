@@ -10,7 +10,7 @@
     <h1>AppVeyor REST API</h1>
     <p class="sw-info">
         Base URL: <span class="sw-info-basePath">/api</span>,
-        Version: <span class="sw-info-version">0.20180607.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
+        Version: <span class="sw-info-version">0.20180815.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
     
     </p>
     <p><p>AppVeyor is a hosted continuous integration service which runs on Microsoft
@@ -3767,8 +3767,8 @@
                                             </td>
                                             <td><p>Include PR builds in the search results?
                                         <code>true</code> - take artifact from PR builds only;
-                                        <code>false</code> - do not look for artifact in PR builds;</p>
-                                        <p>default/unspecified - look for artifact in both PR an non-PR builds.</p>
+                                        <code>false</code> - do not look for artifact in PR builds;
+                                        default/unspecified - look for artifact in both PR an non-PR builds.</p>
                                         </td>
                                             <td>query</td>
                                             <td>
@@ -4927,7 +4927,7 @@
                                             <div class="row">
                                                     <div class="col-md-6 sw-response-examples">
                                                         <div class="label label-default">Example for application/json</div>
-                                                        <pre>[<br>    {<br>        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"api_key"</span></span>,<br>        "<span class="hljs-attribute">value</span>": <span class="hljs-value">{<br>            "<span class="hljs-attribute">isEncrypted</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,<br>            "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"very-secret-key-in-clear-text"</span><br>        </span>}<br>    </span>},<br>    {<br>        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"var1"</span></span>,<br>        "<span class="hljs-attribute">value</span>": <span class="hljs-value">{<br>            "<span class="hljs-attribute">isEncrypted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,<br>            "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"current-value"</span><br>        </span>}<br>    </span>}<br>]</pre>
+                                                        <pre>[<br>    {<br>        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"api_key"</span></span>,<br>        "<span class="hljs-attribute">value</span>": <span class="hljs-value">{<br>            "<span class="hljs-attribute">isEncrypted</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,<br>            "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"very-secret-key-encrypted"</span><br>        </span>}<br>    </span>},<br>    {<br>        "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"var1"</span></span>,<br>        "<span class="hljs-attribute">value</span>": <span class="hljs-value">{<br>            "<span class="hljs-attribute">isEncrypted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,<br>            "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"current-value"</span><br>        </span>}<br>    </span>}<br>]</pre>
                                                     </div>
                                                 
                                                 <div class="col-md-6 sw-response-model">
@@ -6535,8 +6535,8 @@
                     </td>
                     <td><p>Include PR builds in the search results?
                 <code>true</code> - take artifact from PR builds only;
-                <code>false</code> - do not look for artifact in PR builds;</p>
-                <p>default/unspecified - look for artifact in both PR an non-PR builds.</p>
+                <code>false</code> - do not look for artifact in PR builds;
+                default/unspecified - look for artifact in both PR an non-PR builds.</p>
                 </td>
                     <td>query</td>
                     <td>
@@ -7995,6 +7995,8 @@
                                 <span class="json-property-enum-item">Previous Visual Studio 2017</span>
                             ,
                                 <span class="json-property-enum-item">Ubuntu</span>
+                            ,
+                                <span class="json-property-enum-item">Ubuntu1804</span>
                             ,
                                 <span class="json-property-enum-item">Visual Studio 2013</span>
                             ,
