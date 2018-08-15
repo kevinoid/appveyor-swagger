@@ -1,6 +1,6 @@
 {
   "name": "appveyor-swagger",
-  "version": "0.20180607.0",
+  "version": "0.20180815.0",
   "description": "An unofficial Swagger/OpenAPI definition of the AppVeyor REST API.",
   "keywords": [
     "appveyor",
