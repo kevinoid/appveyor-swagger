@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.20180815.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180815.0) (2018-08-15)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180607.0...v0.20180815.0)
+
+- Add `Ubuntu1804` to `BuildWorkerImageName`.
+- Update devDependency versions and package-lock.json.
+- Require Node v6 for test scripts.
+
 ## [v0.20180607.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180607.0) (2018-06-07)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180519.0...v0.20180607.0)
 
