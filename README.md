@@ -3,7 +3,7 @@ Unofficial AppVeyor REST API Swagger Definition
 
 [![Build Status](https://ci.appveyor.com/api/projects/status/4av6wqa9hk5l7lmi/branch/master?svg=true)](https://ci.appveyor.com/project/kevinoid/appveyor-swagger)
 [![Swagger Validation](https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/kevinoid/appveyor-swagger/master/swagger.yaml.svg)](https://github.com/swagger-api/validator-badge)
-[![Version on NPM](https://img.shields.io/npm/v/appveyor-swagger.svg?style=flat)](https://www.npmjs.com/package/appveyor-swagger)
+[![Version on NPM](https://img.shields.io/npm/v/appveyor-swagger.svg?style=flat)](https://www.npmjs.com/package/appveyor-swagger) [![Greenkeeper badge](https://badges.greenkeeper.io/kevinoid/appveyor-swagger.svg)](https://greenkeeper.io/)
 
 This project aims to provide a
 [Swagger](http://swagger.io)/[OpenAPI](https://www.openapis.org/) definition
