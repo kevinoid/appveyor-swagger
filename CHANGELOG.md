@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20180817.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180817.0) (2018-08-17)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180815.0...v0.20180817.0)
+
+- Add `Ubuntu1604` to `BuildWorkerImageName`.
+
 ## [v0.20180815.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180815.0) (2018-08-15)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180607.0...v0.20180815.0)
 
