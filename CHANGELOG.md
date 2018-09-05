@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20180905.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180905.0) (2018-09-05)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180817.0...v0.20180905.0)
+
+- Add `Visual Studio 2015 2` to `BuildWorkerImageName`.
+
 ## [v0.20180817.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180817.0) (2018-08-17)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180815.0...v0.20180817.0)
 
