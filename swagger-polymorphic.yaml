@@ -936,7 +936,6 @@ definitions:
   UserAccount:
     allOf:
     - $ref: '#/definitions/Timestamped'
-    - $ref: '#/definitions/UserAccountSettings'
     - type: object
       properties:
         accountId:
