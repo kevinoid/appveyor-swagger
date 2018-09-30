@@ -969,6 +969,8 @@ definitions:
         roleName:
           readOnly: true
           type: string
+        twoFactorAuthEnabled:
+          type: boolean
         pageSize:
           type: integer
           minimum: 0
