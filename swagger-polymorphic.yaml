@@ -1138,6 +1138,9 @@ definitions:
     - $ref: '#/definitions/Timestamped'
     - type: object
       properties:
+        projectId:
+          type: integer
+          minimum: 0
         jobs:
           description: >-
             Always empty in getProjectHistory and startDeployment responses.
