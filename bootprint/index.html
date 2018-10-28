@@ -10,7 +10,7 @@
     <h1>AppVeyor REST API</h1>
     <p class="sw-info">
         Base URL: <span class="sw-info-basePath">/api</span>,
-        Version: <span class="sw-info-version">0.20180905.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
+        Version: <span class="sw-info-version">0.20181028.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
     
     </p>
     <p><p>AppVeyor is a hosted continuous integration service which runs on Microsoft
@@ -4317,7 +4317,7 @@
                                             <td>
                                                 recordsNumber
                                             </td>
-                                            <td><p>Number of results to include in the response. (Note: getProjectDeployments currently returns Internal Server Error for recordsNumber &lt; 11.)</p>
+                                            <td><p>Number of results to include in the response. getProjectDeployments is documented to have a maximum of 20. It currently returns 500 Internal Server Error for recordsNumber &lt;= 5. In the past it has returned 500 Internal Server Error for many different values which did not match the value used by the ci.appveyor.com web interface at the time.  As of 2018-09-08, the value used by the web interface is 10.</p>
                                         </td>
                                             <td>query</td>
                                             <td>
@@ -4425,7 +4425,7 @@
                                             <td>
                                                 recordsNumber
                                             </td>
-                                            <td><p>Number of results to include in the response. (Note: getProjectDeployments currently returns Internal Server Error for recordsNumber &lt; 11.)</p>
+                                            <td><p>Number of results to include in the response. getProjectDeployments is documented to have a maximum of 20. It currently returns 500 Internal Server Error for recordsNumber &lt;= 5. In the past it has returned 500 Internal Server Error for many different values which did not match the value used by the ci.appveyor.com web interface at the time.  As of 2018-09-08, the value used by the web interface is 10.</p>
                                         </td>
                                             <td>query</td>
                                             <td>
@@ -6609,7 +6609,7 @@
                     <td>
                         recordsNumber
                     </td>
-                    <td><p>Number of results to include in the response. (Note: getProjectDeployments currently returns Internal Server Error for recordsNumber &lt; 11.)</p>
+                    <td><p>Number of results to include in the response. getProjectDeployments is documented to have a maximum of 20. It currently returns 500 Internal Server Error for recordsNumber &lt;= 5. In the past it has returned 500 Internal Server Error for many different values which did not match the value used by the ci.appveyor.com web interface at the time.  As of 2018-09-08, the value used by the web interface is 10.</p>
                 </td>
                     <td>query</td>
                     <td>
@@ -7177,6 +7177,19 @@
                                                 
                                                         <section class="json-schema-properties">
                                                             <dl>
+                                                                    <dt data-property-name="projectId">
+                                                                        <span class="json-property-name">projectId:</span>
+                                                                        
+                                                                        <span class="json-property-type">integer</span>
+                                                                        <span class="json-property-range" title="Value limits">, { x ∈ ℤ | x ≥ 0 }</span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
                                                                     <dt data-property-name="jobs">
                                                                         <span class="json-property-name">jobs:</span>
                                                                         
@@ -10613,6 +10626,19 @@
                                                                                                 </div>
                                                                                             </section>                </div>
                                                                     </dd>
+                                                                    <dt data-property-name="currentBuildId">
+                                                                        <span class="json-property-name">currentBuildId:</span>
+                                                                        
+                                                                        <span class="json-property-type">integer</span>
+                                                                        <span class="json-property-range" title="Value limits">, { x ∈ ℤ | x ≥ 0 }</span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
                                                                     <dt data-property-name="repositoryType">
                                                                         <span class="json-property-name">repositoryType:</span>
                                                                         
@@ -10671,6 +10697,19 @@
                                                                     </dd>
                                                                     <dt data-property-name="isPrivate">
                                                                         <span class="json-property-name">isPrivate:</span>
+                                                                        
+                                                                        <span class="json-property-type">boolean</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
+                                                                    <dt data-property-name="isGitHubApp">
+                                                                        <span class="json-property-name">isGitHubApp:</span>
                                                                         
                                                                         <span class="json-property-type">boolean</span>
                                                                         <span class="json-property-range" title="Value limits"></span>
@@ -10843,6 +10882,32 @@
                                                                     <dd>
                                                                         <p>Not present in response from addProject. Not always present in response from getProjects (only after updateProject or startBuild?).</p>
                                                         
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
+                                                                    <dt data-property-name="disablePushWebhooks">
+                                                                        <span class="json-property-name">disablePushWebhooks:</span>
+                                                                        
+                                                                        <span class="json-property-type">boolean</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
+                                                                    <dt data-property-name="disablePullRequestWebhooks">
+                                                                        <span class="json-property-name">disablePullRequestWebhooks:</span>
+                                                                        
+                                                                        <span class="json-property-type">boolean</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
                                                                         <div class="json-inner-schema">
                                                                             
                                                                         </div>
@@ -14007,7 +14072,6 @@
                                     <section class="json-schema-allOf-inherited">
                                         <ul>
                                                     <a class="json-schema-ref" href="#/definitions/Timestamped">Timestamped</a>
-                                                    <a class="json-schema-ref" href="#/definitions/UserAccountSettings">UserAccountSettings</a>
                                         </ul>
                                     </section>
                                     <section class="json-schema-allOf-additional">
@@ -14147,6 +14211,19 @@
                                                                         <span class="json-property-range" title="Value limits"></span>
                                                                         
                                                                             <span class="json-property-read-only"></span>
+                                                                    </dt>
+                                                                    <dd>
+                                                                        
+                                                                        <div class="json-inner-schema">
+                                                                            
+                                                                        </div>
+                                                                    </dd>
+                                                                    <dt data-property-name="twoFactorAuthEnabled">
+                                                                        <span class="json-property-name">twoFactorAuthEnabled:</span>
+                                                                        
+                                                                        <span class="json-property-type">boolean</span>
+                                                                        <span class="json-property-range" title="Value limits"></span>
+                                                                        
                                                                     </dt>
                                                                     <dd>
                                                                         
