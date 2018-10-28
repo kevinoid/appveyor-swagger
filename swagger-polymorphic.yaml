@@ -1341,6 +1341,9 @@ definitions:
           items:
             $ref: '#/definitions/Build'
           readOnly: true
+        currentBuildId:
+          type: integer
+          minimum: 0
         repositoryType:
           $ref: '#/definitions/RepositoryProvider'
         repositoryScm:
@@ -1351,6 +1354,8 @@ definitions:
           description: Not present in response from addProject.
           type: string
         isPrivate:
+          type: boolean
+        isGitHubApp:
           type: boolean
         skipBranchesWithoutAppveyorYml:
           type: boolean
@@ -1387,6 +1392,10 @@ definitions:
             Not always present in response from getProjects (only after
             updateProject or startBuild?).
           $ref: '#/definitions/SecurityDescriptor'
+        disablePushWebhooks:
+          type: boolean
+        disablePullRequestWebhooks:
+          type: boolean
       # Note: requirements tested against PUT /api/projects 2016-12-21
       required:
       - repositoryName
