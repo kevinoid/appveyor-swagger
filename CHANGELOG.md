@@ -1,5 +1,14 @@
 # Change Log
 
+## [v0.20181028.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181028.0) (2018-10-28)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180905.0...v0.20181028.0)
+
+- Add `currentBuildId`, `isGitHubApp`, `disablePushWebhooks`, and
+  `disablePullRequestWebhooks` to `Project`.
+- Add `projectId` to `Build`.
+- Add `twoFactorAuthEnabled` to `UserAccount`.
+- Remove `UserAccountSettings` from `UserAccount` (no longer returned by API).
+
 ## [v0.20180905.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20180905.0) (2018-09-05)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180817.0...v0.20180905.0)
 
