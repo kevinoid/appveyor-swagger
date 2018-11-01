@@ -364,6 +364,12 @@ parameters:
 
 definitions:
   Error:
+    description: |
+      Schema of object returned in 4XX and 5XX responses.
+      Note:  The name is unfortunate, since it conflicts with `java.lang.Error`
+      and other generic error classes.  It is the name used in XML responses,
+      so it is used for consistency and possible future XML deserialization
+      support.
     type: object
     properties:
       message:
