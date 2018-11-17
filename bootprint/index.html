@@ -10,7 +10,7 @@
     <h1>AppVeyor REST API</h1>
     <p class="sw-info">
         Base URL: <span class="sw-info-basePath">/api</span>,
-        Version: <span class="sw-info-version">0.20181028.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
+        Version: <span class="sw-info-version">0.20181117.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
     
     </p>
     <p><p>AppVeyor is a hosted continuous integration service which runs on Microsoft
@@ -8001,6 +8001,10 @@
                 <span class="json-property-type">string</span>    <span class="json-property-enum" title="Possible values">, x &isin; {
                                 <span class="json-property-enum-item">Previous Ubuntu</span>
                             ,
+                                <span class="json-property-enum-item">Previous Ubuntu1604</span>
+                            ,
+                                <span class="json-property-enum-item">Previous Ubuntu1804</span>
+                            ,
                                 <span class="json-property-enum-item">Previous Visual Studio 2013</span>
                             ,
                                 <span class="json-property-enum-item">Previous Visual Studio 2015</span>
@@ -9349,6 +9353,14 @@
                                 </h3>
                         </div>
                     <div class="panel-body">
+                                <section class="json-schema-description">
+                                    <p>Schema of object returned in 4XX and 5XX responses.
+                            Note:  The name is unfortunate, since it conflicts with <code>java.lang.Error</code>
+                            and other generic error classes.  It is the name used in XML responses,
+                            so it is used for consistency and possible future XML deserialization
+                            support.</p>
+                            
+                                </section>
                             
                                     <section class="json-schema-properties">
                                         <dl>
@@ -13695,6 +13707,8 @@
                                 <span class="json-property-enum-item">ps</span>
                             ,
                                 <span class="json-property-enum-item">pwsh</span>
+                            ,
+                                <span class="json-property-enum-item">sh</span>
                             
                         }
                         </span>
