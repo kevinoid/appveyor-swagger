@@ -1442,6 +1442,8 @@ definitions:
     type: string
     enum:
     - Previous Ubuntu
+    - Previous Ubuntu1604
+    - Previous Ubuntu1804
     - Previous Visual Studio 2013
     - Previous Visual Studio 2015
     - Previous Visual Studio 2017
@@ -1450,6 +1452,7 @@ definitions:
     - Ubuntu1804
     - Visual Studio 2013
     - Visual Studio 2015
+    # No longer appears in getProjectSettings responses (2018-11-17):
     - Visual Studio 2015 2
     - Visual Studio 2017
     - Visual Studio 2017 Preview
