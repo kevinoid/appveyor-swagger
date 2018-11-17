@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.20181117.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181117.0) (2018-11-17)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181028.0...v0.20181117.0)
+
+- Add `sh` to `ScriptLanguage`
+- Add `Previous Ubuntu1604` to `BuildWorkerImageName`
+- Add `Previous Ubuntu1804` to `BuildWorkerImageName`
+
 ## [v0.20181028.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181028.0) (2018-10-28)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20180905.0...v0.20181028.0)
 
