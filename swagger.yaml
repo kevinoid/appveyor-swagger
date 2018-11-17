@@ -1220,7 +1220,15 @@ definitions:
 
   ScriptLanguage:
     type: string
-    enum: [cmd, ps, pwsh]
+    enum:
+    # Command Prompt/Batch Script/cmd.exe
+    - cmd
+    # PowerShell
+    - ps
+    # PowerShell Core
+    - pwsh
+    # POSIX shell
+    - sh
 
   Script:
     type: object
