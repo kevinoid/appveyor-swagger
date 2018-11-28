@@ -1209,6 +1209,17 @@ definitions:
     enum: [gce, pro-vs2013, pro-win2016, pro-vs2017, ubuntu]
 
   BuildWorkerImageName:
+    description: >-
+      Defines the available build worker image templates used to provision a
+      virtual machine for a build.  Images are updated regularly.  "Previous"
+      selects the previous version of an image, for use as a temporary
+      workaround for regressions.
+
+      `Ubuntu` is the same as `Ubuntu1604`.
+      `Previous Ubuntu` is the same as `Previous Ubuntu1604`.
+
+      See https://www.appveyor.com/docs/build-environment/#build-worker-images
+      for details.
     type: string
     enum:
     - Previous Ubuntu
