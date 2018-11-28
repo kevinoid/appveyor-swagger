@@ -10,7 +10,7 @@
     <h1>AppVeyor REST API</h1>
     <p class="sw-info">
         Base URL: <span class="sw-info-basePath">/api</span>,
-        Version: <span class="sw-info-version">0.20181117.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
+        Version: <span class="sw-info-version">0.20181127.0</span>,     <a href="https://www.appveyor.com/docs/api/" class="sw-external-doc">AppVeyor REST API Documentation</a>
     
     </p>
     <p><p>AppVeyor is a hosted continuous integration service which runs on Microsoft
@@ -181,6 +181,11 @@
                     <tr>
                         <td><a href="#operation--builds-post">POST /builds</a></td>
                         <td><p>Start build of branch most recent commit</p>
+        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#operation--builds-put">PUT /builds</a></td>
+                        <td><p>Re-run build</p>
         </td>
                     </tr>
                     <tr>
@@ -431,6 +436,8 @@
                                     <div class="col-md-12"><p><p>API token can be acquired from <a href="https://ci.appveyor.com/api-token">https://ci.appveyor.com/api-token</a>
     This value must be passed to the server in the <code>Authorization</code> header as <code>&quot;Bearer &lt;token&gt;&quot;</code>.  Since <a href="https://github.com/OAI/OpenAPI-Specification/issues/583">bearer token authentication support is not explicitly supported in OpenAPI 2.0</a>, client code will vary.  Clients created with <a href="https://github.com/swagger-api/swagger-codegen">swagger-codegen</a> should set <code>apiKeyPrefix</code> to <code>&quot;Bearer&quot;</code> and set <code>apiKey</code> to the token.  Other clients may need to set <code>apiKey</code> to the string <code>&quot;Bearer &lt;token&gt;&quot;</code>.
     Note that this should be <a href="https://github.com/OAI/OpenAPI-Specification/pull/807">fixed in OpenAPI 3.0</a>), whenever that becomes available and supported.</p>
+    <h4 id="user-level-api-keys">User-Level API Keys</h4>
+    <p>To use a user-level API key (prefixed with &quot;v2.&quot;), <code>basePath</code> must be changed to <code>/api/account/{accountName}</code> where <code>{accountName}</code> is the name of the account for which requests will be made.</p>
     </p></div>
                                 </div>
                             </dd>
@@ -906,6 +913,98 @@
                             <div  class="panel panel-definition">
                                 <div class="panel-body">
                                             <a class="json-schema-ref" href="#/definitions/BuildStartRequest">BuildStartRequest</a>
+                                </div>
+                            </div></div>
+                                        </div>
+                            </section>        
+                    
+                        <section class="sw-responses">
+                                <p><a href="#sw-default-produces">Uses default content-types: </a>
+                                    <span class="label label-default">application/json</span> <span class="label label-default">application/xml</span> 
+                                </p>
+                            
+                            <dl>
+                                    <dt class="sw-response-200">
+                                        200 OK
+                                    
+                                    </dt>
+                                    <dd class="sw-response-200">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Success</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                    <div class="col-md-6 sw-response-examples">
+                                                        <div class="label label-default">Example for application/json</div>
+                                                        <pre>{<br>    "<span class="hljs-attribute">authorName</span>": <span class="hljs-value"><span class="hljs-string">"Feodor Fitsner"</span></span>,<br>    "<span class="hljs-attribute">authorUsername</span>": <span class="hljs-value"><span class="hljs-string">"FeodorFitsner"</span></span>,<br>    "<span class="hljs-attribute">branch</span>": <span class="hljs-value"><span class="hljs-string">"master"</span></span>,<br>    "<span class="hljs-attribute">buildId</span>": <span class="hljs-value"><span class="hljs-number">136709</span></span>,<br>    "<span class="hljs-attribute">buildNumber</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,<br>    "<span class="hljs-attribute">commitId</span>": <span class="hljs-value"><span class="hljs-string">"c2892a70d60c96c1b65a7c665ab806b7731fea8a"</span></span>,<br>    "<span class="hljs-attribute">committed</span>": <span class="hljs-value"><span class="hljs-string">"2014-08-15T22:05:54+00:00"</span></span>,<br>    "<span class="hljs-attribute">committerName</span>": <span class="hljs-value"><span class="hljs-string">"Feodor Fitsner"</span></span>,<br>    "<span class="hljs-attribute">committerUsername</span>": <span class="hljs-value"><span class="hljs-string">"FeodorFitsner"</span></span>,<br>    "<span class="hljs-attribute">created</span>": <span class="hljs-value"><span class="hljs-string">"2014-08-16T00:40:38.1703914+00:00"</span></span>,<br>    "<span class="hljs-attribute">jobs</span>": <span class="hljs-value">[<br>    ]</span>,<br>    "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"replaced with command [skip ci]"</span></span>,<br>    "<span class="hljs-attribute">messages</span>": <span class="hljs-value">[<br>    ]</span>,<br>    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"queued"</span></span>,<br>    "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0.7"</span><br></span>}</pre>
+                                                    </div>
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Build">Build</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                                    <dt class="sw-response-default">
+                                        default 
+                                            <span class="swagger--global"></span> <span class="json-schema--reference"><a href="#/responses/Error">#/responses/Error</a></span>
+                                    
+                                    </dt>
+                                    <dd class="sw-response-default">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>Error</p>
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 sw-response-model">
+                                                <div  class="panel panel-definition">
+                                                    <div class="panel-body">
+                                                                <a class="json-schema-ref" href="#/definitions/Error">Error</a>
+                                                    </div>
+                                                </div></div>
+                                            
+                                            </div>                </dd>
+                            </dl>
+                        </section>
+                </div>
+            </div>
+            <div id="operation--builds-put" class="swagger--panel-operation-put panel">
+                <div class="panel-heading">
+                    <div class="operation-summary">Re-run build</div>
+                    <h3 class="panel-title"><span class="operation-name">PUT</span> <strong>/builds</strong></h3>
+                        Tags:
+                            <a href="#tag-Build">Build</a>
+                </div>
+                <div class="panel-body">
+                    <section class="sw-operation-description">
+                        <p>If <code>reRunIncomplete</code> is <code>true</code> and all jobs in the referenced build completed successfully, a 500 Internal Server Error is returned with the message &quot;No failed or cancelled jobs in build with ID {buildId}&quot;.</p>
+            
+                    </section>
+                            <section class="sw-operation-external-docs">
+                                    <a href="https://www.appveyor.com/docs/api/projects-builds/#re-run-build" class="sw-external-doc">https://www.appveyor.com/docs/api/projects-builds/#re-run-build</a>
+                            </section>
+            
+                        
+                            <section class="sw-request-body">
+                                
+                                    <p><a href="#sw-default-consumes">Uses default content-types: </a>
+                                    <span class="label label-default">application/json</span> 
+                                    </p>
+                                                <div class="row">
+                                            <div class="col-md-6">
+                                                <p></p>
+                                            </div>
+                                            <div class="col-md-6 sw-request-model">
+                            <div  class="panel panel-definition">
+                                <div class="panel-body">
+                                            <a class="json-schema-ref" href="#/definitions/ReRunBuildRequest">ReRunBuildRequest</a>
                                 </div>
                             </div></div>
                                         </div>
@@ -8037,6 +8136,12 @@
                                 </h3>
                         </div>
                     <div class="panel-body">
+                                <section class="json-schema-description">
+                                    <p>Defines the available build worker image templates used to provision a virtual machine for a build.  Images are updated regularly.  &quot;Previous&quot; selects the previous version of an image, for use as a temporary workaround for regressions.
+                            <code>Ubuntu</code> is the same as <code>Ubuntu1604</code>. <code>Previous Ubuntu</code> is the same as <code>Previous Ubuntu1604</code>.
+                            See <a href="https://www.appveyor.com/docs/build-environment/#build-worker-images">https://www.appveyor.com/docs/build-environment/#build-worker-images</a> for details.</p>
+                            
+                                </section>
                             
                     </div>
                 </div>        
@@ -13397,6 +13502,57 @@
                         </div>
                     <div class="panel-body">
                             
+                    </div>
+                </div>        
+                <div id="definition-ReRunBuildRequest" class="panel panel-definition">
+                        <div class="panel-heading">
+                                <h3 class="panel-title"><a name="/definitions/ReRunBuildRequest"></a>ReRunBuildRequest:
+                                    <span class="json-property-type">
+                <span class="json-property-type">object</span>
+                <span class="json-property-range" title="Value limits"></span>
+                
+                </span>
+                                </h3>
+                        </div>
+                    <div class="panel-body">
+                                <section class="json-schema-example">
+                                    <pre><code class="lang-json">{<br>    &quot;<span class="hljs-attribute">buildId</span>&quot;: <span class="hljs-value"><span class="hljs-number">23864</span></span>,<br>    &quot;<span class="hljs-attribute">reRunIncomplete</span>&quot;: <span class="hljs-value"><span class="hljs-literal">true</span><br></span>}
+                            </code></pre>
+                            
+                                </section>
+                            
+                                    <section class="json-schema-properties">
+                                        <dl>
+                                                <dt data-property-name="buildId">
+                                                    <span class="json-property-name">buildId:</span>
+                                                    
+                                                    <span class="json-property-type">integer</span>
+                                                    <span class="json-property-range" title="Value limits">, { x ∈ ℤ | x ≥ 0 }</span>
+                                                    
+                                                        <span class="json-property-required"></span>
+                                                </dt>
+                                                <dd>
+                                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
+                                                <dt data-property-name="reRunIncomplete">
+                                                    <span class="json-property-name">reRunIncomplete:</span>
+                                                    
+                                                    <span class="json-property-type">boolean</span>
+                                                    <span class="json-property-range" title="Value limits"></span>
+                                                    
+                                                </dt>
+                                                <dd>
+                                                    <p>Set <code>reRunIncomplete</code> set to <code>false</code> (default value) for full build re-run. Set it set to <code>true</code> to rerun only failed or cancelled jobs in multijob build.</p>
+                                    
+                                                    <div class="json-inner-schema">
+                                                        
+                                                    </div>
+                                                </dd>
+                                        </dl>
+                                    </section>
                     </div>
                 </div>        
                 <div id="definition-Role" class="panel panel-definition">
