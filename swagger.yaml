@@ -850,6 +850,23 @@ definitions:
         my_var: value
         another_var: another value
 
+  ReRunBuildRequest:
+    type: object
+    properties:
+      buildId:
+        type: integer
+        minimum: 0
+      reRunIncomplete:
+        type: boolean
+        description: >-
+          Set `reRunIncomplete` set to `false` (default value) for full build
+          re-run. Set it set to `true` to rerun only failed or cancelled jobs
+          in multijob build.
+    required: [buildId]
+    example:
+      buildId: 23864
+      reRunIncomplete: true
+
   BuildMessageCategory:
     type: string
     # TODO: Find a way to enumerate these
@@ -3844,6 +3861,47 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/BuildStartRequest'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Build'
+          examples:
+            application/json:
+              buildId: 136709
+              jobs: []
+              buildNumber: 7
+              version: 1.0.7
+              message: replaced with command [skip ci]
+              branch: master
+              commitId: c2892a70d60c96c1b65a7c665ab806b7731fea8a
+              authorName: Feodor Fitsner
+              authorUsername: FeodorFitsner
+              committerName: Feodor Fitsner
+              committerUsername: FeodorFitsner
+              committed: '2014-08-15T22:05:54+00:00'
+              messages: []
+              status: queued
+              created: '2014-08-16T00:40:38.1703914+00:00'
+    put:
+      tags:
+      - Build
+      operationId: reRunBuild
+      summary: Re-run build
+      description: >-
+        If `reRunIncomplete` is `true` and all jobs in the referenced build
+        completed successfully, a 500 Internal Server Error is returned with
+        the message "No failed or cancelled jobs in build with ID {buildId}".
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/projects-builds/#re-run-build'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ReRunBuildRequest'
       responses:
         default:
           $ref: '#/responses/Error'
