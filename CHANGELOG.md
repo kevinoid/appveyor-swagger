@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.20181127.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181127.0) (2018-11-27)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181117.0...v0.20181127.0)
+
+- Add `reRunBuild` operation and `ReRunBuildRequest` schema.
+- Add documentation for `BuildWorkerImageName`.
+- Mention user-level API keys (`v2.`) in documentation.
+
 ## [v0.20181117.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181117.0) (2018-11-17)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181028.0...v0.20181117.0)
 
