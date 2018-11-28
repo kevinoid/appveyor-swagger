@@ -127,6 +127,13 @@ securityDefinitions:
       Note that this should be [fixed in OpenAPI
       3.0](https://github.com/OAI/OpenAPI-Specification/pull/807)), whenever
       that becomes available and supported.
+
+      #### User-Level API Keys
+
+      To use a user-level API key (prefixed with "v2."), `basePath` must be
+      changed to `/api/account/{accountName}` where `{accountName}` is the name
+      of the account for which requests will be made.
+
     type: apiKey
     in: header
     name: Authorization
