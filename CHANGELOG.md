@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20181211.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181211.0) (2018-12-11)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181127.0...v0.20181211.0)
+
+- Add `Visual Studio 2019 Preview` to `BuildWorkerImageName`
+
 ## [v0.20181127.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181127.0) (2018-11-27)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181117.0...v0.20181127.0)
 
