@@ -1237,6 +1237,7 @@ definitions:
     - Visual Studio 2015 2
     - Visual Studio 2017
     - Visual Studio 2017 Preview
+    - Visual Studio 2019 Preview
     - WMF 5
 
   BuildWorkerImage:
