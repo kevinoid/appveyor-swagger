@@ -769,7 +769,14 @@ definitions:
 
   Status:
     type: string
-    enum: [cancelled, cancelling, failed, queued, running, success]
+    enum:
+    - cancelled
+    - cancelling
+    - failed
+    - queued
+    - running
+    - starting
+    - success
 
   Job:
     allOf:
