@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20181217.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181217.0) (2018-12-17)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181211.0...v0.20181217.0)
+
+- Add `starting` to `Status` enumeration.
+
 ## [v0.20181211.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181211.0) (2018-12-11)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181127.0...v0.20181211.0)
 
