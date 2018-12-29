@@ -1213,7 +1213,15 @@ definitions:
 
   BuildCloudName:
     type: string
-    enum: [gce, pro-vs2013, pro-win2016, pro-vs2017, ubuntu]
+    enum:
+    - gce
+    - pro-ubuntu
+    - pro-vs2013
+    # No longer appears in getProjectSettings responses (2018-12-29):
+    - pro-win2016
+    - pro-vs2017
+    # No longer appears in getProjectSettings responses (2018-12-29):
+    - ubuntu
 
   BuildWorkerImageName:
     description: >-
