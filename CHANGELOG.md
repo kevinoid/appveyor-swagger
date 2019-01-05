@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20190105.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20190105.0) (2019-01-05)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181229.0...v0.20190105.0)
+
+- Add `disableNuGetPublishForOctopusPackages` to `ProjectConfiguration`.
+
 ## [v0.20181229.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20181229.0) (2018-12-29)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181217.0...v0.20181229.0)
 
