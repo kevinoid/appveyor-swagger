@@ -1851,6 +1851,8 @@ definitions:
         type: boolean
       disableNuGetPublishOnPullRequests:
         type: boolean
+      disableNuGetPublishForOctopusPackages:
+        type: boolean
       buildMode:
         $ref: '#/definitions/BuildMode'
       platform:
