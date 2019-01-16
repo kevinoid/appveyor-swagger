@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.20190115.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20190115.0) (2019-01-15)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190105.0...v0.20190115.0)
+
+- Add `pro-ubuntu18` to `BuildCloudName`.
+
 ## [v0.20190105.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20190105.0) (2019-01-05)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20181229.0...v0.20190105.0)
 
