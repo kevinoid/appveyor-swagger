@@ -1214,6 +1214,7 @@ definitions:
   BuildCloudName:
     type: string
     enum:
+    - azure-westus
     - gce
     - pro-ubuntu
     - pro-ubuntu18
