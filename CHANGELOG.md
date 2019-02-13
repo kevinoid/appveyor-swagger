@@ -1,5 +1,11 @@
 # Change Log
 
+## [v0.20190213.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20190213.0) (2019-02-13)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190115.0...v0.20190223.0)
+
+- Add `Windows Server 2019` to `BuildWorkerImageName`.
+- Add `azure-westus` to `BuildCloudName`.
+
 ## [v0.20190115.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20190115.0) (2019-01-15)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190105.0...v0.20190115.0)
 
