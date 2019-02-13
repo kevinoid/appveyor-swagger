@@ -1256,6 +1256,7 @@ definitions:
     - Visual Studio 2017 Preview
     - Visual Studio 2019 Preview
     - WMF 5
+    - Windows Server 2019
 
   BuildWorkerImage:
     type: object
