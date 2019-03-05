@@ -1,7 +1,13 @@
 # Change Log
 
+## [v1.0.0](https://github.com/kevinoid/appveyor-swagger/tree/v1.0.0) (2019-03-05)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190213.0...v1.0.0)
+
+- Adopt new semantic versioning scheme based on changes to generated code.
+- Add `nuGetFeedId` to `NuGetFeed`.
+
 ## [v0.20190213.0](https://github.com/kevinoid/appveyor-swagger/tree/v0.20190213.0) (2019-02-13)
-[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190115.0...v0.20190223.0)
+[Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190115.0...v0.20190213.0)
 
 - Add `Windows Server 2019` to `BuildWorkerImageName`.
 - Add `azure-westus` to `BuildCloudName`.
