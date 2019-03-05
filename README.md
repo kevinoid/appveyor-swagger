@@ -55,22 +55,18 @@ this definition.
 
 The AppVeyor REST API does not provide any public versioning scheme that I am
 aware of.  Since versioning is necessary, both in the OpenAPI specification
-file and in the npm package, the following versioning scheme is adopted:
+file and in the npm package, this package attempts to apply the rules of
+[Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) to code
+generated from this OpenAPI definition to determine appropriate version
+numbers.
 
-* **Major Version** is kept at 0.  This is both to signal that the API is
-  unstable (via [semver
-rules](http://semver.org/spec/v2.0.0.html#semantic-versioning-specification-semver)) and to allow any numbering which may be introduced by AppVeyor to compare
-  as later than these unnumbered releases.
-* **Minor Version** is the REST API date as YYYYMMDD.  This denotes the version
-  of the AppVeyor REST API being described which is easy to read and reason
-  about.  Changes to this number may reflect incompatible changes to the API.
-* **Patch Version** is the serial number of the OpenAPI/Swagger description for
-  the minor date.  It resets to 0 each time the minor version is changed and
-  is incremented by 1 for each published version.  Although it does not
-  represent a change in the REST API, it is likely to reflect a change in the
-  generated/validation API of software using the specification.  Software using
-  this specification should *expect API changes even when the patch version
-  changes* and should not be depended upon such versions without testing.
+Since generated code varies based on the code generator and settings
+used, the definition of what constitutes a backward-compatible API change is
+subjective.  The version numbering will be conservative, such that the major
+version number is incremented for potentially- and selectively-incompatible
+generated API changes.  Users who encounter changes which violate semantic
+versioning expectations are encouraged to report the issue so the version can
+be incremented accordingly.
 
 ### Schema Names
 
