@@ -1047,6 +1047,8 @@ definitions:
     - $ref: '#/definitions/Timestamped'
     - type: object
       properties:
+        nuGetFeedId:
+          type: integer
         id:
           type: string
         name:
