@@ -655,6 +655,139 @@ definitions:
     - accountId
     - created
 
+  JoinAccountRequest:
+    type: object
+    properties:
+      invitationId:
+        type: string
+        minLength: 1
+    required:
+    - invitationId
+
+  SessionUserModel:
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        userId:
+          readOnly: true
+          type: integer
+          minimum: 0
+        email:
+          type: string
+          format: email
+        gravatarHash:
+          type: string
+        bitBucketUsername:
+          type: string
+        gitHubUsername:
+          type: string
+        gitLabUserId:
+          type: string
+        vsoUsername:
+          type: string
+        twoFactorAuthEnabled:
+          type: boolean
+        fullName:
+          type: string
+        pageSize:
+          type: integer
+          minimum: 0
+          readOnly: true
+      required:
+      - userId
+      - email
+
+  PlanName:
+    type: string
+    enum:
+    - free
+
+  PlanStatus:
+    type: string
+    enum:
+    - active
+
+  FeatureFlags:
+    type: string
+    enum:
+    - distv2
+
+  SessionUserAccountModel:
+    allOf:
+    - $ref: '#/definitions/Timestamped'
+    - type: object
+      properties:
+        accountId:
+          readOnly: true
+          type: integer
+          minimum: 0
+        name:
+          readOnly: true
+          type: string
+        isOwner:
+          readOnly: true
+          type: boolean
+        isCollaborator:
+          readOnly: true
+          type: boolean
+        roleId:
+          type: integer
+          minimum: 0
+        roleName:
+          readOnly: true
+          type: string
+        permissions:
+          type: array
+          items:
+            $ref: '#/definitions/PermissionName'
+        timeZoneId:
+          type: string
+        planId:
+          $ref: '#/definitions/PlanName'
+        planStart:
+          readOnly: true
+          type: string
+          format: date-time
+        planEnd:
+          readOnly: true
+          type: string
+          format: date-time
+        planStatus:
+          $ref: '#/definitions/PlanStatus'
+        gitHubPlan:
+          type: boolean
+        gitHubPlanOrg:
+          type: string
+        unpaid:
+          type: boolean
+        unverified:
+          type: boolean
+        blocked:
+          type: boolean
+        manualPayments:
+          type: boolean
+        featureFlags:
+          $ref: '#/definitions/FeatureFlags'
+        allowCustomBuildEnvironment:
+          type: boolean
+        isEnterprisePlan:
+          type: boolean
+
+  SessionModel:
+    type: object
+    properties:
+      setupRequired:
+        type: boolean
+      twoFactorAuthRequired:
+        type: boolean
+      user:
+        $ref: '#/definitions/SessionUserModel'
+      accounts:
+        type: array
+        items:
+          $ref: '#/definitions/SessionUserAccountModel'
+
   UserAccountSettings:
     type: object
     properties:
@@ -2612,6 +2745,97 @@ paths:
           $ref: '#/responses/Error'
         '204':
           description: Success
+
+  /user/join-account:
+    put:
+      tags:
+      - User
+      operationId: joinAccount
+      summary: Join Account
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/JoinAccountRequest'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/SessionModel'
+          examples:
+            application/json:
+              setupRequired: false
+              twoFactorAuthRequired: false
+              user:
+                userId: 2019
+                email: nuget@appveyor.com
+                gravatarHash: 142e1aa89b96190de9f4ce6569ebb421
+                gitHubUsername: nuget
+                twoFactorAuthEnabled: false
+                fullName: NuGet
+                pageSize: 10
+                created: '2016-09-09T23:01:29.941128+00:00'
+                updated: '2017-01-03T02:06:50.0238036+00:00'
+              accounts:
+              - isOwner: false
+                isCollaborator: true
+                roleId: 5
+                roleName: User
+                permissions: []
+                accountId: 2
+                name: NuGet
+                planId: free
+                planStart: '2016-09-09T23:01:29.941128+00:00'
+                planStatus: active
+                gitHubPlan: false
+                unpaid: false
+                unverified: false
+                blocked: false
+                manualPayments: false
+                featureFlags: distv2
+                allowCustomBuildEnvironment: false
+                isEnterprisePlan: false
+                created: '2016-12-30T05:00:43.038419+00:00'
+                updated: '2017-01-01T21:21:10.1292694+00:00'
+              - isOwner: true
+                isCollaborator: false
+                roleId: 4
+                roleName: Administrator
+                permissions:
+                - ManageProjects
+                - UpdateProjectSettings
+                - RunProjectBuild
+                - ManageEnvironments
+                - UpdateEnvironmentSettings
+                - DeployToEnvironment
+                - ConfigureBuildEnvironment
+                - UpdateAccountDetails
+                - UpdateBillingDetails
+                - ManageApplicationAuthorizations
+                - AddUser
+                - UpdateUserDetails
+                - DeleteUser
+                - AddRole
+                - UpdateRoleDetails
+                - DeleteRole
+                accountId: 2
+                name: nuget
+                planId: free
+                planStart: '2016-09-09T23:01:29.941128+00:00'
+                planStatus: active
+                gitHubPlan: false
+                unpaid: false
+                unverified: false
+                blocked: false
+                manualPayments: false
+                featureFlags: distv2
+                allowCustomBuildEnvironment: false
+                isEnterprisePlan: false
+                created: '2016-09-09T23:01:29.941128+00:00'
+                updated: '2016-09-21T00:08:35.0728561+00:00'
 
   ### User }}}
   ### {{{ Collaborator
