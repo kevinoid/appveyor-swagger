@@ -425,24 +425,6 @@ definitions:
     type: string
     enum: [all, none]
 
-  CollaboratorAddition:
-    description: |
-      Technically `roleId` has default value 0 and is not required, but
-      since role 0 never exists it would always cause a 404 response.
-    type: object
-    properties:
-      email:
-        type: string
-        format: email
-      roleId:
-        type: integer
-        minimum: 0
-    # Tested with POST /collaborators 2016-12-29
-    required: [email, roleId]
-    example:
-      email: john@smith.com
-      roleId: 3040
-
   CollaboratorUpdate:
     description: |
       Technically `userId` and `roleId` have default value 0 and are not
@@ -873,45 +855,6 @@ definitions:
         - name: ConfigureApiKeys
           description: Generate API keys
           allowed: false
-
-  UserAddition:
-    type: object
-    properties:
-      fullName:
-        type: string
-      email:
-        type: string
-        format: email
-      roleId:
-        description: |
-          Technically `roleId` has default value 0 and is not required, but
-          since role 0 never exists it would always cause a 404 response.
-        type: integer
-        minimum: 0
-      generatePassword:
-        type: boolean
-      password:
-        # Note: Could require/forbid password based on generatePassword
-        #       using JSON Schema oneOf but it is not allowed by Swagger spec
-        # https://github.com/OAI/OpenAPI-Specification/issues/333
-        # https://github.com/OAI/OpenAPI-Specification/pull/741
-        type: string
-        minLength: 1
-        format: password
-      confirmPassword:
-        # FIXME: Can't think of a way to validate equality with password
-        # https://stackoverflow.com/a/27610799
-        type: string
-        minLength: 1
-        format: password
-    required: [fullName, email, roleId]
-    example:
-      fullName: John Smith
-      email: john@smith.com
-      roleId: 4
-      generatePassword: false
-      password: password
-      confirmPassword: password
 
   UserAccountSettings:
     type: object
@@ -2840,24 +2783,6 @@ paths:
               notifyWhenBuildStatusChangedOnly: true
               created: '2014-02-12T19:21:15.0618564+00:00'
               updated: '2014-03-06T22:47:44.9706252+00:00'
-    post:
-      tags:
-      - User
-      operationId: addUser
-      summary: Add user
-      externalDocs:
-        url: 'https://www.appveyor.com/docs/api/team/#add-user'
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UserAddition'
-      responses:
-        default:
-          $ref: '#/responses/Error'
-        '204':
-          description: Success
     put:
       tags:
       - User
@@ -2969,24 +2894,6 @@ paths:
               notifyWhenBuildStatusChangedOnly: true
               created: '2014-02-03T20:29:26.6807307+00:00'
               updated: '2014-03-07T04:26:09.1051534+00:00'
-    post:
-      tags:
-      - Collaborator
-      operationId: addCollaborator
-      summary: Add collaborator
-      externalDocs:
-        url: 'https://www.appveyor.com/docs/api/team/#add-collaborator'
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CollaboratorAddition'
-      responses:
-        default:
-          $ref: '#/responses/Error'
-        '204':
-          description: Success
     put:
       tags:
       - Collaborator
