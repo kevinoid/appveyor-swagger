@@ -180,6 +180,13 @@ parameters:
     type: integer
     required: true
     minimum: 0
+  userInvitationId:
+    name: userInvitationId
+    in: path
+    description: User Invitation ID
+    type: string
+    required: true
+    minLength: 1
 
   ### }}}
   ### {{{ Projects and Builds
@@ -855,6 +862,52 @@ definitions:
         - name: ConfigureApiKeys
           description: Generate API keys
           allowed: false
+
+  InviteUserRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+      roleId:
+        type: integer
+        minimum: 0
+    required:
+    - email
+    - roleId
+
+  UserInvitationModel:
+    type: object
+    properties:
+      userInvitationId:
+        readOnly: true
+        type: string
+        minLength: 1
+      email:
+        type: string
+        format: email
+      roleId:
+        type: integer
+        minimum: 0
+      roleName:
+        readOnly: true
+        type: string
+      accountId:
+        readOnly: true
+        type: integer
+      accountName:
+        readOnly: true
+        type: string
+      created:
+        readOnly: true
+        type: string
+        format: date-time
+    required:
+    - userInvitationId
+    - email
+    - roleId
+    - accountId
+    - created
 
   UserAccountSettings:
     type: object
@@ -2852,6 +2905,61 @@ paths:
       summary: Delete user
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#delete-user'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /users/invitations:
+    get:
+      tags:
+      - User
+      operationId: getUserInvitations
+      summary: Get user invitations
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserInvitationModel'
+          examples:
+            application/json:
+            - userInvitationId: 6i9w9rcp5us7lxnbdo63
+              email: nuget@appveyor.com
+              roleId: 5
+              roleName: User
+              accountId: 2
+              accountName: FeodorFitsner
+              created: '2019-03-20T16:22:50.2504181+00:00'
+    post:
+      tags:
+      - User
+      operationId: inviteUser
+      summary: Invite user
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/InviteUserRequest'
+      responses:
+        default:
+          $ref: '#/responses/Error'
+        '204':
+          description: Success
+
+  /users/invitations/{userInvitationId}:
+    parameters:
+    - $ref: '#/parameters/userInvitationId'
+    delete:
+      tags:
+      - User
+      operationId: cancelUserInvitation
+      summary: Cancel user invitation
       responses:
         default:
           $ref: '#/responses/Error'
