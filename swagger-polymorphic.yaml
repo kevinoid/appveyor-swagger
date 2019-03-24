@@ -113,7 +113,7 @@ securityDefinitions:
   #  scheme: bearer
   apiToken:
     description: >-
-      API token can be acquired from https://ci.appveyor.com/api-token
+      API token can be acquired from https://ci.appveyor.com/api-keys
 
       This value must be passed to the server in the `Authorization` header
       as `"Bearer <token>"`.  Since [bearer token authentication support is not
