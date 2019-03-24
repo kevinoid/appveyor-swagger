@@ -5070,7 +5070,7 @@ paths:
               updated: '2014-08-12T23:06:25.0502019+00:00'
 
   /deployments/stop:
-    delete:
+    put:
       tags:
       - Deployment
       operationId: cancelDeployment
