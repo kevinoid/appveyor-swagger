@@ -2457,6 +2457,22 @@ definitions:
       provider:
         $ref: '#/definitions/DeploymentProviderType'
 
+  DeploymentProjectSelectionMode:
+    description: Project selection mode for deployment environments.
+    type: integer
+    enum:
+    - 0
+    - 1
+    - 2
+    x-enum-varnames:
+    - Any
+    - Only Selected
+    - All Except Selected
+    x-enum-descriptions:
+    - Any project can be deployed to the environment.
+    - Only selected projects can be deployed to the environment.
+    - All projects except the selected projects can be deployed to the environment.
+
   DeploymentEnvironment:
     allOf:
     - $ref: '#/definitions/DeploymentEnvironmentLookupModel'
@@ -2466,17 +2482,7 @@ definitions:
         accountId:
           type: integer
         projectsMode:
-          # Note: May be able to define enumeration value names in OpenAPI v3
-          # https://github.com/OAI/OpenAPI-Specification/issues/681
-          #
-          # swagger-codegen fails when this enumeration is a toplevel definition
-          # due to https://github.com/swagger-api/swagger-parser/pull/363
-          description: |-
-            0 is "Any project can be deployed to the environment"
-            1 is "Only selected projects can be deployed to the environment"
-            2 is "All except selected projects can be deployed to the environment"
-          type: integer
-          enum: [0, 1, 2]
+          $ref: '#/definitions/DeploymentProjectSelectionMode'
         securityDescriptor:
           $ref: '#/definitions/SecurityDescriptor'
         tags:
