@@ -5094,25 +5094,4 @@ paths:
 
   ### Deployment }}}
 
-# Suppress incorrect swagger-editor warnings for discriminator subtypes
-# https://github.com/swagger-api/swagger-editor/issues/765#issuecomment-256618196
-x-suppress-warning:
-# Group permissions
-- $ref: '#/definitions/Account'
-- $ref: '#/definitions/BuildEnvironment'
-- $ref: '#/definitions/Deny'
-- $ref: '#/definitions/Environments'
-- $ref: '#/definitions/Projects'
-- $ref: '#/definitions/Roles'
-- $ref: '#/definitions/User'
-- $ref: '#/definitions/Users'
-# Notifications
-- $ref: '#/definitions/Campfire'
-- $ref: '#/definitions/Email'
-- $ref: '#/definitions/GitHubPullRequest'
-- $ref: '#/definitions/HipChat'
-- $ref: '#/definitions/Slack'
-- $ref: '#/definitions/Webhook'
-- $ref: '#/definitions/VSOTeamRoom'
-
 # vim: set foldmethod=marker :
