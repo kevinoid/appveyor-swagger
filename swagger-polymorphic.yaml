@@ -1394,7 +1394,7 @@ definitions:
       name:
         $ref: '#/definitions/AccessRightName'
       allowed:
-        # Note: true==allow, false==deny, undefined==inherit
+        description: true to allow, false to deny, undefined to inherit
         type: boolean
     required: [name]
 
@@ -1660,14 +1660,15 @@ definitions:
   ScriptLanguage:
     type: string
     enum:
-    # Command Prompt/Batch Script/cmd.exe
     - cmd
-    # PowerShell
     - ps
-    # PowerShell Core
     - pwsh
-    # POSIX shell
     - sh
+    x-enum-descriptions:
+    - Command Prompt/Batch Script/cmd.exe
+    - PowerShell
+    - PowerShell Core
+    - POSIX shell
 
   Script:
     type: object
@@ -4645,13 +4646,15 @@ paths:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
       security: []
       produces:
-      # Note:  Should be text/plain, but server always sends as octet-stream.
       - application/octet-stream
       responses:
         default:
           $ref: '#/responses/Error'
         '200':
-          description: Success
+          description: |-
+            Success.
+            Note:  Response content is plain text sent with Content-Type
+            application/octet-stream.
           schema:
             type: file
 
