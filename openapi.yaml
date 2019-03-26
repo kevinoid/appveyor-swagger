@@ -2983,6 +2983,11 @@ paths:
                 notifyWhenBuildStatusChangedOnly: true
                 created: '2014-02-12T19:21:15.0618564+00:00'
                 updated: '2014-03-06T22:47:44.9706252+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserAccount'
     put:
       tags:
       - User
@@ -3046,6 +3051,9 @@ paths:
                   name: User
                   isSystem: true
                   created: '2013-09-26T19:23:39.3645117+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserAccountRolesResults'
     delete:
       tags:
       - User
@@ -3084,6 +3092,11 @@ paths:
                 accountId: 2
                 accountName: FeodorFitsner
                 created: '2019-03-20T16:22:50.2504181+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInvitationModel'
     post:
       tags:
       - User
@@ -3206,6 +3219,9 @@ paths:
                   isEnterprisePlan: false
                   created: '2016-09-09T23:01:29.941128+00:00'
                   updated: '2016-09-21T00:08:35.0728561+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SessionModel'
 
   ### User }}}
   ### {{{ Collaborator
@@ -3244,6 +3260,11 @@ paths:
                 notifyWhenBuildStatusChangedOnly: true
                 created: '2014-02-03T20:29:26.6807307+00:00'
                 updated: '2014-03-07T04:26:09.1051534+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserAccount'
     put:
       tags:
       - Collaborator
@@ -3312,6 +3333,9 @@ paths:
                   isSystem: false
                   created: '2014-03-18T20:12:08.4749886+00:00'
                   updated: '2014-03-18T20:16:06.8803375+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserAccountRolesResults'
     delete:
       tags:
       - Collaborator
@@ -3356,6 +3380,11 @@ paths:
                 name: User
                 isSystem: true
                 created: '2013-09-26T19:23:39.3645117+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
     post:
       tags:
       - Role
@@ -3378,6 +3407,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RoleWithGroups'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RoleWithGroups'
     put:
       tags:
       - Role
@@ -3398,6 +3430,9 @@ paths:
           description: Success
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/RoleWithGroups'
+            application/xml:
               schema:
                 $ref: '#/components/schemas/RoleWithGroups'
 
@@ -3483,6 +3518,9 @@ paths:
                   - name: ConfigureApiKeys
                     description: Generate API keys
                     allowed: false
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RoleWithGroups'
     delete:
       tags:
       - Role
@@ -3583,6 +3621,11 @@ paths:
                   publishingEnabled: false
                   created: '2014-08-15T22:04:21.3111546+00:00'
                 created: '2014-08-15T22:04:19.2868375+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
     post:
       tags:
       - Project
@@ -3618,6 +3661,9 @@ paths:
                 isPrivate: false
                 skipBranchesWithoutAppveyorYml: false
                 created: '2014-08-16T00:52:15.6604826+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Project'
     put:
       tags:
       - Project
@@ -3715,6 +3761,9 @@ paths:
                   finished: '2014-08-14T05:42:45.5709599+00:00'
                   created: '2014-08-14T05:39:26.2946368+00:00'
                   updated: '2014-08-14T05:42:45.5709599+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectBuildResults'
     delete:
       tags:
       - Project
@@ -3808,6 +3857,9 @@ paths:
                   finished: '2014-08-14T05:42:45.5709599+00:00'
                   created: '2014-08-14T05:39:26.2946368+00:00'
                   updated: '2014-08-14T05:42:45.5709599+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectBuildResults'
 
   /projects/{accountName}/{projectSlug}/build/{buildVersion}:
     parameters:
@@ -3889,6 +3941,9 @@ paths:
                   finished: '2014-08-14T05:42:45.5709599+00:00'
                   created: '2014-08-14T05:39:26.2946368+00:00'
                   updated: '2014-08-14T05:42:45.5709599+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectBuildResults'
 
   /projects/{accountName}/{projectSlug}/history:
     parameters:
@@ -3966,6 +4021,9 @@ paths:
                   finished: '2014-08-09T15:44:15.5828009+00:00'
                   created: '2014-08-09T15:42:38.8315273+00:00'
                   updated: '2014-08-09T15:44:15.5828009+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectHistory'
 
   /projects/{accountName}/{projectSlug}/artifacts/{artifactFileName}:
     parameters:
@@ -4093,6 +4151,9 @@ paths:
                     finished: '2014-08-12T23:06:25.0502019+00:00'
                     created: '2014-08-12T23:06:07.9009315+00:00'
                     updated: '2014-08-12T23:06:25.0502019+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectDeploymentsResults'
 
   /projects/{accountName}/{projectSlug}/settings:
     parameters:
@@ -4265,6 +4326,9 @@ paths:
                 - name: test-win2012-r2
                 - name: Windows Server 2012
                 - name: Windows Server 2012 R2
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectSettingsResults'
 
   /projects/{accountName}/{projectSlug}/settings/yaml:
     parameters:
@@ -4373,6 +4437,11 @@ paths:
                 value:
                   isEncrypted: false
                   value: current-value
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StoredNameValue'
     put:
       tags:
       - Project
@@ -4553,6 +4622,9 @@ paths:
                 messages: []
                 status: queued
                 created: '2014-08-16T00:40:38.1703914+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Build'
     put:
       tags:
       - Build
@@ -4595,6 +4667,9 @@ paths:
                 messages: []
                 status: queued
                 created: '2014-08-16T00:40:38.1703914+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Build'
 
   /builds/{accountName}/{projectSlug}/{buildVersion}:
     parameters:
@@ -4645,6 +4720,11 @@ paths:
                 name: out\example.zip
                 type: Zip
                 size: 15600
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArtifactModel'
 
   /buildjobs/{jobId}/artifacts/{artifactFileName}:
     parameters:
@@ -4723,6 +4803,11 @@ paths:
               - deploymentEnvironmentId: 12
                 name: azure-deploy-test
                 provider: AzureCS
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeploymentEnvironmentLookupModel'
     post:
       tags:
       - Environment
@@ -4770,6 +4855,9 @@ paths:
                       isEncrypted: false
                       value: '123'
                 created: '2014-08-15T23:57:16.1585268+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
     put:
       tags:
       - Environment
@@ -4818,6 +4906,9 @@ paths:
                       value: '123'
                 created: '2014-08-15T23:57:16.1585268+00:00'
                 updated: '2014-08-16T00:00:37.6079863+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
 
   /environments/{deploymentEnvironmentId}/settings:
     parameters:
@@ -4868,6 +4959,9 @@ paths:
                     environmentVariables: []
                   created: '2014-01-23T18:13:52.2268502+00:00'
                   updated: '2014-06-02T18:13:32.5106126+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeploymentEnvironmentSettingsResults'
 
   /environments/{deploymentEnvironmentId}/deployments:
     parameters:
@@ -4953,6 +5047,9 @@ paths:
                     finished: '2014-06-02T18:20:25.11916+00:00'
                     created: '2014-06-02T18:20:07.2833871+00:00'
                     updated: '2014-06-02T18:20:25.11916+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeploymentEnvironmentDeploymentsResults'
 
   /environments/{deploymentEnvironmentId}:
     parameters:
@@ -5049,6 +5146,9 @@ paths:
                   finished: '2014-08-12T23:06:25.0502019+00:00'
                   created: '2014-08-12T23:06:07.9009315+00:00'
                   updated: '2014-08-12T23:06:25.0502019+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProjectDeployment'
 
   /deployments:
     post:
@@ -5114,6 +5214,9 @@ paths:
                 finished: '2014-08-12T23:06:25.0502019+00:00'
                 created: '2014-08-12T23:06:07.9009315+00:00'
                 updated: '2014-08-12T23:06:25.0502019+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Deployment'
 
   /deployments/stop:
     put:
