@@ -33,5 +33,7 @@ jobs:
       run: node --version
     - name: Install dependencies
       run: npm install --strict-peer-deps
+    - name: Lint
+      run: npm run lint
     - name: Validate
       run: npm run validate
