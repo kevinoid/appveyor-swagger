@@ -41,6 +41,7 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.0.0",
     "@stoplight/spectral-cli": "^6.6.0",
+    "api-spec-converter": "^2.8.1",
     "autorest": "^3.0.5202",
     "bootprint": "^4.0.4",
     "bootprint-openapi": "^4.0.0",
