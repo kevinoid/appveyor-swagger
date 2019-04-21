@@ -146,7 +146,12 @@ parameters:
   accountName:
     name: accountName
     in: path
-    description: AppVeyor account name (`accountName` property of `UserAccount`)
+    # Note: copied to accountName server variable for user-level API spec
+    description: |-
+      AppVeyor account name on which to operate.
+      Accounts for which a user has access are listed on the [Security page of
+      the user profile](https://ci.appveyor.com/security) (when logged in).
+      The user account is also the `accountName` property of `UserAccount`.
     type: string
     required: true
     minLength: 1
