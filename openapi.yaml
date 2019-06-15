@@ -457,68 +457,68 @@ components:
 
     PermissionName:
       description: |
-        Available permission names.  The names correspond to the following groups:
-        #### AccountPermission
+        Available permission names.
+        The names correspond to the following permission groups:
+        #### Account
         - ManageApplicationAuthorizations
         - UpdateAccountDetails
         - UpdateBillingDetails
-        #### BuildEnvironmentPermission
+        #### BuildEnvironment
         - ConfigureBuildEnvironment
-        #### DenyPermission
+        #### Deny
         - DenyAllProjectsEnvironments
-        #### EnvironmentsPermission
+        #### Environments
         - DeployToEnvironment
         - ManageEnvironments
         - UpdateEnvironmentSettings
-        #### ProjectsPermission
+        #### Projects
         - ManageProjects
         - RunProjectBuild
         - UpdateProjectSettings
-        #### RolesPermission
+        #### Roles
         - AddRole
         - DeleteRole
         - UpdateRoleDetails
-        #### UserPermission
+        #### User
         - ConfigureApiKeys
-        #### UsersPermission
+        #### Users
         - AddUser
         - DeleteUser
         - UpdateUserDetails
       type: string
       enum:
-      # AccountPermission:
+      # Account
       - ManageApplicationAuthorizations
       - UpdateAccountDetails
       - UpdateBillingDetails
-      # BuildEnvironmentPermission:
+      # BuildEnvironment
       - ConfigureBuildEnvironment
-      # DenyPermission:
+      # Deny
       - DenyAllProjectsEnvironments
-      # EnvironmentsPermission:
+      # Environments
       - DeployToEnvironment
       - ManageEnvironments
       - UpdateEnvironmentSettings
-      # ProjectsPermission:
+      # Projects
       - ManageProjects
       - RunProjectBuild
       - UpdateProjectSettings
-      # RolesPermission:
+      # Roles
       - AddRole
       - DeleteRole
       - UpdateRoleDetails
-      # UserPermission:
+      # User
       - ConfigureApiKeys
-      # UsersPermission:
+      # Users
       - AddUser
       - DeleteUser
       - UpdateUserDetails
 
-    PermissionState:
+    RolePermissionModel:
       type: object
       properties:
-        # Removed due to lack of support for enum type covariance on properties
-        #name:
-        #  $ref: '#/components/schemas/PermissionName'
+        name:
+          $ref: '#/components/schemas/PermissionName'
         description:
           type: string
         allowed:
@@ -528,222 +528,28 @@ components:
           type: boolean
       required: [name]
 
-    GroupPermissions:
+    PermissionGroupName:
+      type: string
+      enum:
+      - Account
+      - BuildEnvironment
+      - Deny
+      - Environments
+      - Projects
+      - Roles
+      - User
+      - Users
+
+    PermissionGroup:
       type: object
-      discriminator:
-        propertyName: name
-        mapping:
-          Account: AccountGroupPermissions
-          BuildEnvironment: BuildEnvironmentGroupPermissions
-          Deny: DenyGroupPermissions
-          Environments: EnvironmentsGroupPermissions
-          Projects: ProjectsGroupPermissions
-          Roles: RolesGroupPermissions
-          User: UserGroupPermissions
-          Users: UsersGroupPermissions
       properties:
         name:
-          type: string
-        # Removed due to lack of support for type covariance on properties
-        #permissions:
-        #  type: array
-        #  items:
-        #    $ref: '#/components/schemas/PermissionState'
+          $ref: '#/components/schemas/PermissionGroupName'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RolePermissionModel'
       required: [name, permissions]
-
-    AccountPermission:
-      type: string
-      enum:
-      - ManageApplicationAuthorizations
-      - UpdateAccountDetails
-      - UpdateBillingDetails
-
-    AccountPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/AccountPermission'
-
-    AccountGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/AccountPermissionState'
-
-    BuildEnvironmentPermission:
-      type: string
-      enum:
-      - ConfigureBuildEnvironment
-
-    BuildEnvironmentPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/BuildEnvironmentPermission'
-
-    BuildEnvironmentGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/BuildEnvironmentPermissionState'
-
-    DenyPermission:
-      type: string
-      enum:
-      - DenyAllProjectsEnvironments
-
-    DenyPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/DenyPermission'
-
-    DenyGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/DenyPermissionState'
-
-    EnvironmentsPermission:
-      type: string
-      enum:
-      - DeployToEnvironment
-      - ManageEnvironments
-      - UpdateEnvironmentSettings
-
-    EnvironmentsPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/EnvironmentsPermission'
-
-    EnvironmentsGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/EnvironmentsPermissionState'
-
-    ProjectsPermission:
-      type: string
-      enum:
-      - ManageProjects
-      - RunProjectBuild
-      - UpdateProjectSettings
-
-    ProjectsPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/ProjectsPermission'
-
-    ProjectsGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/ProjectsPermissionState'
-
-    RolesPermission:
-      type: string
-      enum:
-      - AddRole
-      - DeleteRole
-      - UpdateRoleDetails
-
-    RolesPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/RolesPermission'
-
-    RolesGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/RolesPermissionState'
-
-    UserPermission:
-      type: string
-      enum:
-      - ConfigureApiKeys
-
-    UserPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/UserPermission'
-
-    UserGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/UserPermissionState'
-
-    UsersPermission:
-      type: string
-      enum:
-      - AddUser
-      - DeleteUser
-      - UpdateUserDetails
-
-    UsersPermissionState:
-      allOf:
-      - $ref: '#/components/schemas/PermissionState'
-      - type: object
-        properties:
-          name:
-            $ref: '#/components/schemas/UsersPermission'
-
-    UsersGroupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/GroupPermissions'
-      - type: object
-        properties:
-          permissions:
-            type: array
-            items:
-              $ref: '#/components/schemas/UsersPermissionState'
 
     # Permissions }}}
 
@@ -787,7 +593,7 @@ components:
           groups:
             type: array
             items:
-              $ref: '#/components/schemas/GroupPermissions'
+              $ref: '#/components/schemas/PermissionGroup'
       example:
         roleId: 3040
         name: My Role
