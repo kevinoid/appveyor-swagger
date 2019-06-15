@@ -171,7 +171,7 @@ components:
         AppVeyor account name on which to operate.
         Accounts for which a user has access are listed on the [Security page of
         the user profile](https://ci.appveyor.com/security) (when logged in).
-        The user account is also the `accountName` property of `UserAccount`.
+        The user account is also the `accountName` property of `UserModel`.
       required: true
       schema:
         type: string
@@ -872,10 +872,7 @@ components:
       - successfulDeploymentNotification
       - failedDeploymentNotification
 
-    # Note:  I would prefer the name User, but User must be used for
-    # UserGroupPermissions in the due to how discriminator works.
-    # Item 1 of https://github.com/OAI/OpenAPI-Specification/issues/707
-    UserAccount:
+    UserModel:
       allOf:
       - $ref: '#/components/schemas/Timestamped'
       - type: object
@@ -935,7 +932,7 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/UserAccount'
+          $ref: '#/components/schemas/UserModel'
         roles:
           type: array
           items:
@@ -2740,7 +2737,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserAccount'
+                  $ref: '#/components/schemas/UserModel'
               example:
               - accountId: 2
                 accountName: FeodorFitsner
@@ -2760,7 +2757,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserAccount'
+                  $ref: '#/components/schemas/UserModel'
     put:
       tags:
       - User
@@ -2773,7 +2770,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserAccount'
+              $ref: '#/components/schemas/UserModel'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -3017,7 +3014,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserAccount'
+                  $ref: '#/components/schemas/UserModel'
               example:
               - accountId: 2
                 accountName: FeodorFitsner
@@ -3037,7 +3034,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserAccount'
+                  $ref: '#/components/schemas/UserModel'
     put:
       tags:
       - Collaborator
