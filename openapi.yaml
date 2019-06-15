@@ -1440,7 +1440,7 @@ components:
       - WMF 5
       - Windows Server 2019
 
-    BuildWorkerImage:
+    BuildWorkerImageModel:
       type: object
       properties:
         buildWorkerImageId:
@@ -2092,7 +2092,7 @@ components:
         images:
           type: array
           items:
-            $ref: '#/components/schemas/BuildWorkerImage'
+            $ref: '#/components/schemas/BuildWorkerImageModel'
         buildClouds:
           type: array
           items:
