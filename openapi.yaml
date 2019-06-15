@@ -1594,7 +1594,7 @@ components:
             rather than an empty string.
           type: string
 
-    StoredNameValue:
+    SecurableVariable:
       type: object
       properties:
         name:
@@ -1608,7 +1608,7 @@ components:
       type: object
       properties:
         variables:
-          $ref: '#/components/schemas/StoredNameValue'
+          $ref: '#/components/schemas/SecurableVariable'
 
     HostEntry:
       type: object
@@ -1760,7 +1760,7 @@ components:
         environmentVariables:
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValue'
+            $ref: '#/components/schemas/SecurableVariable'
         environmentVariablesMatrix:
           type: array
           items:
@@ -2145,7 +2145,7 @@ components:
         providerSettings:
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValue'
+            $ref: '#/components/schemas/SecurableVariable'
         onBranch:
           type: array
           # The web UI only displays a single branch.  Max length?
@@ -2154,7 +2154,7 @@ components:
         onEnvironmentVariables:
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValue'
+            $ref: '#/components/schemas/SecurableVariable'
       required: [provider]
 
     # TODO: Not worth effort to specify without anyOf or discriminator support
@@ -2176,7 +2176,7 @@ components:
     #
     # FTPDeploymentSettingNameValue:
     #   allOf:
-    #   - $ref: '#/components/schemas/StoredNameValue'
+    #   - $ref: '#/components/schemas/SecurableVariable'
     #   - properties:
     #       name:
     #         $ref: '#/components/schemas/FTPDeploymentSetting'
@@ -2200,11 +2200,11 @@ components:
         providerSettings:
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValue'
+            $ref: '#/components/schemas/SecurableVariable'
         environmentVariables:
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValue'
+            $ref: '#/components/schemas/SecurableVariable'
         notifications:
           type: array
           items:
@@ -2661,7 +2661,7 @@ components:
           headers:
             type: array
             items:
-              $ref: '#/components/schemas/StoredNameValue'
+              $ref: '#/components/schemas/SecurableVariable'
           headersValue:
             type: string
           addCustomRequestBody:
@@ -4197,7 +4197,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/StoredNameValue'
+                  $ref: '#/components/schemas/SecurableVariable'
               example:
               - name: api_key
                 value:
@@ -4211,7 +4211,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/StoredNameValue'
+                  $ref: '#/components/schemas/SecurableVariable'
     put:
       tags:
       - Project
@@ -4226,7 +4226,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/StoredNameValue'
+                $ref: '#/components/schemas/SecurableVariable'
       responses:
         default:
           $ref: '#/components/responses/Error'
