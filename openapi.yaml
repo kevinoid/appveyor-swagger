@@ -1883,7 +1883,7 @@ components:
         deployments:
           type: array
           items:
-            $ref: '#/components/schemas/DeploymentProvider'
+            $ref: '#/components/schemas/DeploymentSettings'
         deployScripts:
           type: array
           items:
@@ -2118,27 +2118,327 @@ components:
     DeploymentProviderType:
       type: string
       enum:
-      - Agent
+      - AzureAppServiceZipDeploy
       - AzureBlob
       - AzureCS
       - AzureWebJob
       - BinTray
+      - ElasticBeanstalk
+      - Environment
       - FTP
       - GitHub
+      - Local
       - NuGet
+      - Octopus
       - S3
       - SqlDatabase
       - WebDeploy
       - Webhook
+      x-enum-descriptions:
+      - Azure App Service Zip Push Deploy
+      - Azure Blob Storage
+      - Azure Cloud Service
+      - Azure WebJob
+      - BinTray
+      - Amazon Elastic Beanstalk
+      - Environment
+      - FTP
+      - GitHub Releases
+      - Local Build Server
+      - NuGet
+      - Octopus Deploy
+      - Amazon S3
+      - SQL Server Database
+      - Web Deploy
+      - Webhook
 
-    DeploymentProvider:
+    AzureAppServiceZipDeployDPSettingName:
+      type: string
+      enum:
+      - appservice_environment
+      - artifact
+      - async_deploy
+      - password
+      - retry_attempts
+      - retry_interval
+      - slot
+      - username
+      - website
+
+    AzureBlobDPSettingName:
+      type: string
+      enum:
+      - artifact
+      - container
+      - folder
+      - set_content_type
+      - storage_access_key
+      - storage_account_name
+      - unzip
+
+    AzureCSDPSettingName:
+      type: string
+      enum:
+      - artifact
+      - deployment_label
+      - do_not_start_deployment
+      - recreate_deployment
+      - retry_attempts  # integer
+      - retry_interval  # number
+      - role_to_upgrade
+      - service
+      - slot  # Staging, Production
+      - storage_access_key
+      - storage_account_name
+      - storage_container_name
+      - subscription_certificate
+      - subscription_id
+      - target_profile
+
+    AzureWebJobDPSettingName:
+      type: string
+      enum:
+      - appservice_environment
+      - artifact
+      - job_name
+      - job_schedule
+      - manually_triggered
+      - password
+      - retry_attempts
+      - retry_interval
+      - slot
+      - username
+      - website
+
+    BinTrayDPSettingName:
+      type: string
+      enum:
+      - api_key
+      - artifact
+      - explode
+      - override
+      - package
+      - publish
+      - repo
+      - subject
+      - username
+      - version
+
+    ElasticBeanstalkDPSettingName:
+      type: string
+      enum:
+      - access_key_id
+      - application_name
+      - artifact
+      - environment_name
+      - healthcheck
+      - max_error_retry
+      - region
+      - secret_access_key
+
+    EnvironmentDPSettingName:
+      type: string
+      enum:
+      - name
+
+    FTPDPSettingName:
+      type: string
+      enum:
+      - active_mode
+      - application
+      - artifact
+      - beta
+      - debug
+      - enable_ssl
+      - folder
+      - host
+      - password
+      - protocol
+      - server
+      - username
+
+    GitHubDPSettingName:
+      type: string
+      enum:
+      - artifact
+      - auth_token
+      - description
+      - draft
+      - force_update
+      - prerelease
+      - release
+      - repository
+      - tag
+
+    NuGetDPSettingName:
+      type: string
+      enum:
+      - api_key
+      - artifact
+      - server
+      - skip_symbols
+      - symbol_server
+
+    OctopusDPSettingName:
+      type: string
+      enum:
+      - api_key
+      - create_release
+      - deploy_release
+      - octo_timeout
+      - push_packages
+      - server
+
+    S3DPSettingName:
+      type: string
+      enum:
+      - access_key_id
+      - artifact
+      - bucket
+      - encrypt
+      - folder
+      - max_error_retry
+      - reduced_redundancy
+      - region
+      - secret_access_key
+      - set_public
+      - unzip
+
+    SqlDatabaseDPSettingName:
+      type: string
+      enum:
+      - allow_drop_blocking_assemblies
+      - allow_incompatible_platform
+      - artifact
+      - backup_database_before_changes
+      - block_on_possible_data_loss
+      - comment_out_set_var_declarations
+      - compare_using_target_collation
+      - connection_string
+      - create_new_database
+      - deploy_database_in_single_user_mode
+      - disable_and_reenable_ddl_triggers
+      - do_not_alter_change_data_capture_objects
+      - do_not_alter_replicated_objects
+      - do_not_drop_users
+      - drop_constraints_not_in_source
+      - drop_dml_triggers_not_in_source
+      - drop_extended_properties_not_in_source
+      - drop_indexes_not_in_source
+      - drop_objects_not_in_source
+      - drop_permissions_not_in_source
+      - drop_role_members_not_in_source
+      - generate_smart_defaults
+      - ignore_ansi_nulls
+      - ignore_authorizer
+      - ignore_column_collation
+      - ignore_comments
+      - ignore_cryptographic_provider_file_path
+      - ignore_ddl_trigger_order
+      - ignore_ddl_trigger_state
+      - ignore_default_schema
+      - ignore_dml_trigger_order
+      - ignore_dml_trigger_state
+      - ignore_extended_properties
+      - ignore_file_and_log_file_path
+      - ignore_file_size
+      - ignore_filegroup_placement
+      - ignore_fill_factor
+      - ignore_full_text_catalog_file_path
+      - ignore_identity_seed
+      - ignore_increment
+      - ignore_index_options
+      - ignore_index_padding
+      - ignore_keyword_casing
+      - ignore_lock_hints_on_indexes
+      - ignore_login_sids
+      - ignore_not_for_replication
+      - ignore_object_placement_on_partition_scheme
+      - ignore_partition_schemes
+      - ignore_permissions
+      - ignore_quoted_identifiers
+      - ignore_role_membership
+      - ignore_route_lifetime
+      - ignore_semicolon_between_statements
+      - ignore_table_options
+      - ignore_user_settings_objects
+      - ignore_whitespace
+      - ignore_with_nocheck_on_check_constraints
+      - ignore_with_nocheck_on_foreign_keys
+      - include_composite_objects
+      - include_transactional_scripts
+      - no_alter_statements_to_change_clr_types
+      - populate_files_on_file_groups
+      - register_data_tier_application
+      - script_database_collation
+      - script_database_compatibility
+      - script_database_options
+      - script_deploy_state_checks
+      - script_file_size
+      - script_new_constraint_validation
+      - script_refresh_module
+      - treat_verification_errors_as_warnings
+      - unmodifiable_object_warnings
+      - verify_collation_compatibility
+      - verify_deployment
+
+    WebDeployDPSettingName:
+      type: string
+      enum:
+      - app_offline
+      - artifact
+      - aspnet_core
+      - do_not_use_checksum
+      - ntlm
+      - password
+      - post_sync
+      - pre_sync
+      - remove_files
+      - server
+      - skip_dirs
+      - skip_files
+      - sync_retry_attempts
+      - sync_retry_interval
+      - sync_wait_attempts
+      - sync_wait_interval
+      - username
+      - website
+
+    WebhookDPSettingName:
+      type: string
+      enum:
+      - authorization
+      - request_timeout
+      - url
+
+    DeploymentSettings:
+      description: |
+        The names and values of `SecurableVariable` in `providerSettings` are
+        restricted based on `provider`.
+
+        This could be enforced using `discriminator` in combination with
+        a child schema for each provider.  The drawbacks to that approach
+        (difficulty of use due to lack of covariance and abstract classes, and
+        divergence from server schema) currently outweigh the benefits.
+
+        For convenience, the variable names for each provider are defined in:
+
+        - AzureAppServiceZipDeployDPSettingName
+        - AzureBlobDPSettingName
+        - AzureCSDPSettingName
+        - AzureWebJobDPSettingName
+        - BinTrayDPSettingName
+        - ElasticBeanstalkDPSettingName
+        - EnvironmentDPSettingName
+        - FTPDPSettingName
+        - GitHubDPSettingName
+        - NuGetDPSettingName
+        - OctopusDPSettingName
+        - S3DPSettingName
+        - SqlDatabaseDPSettingName
+        - WebDeployDPSettingName
+        - WebhookDPSettingName
       type: object
-      # FIXME: discriminator requires schema names that clash with existing
-      # non-DeploymentProvider schemas.
-      # https://github.com/OAI/OpenAPI-Specification/issues/707
-      # It is also not supported at all by most code generators.
-      # Future: https://github.com/swagger-api/swagger-codegen/pull/4252
-      #discriminator: provider
       properties:
         provider:
           $ref: '#/components/schemas/DeploymentProviderType'
@@ -2156,43 +2456,6 @@ components:
           items:
             $ref: '#/components/schemas/SecurableVariable'
       required: [provider]
-
-    # TODO: Not worth effort to specify without anyOf or discriminator support
-    # FTPDeploymentSetting:
-    #   type: string
-    #   enum:
-    #   - active_mode
-    #   - application
-    #   - artifact
-    #   - beta
-    #   - debug
-    #   - enable_ssl
-    #   - folder
-    #   - host
-    #   - password
-    #   - protocol
-    #   - server
-    #   - username
-    #
-    # FTPDeploymentSettingNameValue:
-    #   allOf:
-    #   - $ref: '#/components/schemas/SecurableVariable'
-    #   - properties:
-    #       name:
-    #         $ref: '#/components/schemas/FTPDeploymentSetting'
-    #
-    # FTPDeploymentProvider:
-    #   allOf:
-    #   - $ref: '#/components/schemas/DeploymentProvider'
-    #   - type: object
-    #     properties:
-    #       provider:
-    #         type: string
-    #         enum: [FTP]
-    #       providerSettings:
-    #         type: array
-    #         items:
-    #           $ref: '#/components/schemas/FTPDeploymentSettingNameValue'
 
     DeploymentEnvironmentSettings:
       type: object
