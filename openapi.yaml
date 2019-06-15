@@ -516,8 +516,9 @@ components:
     PermissionState:
       type: object
       properties:
-        name:
-          $ref: '#/components/schemas/PermissionName'
+        # Removed due to lack of support for enum type covariance on properties
+        #name:
+        #  $ref: '#/components/schemas/PermissionName'
         description:
           type: string
         allowed:
@@ -526,18 +527,6 @@ components:
             missing to inherit.
           type: boolean
       required: [name]
-
-    GroupName:
-      type: string
-      enum:
-      - Account
-      - BuildEnvironment
-      - Deny
-      - Environments
-      - Projects
-      - Roles
-      - User
-      - Users
 
     GroupPermissions:
       type: object
@@ -554,11 +543,12 @@ components:
           Users: UsersGroupPermissions
       properties:
         name:
-          $ref: '#/components/schemas/GroupName'
-        permissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/PermissionState'
+          type: string
+        # Removed due to lack of support for type covariance on properties
+        #permissions:
+        #  type: array
+        #  items:
+        #    $ref: '#/components/schemas/PermissionState'
       required: [name, permissions]
 
     AccountPermission:
@@ -2613,8 +2603,6 @@ components:
         deploymentId:
           type: integer
           minimum: 0
-        build:
-          $ref: '#/components/schemas/BuildLookupModel'
         status:
           $ref: '#/components/schemas/Status'
         started:
@@ -2663,6 +2651,8 @@ components:
       - $ref: '#/components/schemas/DeploymentLookupModel'
       - type: object
         properties:
+          build:
+            $ref: '#/components/schemas/BuildLookupModel'
           environment:
             $ref: '#/components/schemas/DeploymentEnvironmentLookupModel'
 
@@ -2681,6 +2671,8 @@ components:
       - $ref: '#/components/schemas/DeploymentLookupModel'
       - type: object
         properties:
+          build:
+            $ref: '#/components/schemas/BuildLookupModel'
           project:
             $ref: '#/components/schemas/ProjectLookupModel'
 
@@ -2697,17 +2689,6 @@ components:
 
     # Deployment Settings }}}
     ### {{{ Notification Settings
-
-    NotificationProviderType:
-      type: string
-      enum:
-      - Campfire
-      - Email
-      - GitHubPullRequest
-      - HipChat
-      - Slack
-      - Webhook
-      - VSOTeamRoom
 
     NotificationSettings:
       type: object
@@ -2746,9 +2727,10 @@ components:
           VSOTeamRoom: VSOTeamRoomNotificationProviderSettings
       properties:
         provider:
-          $ref: '#/components/schemas/NotificationProviderType'
-        settings:
-          $ref: '#/components/schemas/NotificationSettings'
+          type: string
+        # Removed due to lack of support for type covariance on properties
+        #settings:
+        #  $ref: '#/components/schemas/NotificationSettings'
       required: [provider, settings]
 
     CampfireNotificationSettings:
