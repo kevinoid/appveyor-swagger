@@ -1581,7 +1581,7 @@ components:
       type: string
       enum: [auto, none, script]
 
-    StoredValue:
+    SecurableValue:
       type: object
       properties:
         isEncrypted:
@@ -1601,7 +1601,7 @@ components:
           type: string
           minLength: 1
         value:
-          $ref: '#/components/schemas/StoredValue'
+          $ref: '#/components/schemas/SecurableValue'
       required: [name, value]
 
     StoredNameValueMatrix:
@@ -2544,7 +2544,7 @@ components:
           account:
             type: string
           authToken:
-            $ref: '#/components/schemas/StoredValue'
+            $ref: '#/components/schemas/SecurableValue'
           room:
             type: string
           template:
@@ -2588,7 +2588,7 @@ components:
       - type: object
         properties:
           authToken:
-            $ref: '#/components/schemas/StoredValue'
+            $ref: '#/components/schemas/SecurableValue'
           template:
             type: string
 
@@ -2606,7 +2606,7 @@ components:
       - type: object
         properties:
           authToken:
-            $ref: '#/components/schemas/StoredValue'
+            $ref: '#/components/schemas/SecurableValue'
           from:
             type: string
           room:
@@ -2634,7 +2634,7 @@ components:
             type: string
             format: uri
           authToken:
-            $ref: '#/components/schemas/StoredValue'
+            $ref: '#/components/schemas/SecurableValue'
           channel:
             type: string
           template:
@@ -2691,7 +2691,7 @@ components:
           username:
             type: string
           password:
-            $ref: '#/components/schemas/StoredValue'
+            $ref: '#/components/schemas/SecurableValue'
           room:
             type: string
           template:
@@ -3315,7 +3315,7 @@ paths:
       tags:
       - Project
       operationId: encryptValue
-      summary: Encrypt a value for use in StoredValue.
+      summary: Encrypt a value for use in SecurableValue.
       requestBody:
         required: true
         content:
@@ -3332,7 +3332,7 @@ paths:
               schema:
                 type: string
                 # Could add format: byte since data is base64 encoded.
-                # Avoided since primary use is as string in StoredValue, not byte[].
+                # Avoided since primary use is as string in SecurableValue, not byte[].
               example: wsnoY4v1v1Uofj0xf8E6FA==
 
   /projects:
