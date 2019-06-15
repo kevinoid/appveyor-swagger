@@ -543,6 +543,15 @@ components:
       type: object
       discriminator:
         propertyName: name
+        mapping:
+          Account: AccountGroupPermissions
+          BuildEnvironment: BuildEnvironmentGroupPermissions
+          Deny: DenyGroupPermissions
+          Environments: EnvironmentsGroupPermissions
+          Projects: ProjectsGroupPermissions
+          Roles: RolesGroupPermissions
+          User: UserGroupPermissions
+          Users: UsersGroupPermissions
       properties:
         name:
           $ref: '#/components/schemas/GroupName'
@@ -567,8 +576,7 @@ components:
           name:
             $ref: '#/components/schemas/AccountPermission'
 
-    #AccountGroupPermissions:
-    Account:
+    AccountGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -591,8 +599,7 @@ components:
           name:
             $ref: '#/components/schemas/BuildEnvironmentPermission'
 
-    #BuildEnvironmentGroupPermissions:
-    BuildEnvironment:
+    BuildEnvironmentGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -615,8 +622,7 @@ components:
           name:
             $ref: '#/components/schemas/DenyPermission'
 
-    #DenyGroupPermissions:
-    Deny:
+    DenyGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -641,8 +647,7 @@ components:
           name:
             $ref: '#/components/schemas/EnvironmentsPermission'
 
-    #EnvironmentsGroupPermissions:
-    Environments:
+    EnvironmentsGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -667,8 +672,7 @@ components:
           name:
             $ref: '#/components/schemas/ProjectsPermission'
 
-    #ProjectsGroupPermissions:
-    Projects:
+    ProjectsGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -693,8 +697,7 @@ components:
           name:
             $ref: '#/components/schemas/RolesPermission'
 
-    #RolesGroupPermissions:
-    Roles:
+    RolesGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -717,8 +720,7 @@ components:
           name:
             $ref: '#/components/schemas/UserPermission'
 
-    #UserGroupPermissions:
-    User:
+    UserGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -743,8 +745,7 @@ components:
           name:
             $ref: '#/components/schemas/UsersPermission'
 
-    #UsersGroupPermissions:
-    Users:
+    UsersGroupPermissions:
       allOf:
       - $ref: '#/components/schemas/GroupPermissions'
       - type: object
@@ -2710,6 +2711,16 @@ components:
 
     NotificationSettings:
       type: object
+      discriminator:
+        propertyName: $type
+        mapping:
+          'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models': CampfireNotificationSettings
+          'Appveyor.Models.EmailNotificationSettings, Appveyor.Models': EmailNotificationSettings
+          'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models': GitHubPullRequestNotificationSettings
+          'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models': HipChatNotificationSettings
+          'Appveyor.Models.SlackNotificationSettings, Appveyor.Models': SlackNotificationSettings
+          'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models': WebhookNotificationSettings
+          'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models': VSOTeamRoomNotificationSettings
       properties:
         $type:
           type: string
@@ -2719,11 +2730,20 @@ components:
           type: boolean
         onBuildStatusChanged:
           type: boolean
+      required: [$type]
 
     NotificationProviderSettings:
       type: object
       discriminator:
         propertyName: provider
+        mapping:
+          Campfire: CampfireNotificationProviderSettings
+          Email: EmailNotificationProviderSettings
+          GitHubPullRequest: GitHubPullRequestNotificationProviderSettings
+          HipChat: HipChatNotificationProviderSettings
+          Slack: SlackNotificationProviderSettings
+          Webhook: WebhookNotificationProviderSettings
+          VSOTeamRoom: VSOTeamRoomNotificationProviderSettings
       properties:
         provider:
           $ref: '#/components/schemas/NotificationProviderType'
@@ -2736,10 +2756,6 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models'
           account:
             type: string
           authToken:
@@ -2749,8 +2765,7 @@ components:
           template:
             type: string
 
-    # CampfireNotificationProviderSettings:
-    Campfire:
+    CampfireNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
@@ -2763,10 +2778,6 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.EmailNotificationSettings, Appveyor.Models'
           subjectTemplate:
             type: string
           bodyTemplate:
@@ -2778,8 +2789,7 @@ components:
           recipientsValue:
             type: string
 
-    # EmailNotificationProviderSettings:
-    Email:
+    EmailNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
@@ -2792,17 +2802,12 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models'
           authToken:
             $ref: '#/components/schemas/StoredValue'
           template:
             type: string
 
-    # GitHubPullRequestNotificationProviderSettings:
-    GitHubPullRequest:
+    GitHubPullRequestNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
@@ -2815,10 +2820,6 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models'
           authToken:
             $ref: '#/components/schemas/StoredValue'
           from:
@@ -2831,8 +2832,7 @@ components:
             type: string
             format: uri
 
-    # HipChatNotificationProviderSettings:
-    HipChat:
+    HipChatNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
@@ -2845,10 +2845,6 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.SlackNotificationSettings, Appveyor.Models'
           incomingWebhookUrl:
             type: string
             format: uri
@@ -2859,8 +2855,7 @@ components:
           template:
             type: string
 
-    # SlackNotificationProviderSettings:
-    Slack:
+    SlackNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
@@ -2873,10 +2868,6 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models'
           method:
             $ref: '#/components/schemas/HttpMethodRestricted'
           url:
@@ -2897,8 +2888,7 @@ components:
           customRequestBody:
             type: string
 
-    # WebhookNotificationProviderSettings:
-    Webhook:
+    WebhookNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
@@ -2911,10 +2901,6 @@ components:
       - $ref: '#/components/schemas/NotificationSettings'
       - type: object
         properties:
-          $type:
-            type: string
-            enum:
-            - 'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models'
           vsoAccount:
             type: string
           username:
@@ -2926,8 +2912,7 @@ components:
           template:
             type: string
 
-    # VSOTeamRoomNotificationProviderSettings:
-    VSOTeamRoom:
+    VSOTeamRoomNotificationProviderSettings:
       allOf:
       - $ref: '#/components/schemas/NotificationProviderSettings'
       - type: object
