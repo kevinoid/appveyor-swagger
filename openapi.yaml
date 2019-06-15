@@ -541,6 +541,15 @@ components:
       - Users
 
     PermissionGroup:
+      description: |
+        Each `RolePermissionModel` must have a `PermissionName` which is
+        a member of the `PermissionGroupName`.  See the description of
+        `PermissionName` for details.
+
+        Previously this was enforced using `discriminator` in combination with
+        a child schema for each group.  The drawbacks to that approach
+        (difficulty of use due to lack of covariance and abstract classes, and
+        divergence from server schema) outweighed the benefits.
       type: object
       properties:
         name:
