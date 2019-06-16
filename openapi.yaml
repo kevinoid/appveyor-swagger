@@ -23,53 +23,6 @@ info:
     Fields which are missing from update operations (`PUT` requests) are
     typically reset to their default values.  So although most fields are not
     technically required, they should usually be specified in practice.
-
-    #### Polymorphism
-
-    This Swagger definition attempts to provide stricter type definitions by
-    applying polymorphism using the
-    [`discriminator`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#user-content-schemaDiscriminator)
-    property.  Unfortunately, support for this property is currently spotty
-    and the complex inheritance used in this Swagger definition makes it
-    difficult to generate working code in strongly-typed languages with limited
-    inheritance features (e.g. Java).
-
-    ##### Codegen Issues
-
-    There are several obstacles of supporting this definition in
-    [swagger-codegen](https://github.com/swagger-api/swagger-codegen):
-
-    1.  `*PermissionState` classes do not inherit from `PermissionState`.
-        This makes the definition of the `permissions` property problematic.
-        This behavior is arguably [by
-        design](https://github.com/swagger-api/swagger-codegen/pull/1120#issuecomment-229352464).
-        If this interpretation prevails, it may make this implementation
-        permanently unworkable.
-
-        Same issue with `*NotificationSettings` not inheriting from
-        `NotificationSettings` making `NotificationProviderSettings.settings`
-        problematic.
-    2.  The argument and return type of the `permissions` property
-        (`getPermissions` and `setPermissions` methods) of `GroupPermissions`
-        is `List<PermissionState>` rather than
-        `List<? extends PermissionState>`.
-
-    Both of these problems could be avoided by removing `permissions` from
-    `GroupPermissions`, which would make its use slightly more annoying and
-    remove any knowledge of this property for clients which don't support
-    `discriminator`.
-
-    3.  Since most strongly typed languages have no notion of enum subclassing,
-        `*PermissionName` classes can not inherit from `PermissionName`.  This
-        makes the `name` property of `PermissionState` and its subclasses
-        conflict.
-
-    This could be fixed by removing `PermissionState` and relaxing the type
-    of `PermissionState.name` to `string`.
-
-    4.  Lack of deserialization support
-        ([swagger-api/swagger-codegen#1253](https://github.com/swagger-api/swagger-codegen/issues/1253),
-         [swagger-api/swagger-codegen#2449](https://github.com/swagger-api/swagger-codegen/issues/2449))
   contact:
     name: AppVeyor Team
     email: team@appveyor.com
