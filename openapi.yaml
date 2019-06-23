@@ -4369,9 +4369,17 @@ paths:
       requestBody:
         required: true
         content:
+          # Note: Could use an unofficial media type, such as the ones in
+          # https://stackoverflow.com/q/332129
+          # API returns text/plain from getProjectSettingsYaml.  Use it here.
           text/plain:
             schema:
               type: string
+              # format: binary is required by openapi-generator for non-JSON
+              # request bodies.
+              # May also be a hint for other code generators to take File arg,
+              # which would support a common use case. (Uploading appveyor.yml)
+              format: binary
       responses:
         default:
           $ref: '#/components/responses/Error'
