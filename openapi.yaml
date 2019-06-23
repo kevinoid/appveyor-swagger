@@ -2759,7 +2759,7 @@ components:
         # Removed due to lack of support for type covariance on properties
         #settings:
         #  $ref: '#/components/schemas/NotificationSettings'
-      required: [provider, settings]
+      required: [provider]
 
     CampfireNotificationSettings:
       allOf:
@@ -2782,6 +2782,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/CampfireNotificationSettings'
+        required: [settings]
 
     EmailNotificationSettings:
       allOf:
@@ -2806,6 +2807,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/EmailNotificationSettings'
+        required: [settings]
 
     GitHubPullRequestNotificationSettings:
       allOf:
@@ -2824,6 +2826,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/GitHubPullRequestNotificationSettings'
+        required: [settings]
 
     HipChatNotificationSettings:
       allOf:
@@ -2849,6 +2852,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/HipChatNotificationSettings'
+        required: [settings]
 
     SlackNotificationSettings:
       allOf:
@@ -2872,6 +2876,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/SlackNotificationSettings'
+        required: [settings]
 
     WebhookNotificationSettings:
       allOf:
@@ -2905,6 +2910,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/WebhookNotificationSettings'
+        required: [settings]
 
     VSOTeamRoomNotificationSettings:
       allOf:
@@ -2929,6 +2935,7 @@ components:
         properties:
           settings:
             $ref: '#/components/schemas/VSOTeamRoomNotificationSettings'
+        required: [settings]
 
     # Notification Settings }}}
     ### Environments and Deployments }}}
