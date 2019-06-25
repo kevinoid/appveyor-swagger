@@ -2960,6 +2960,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
 
 # Describe your paths here
 paths:
