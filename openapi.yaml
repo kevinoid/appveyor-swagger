@@ -1398,9 +1398,13 @@ components:
       - Visual Studio 2015 2
       - Visual Studio 2017
       - Visual Studio 2017 Preview
+      - Visual Studio 2019
       - Visual Studio 2019 Preview
       - WMF 5
+      # No longer appears in getProjectSettings responses (2019-06-24):
       - Windows Server 2019
+      # Appears in getProjectSettings responses (2019-06-24):
+      - zhaw18
 
     BuildWorkerImageModel:
       type: object
