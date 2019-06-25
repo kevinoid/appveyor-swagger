@@ -3131,6 +3131,15 @@ paths:
           $ref: '#/components/responses/Error'
         '204':
           description: Success
+        '409':
+          description: If email has already been invited.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /users/invitations/{userInvitationId}:
     parameters:
@@ -3240,6 +3249,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/SessionModel'
+        '409':
+          description: If already a member of the inviting account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   ### User }}}
   ### {{{ Collaborator
