@@ -2528,7 +2528,7 @@ components:
               values and items are allowed.
             type: string
 
-    DeploymentEnvironmentProject:
+    DeploymentEnvironmentProjectModel:
       type: object
       properties:
         projectId:
@@ -2555,13 +2555,14 @@ components:
             items:
               type: integer
               minimum: 1
+          # Note: projects is omitted from addEnvironment
           projects:
             description: |
               Projects available for selection in UI.
               Only present in response from getEnvironmentSettings.
             type: array
             items:
-              $ref: '#/components/schemas/DeploymentEnvironmentProject'
+              $ref: '#/components/schemas/DeploymentEnvironmentProjectModel'
       example:
         deploymentEnvironmentId: 3018
         name: production
