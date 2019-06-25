@@ -1776,6 +1776,8 @@ components:
           type: boolean
         packageWebApplicationProjectsOctopus:
           type: boolean
+        packageAzureWebJobProjects:
+          type: boolean
         packageAzureCloudServiceProjects:
           type: boolean
         packageNuGetProjects:
