@@ -2434,6 +2434,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NotificationProviderSettings'
+      # 6/24: addEnvironment returns 500 with body
+      # {"message":"Object reference not set to an instance of an object."}
+      # if environmentVariables or providerSettings is missing
+      required: [environmentVariables, providerSettings]
 
     DeploymentEnvironmentAddition:
       type: object
