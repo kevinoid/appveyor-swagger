@@ -1784,6 +1784,8 @@ components:
           type: boolean
         packageNuGetSymbols:
           type: boolean
+        useSnupkgFormat:
+          type: boolean
         packageAspNetCoreProjects:
           type: boolean
         packageDotnetConsoleProjects:
