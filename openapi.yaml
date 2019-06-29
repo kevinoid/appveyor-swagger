@@ -2743,13 +2743,13 @@ components:
       discriminator:
         propertyName: $type
         mapping:
-          'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models': CampfireNotificationSettings
-          'Appveyor.Models.EmailNotificationSettings, Appveyor.Models': EmailNotificationSettings
-          'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models': GitHubPullRequestNotificationSettings
-          'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models': HipChatNotificationSettings
-          'Appveyor.Models.SlackNotificationSettings, Appveyor.Models': SlackNotificationSettings
-          'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models': WebhookNotificationSettings
-          'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models': VSOTeamRoomNotificationSettings
+          'Appveyor.Models.CampfireNotificationSettings, Appveyor.Models': '#/components/schemas/CampfireNotificationSettings'
+          'Appveyor.Models.EmailNotificationSettings, Appveyor.Models': '#/components/schemas/EmailNotificationSettings'
+          'Appveyor.Models.GitHubPullRequestNotificationSettings, Appveyor.Models': '#/components/schemas/GitHubPullRequestNotificationSettings'
+          'Appveyor.Models.HipChatNotificationSettings, Appveyor.Models': '#/components/schemas/HipChatNotificationSettings'
+          'Appveyor.Models.SlackNotificationSettings, Appveyor.Models': '#/components/schemas/SlackNotificationSettings'
+          'Appveyor.Models.WebhookNotificationSettings, Appveyor.Models': '#/components/schemas/WebhookNotificationSettings'
+          'Appveyor.Models.VSOTeamRoomNotificationSettings, Appveyor.Models': '#/components/schemas/VSOTeamRoomNotificationSettings'
       properties:
         $type:
           type: string
@@ -2766,13 +2766,13 @@ components:
       discriminator:
         propertyName: provider
         mapping:
-          Campfire: CampfireNotificationProviderSettings
-          Email: EmailNotificationProviderSettings
-          GitHubPullRequest: GitHubPullRequestNotificationProviderSettings
-          HipChat: HipChatNotificationProviderSettings
-          Slack: SlackNotificationProviderSettings
-          Webhook: WebhookNotificationProviderSettings
-          VSOTeamRoom: VSOTeamRoomNotificationProviderSettings
+          Campfire: '#/components/schemas/CampfireNotificationProviderSettings'
+          Email: '#/components/schemas/EmailNotificationProviderSettings'
+          GitHubPullRequest: '#/components/schemas/GitHubPullRequestNotificationProviderSettings'
+          HipChat: '#/components/schemas/HipChatNotificationProviderSettings'
+          Slack: '#/components/schemas/SlackNotificationProviderSettings'
+          Webhook: '#/components/schemas/WebhookNotificationProviderSettings'
+          VSOTeamRoom: '#/components/schemas/VSOTeamRoomNotificationProviderSettings'
       properties:
         provider:
           type: string
