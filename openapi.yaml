@@ -2502,10 +2502,13 @@ components:
       - 0
       - 1
       - 2
+      # Note: x-enum-varnames used as identifiers verbatim by openapi-generator.
+      # Choice of identifier casing convention is necessarily arbitrary.
+      # https://github.com/OpenAPITools/openapi-generator/issues/3246
       x-enum-varnames:
-      - Any
-      - Only Selected
-      - All Except Selected
+      - ANY
+      - ONLY_SELECTED
+      - ALL_EXCEPT_SELECTED
       x-enum-descriptions:
       - Any project can be deployed to the environment.
       - Only selected projects can be deployed to the environment.
