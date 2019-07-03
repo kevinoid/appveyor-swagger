@@ -13,9 +13,9 @@ info:
     Additional help and discussion of the AppVeyor REST API is available at
     https://help.appveyor.com/discussions
 
-    This Swagger definition is an **unofficial** description of the AppVeyor
+    This OpenAPI definition is an **unofficial** description of the AppVeyor
     REST API maintained at https://github.com/kevinoid/appveyor-swagger
-    Please report any issues or suggestions for this Swagger definition at
+    Please report any issues or suggestions for this OpenAPI definition at
     https://github.com/kevinoid/appveyor-swagger/issues/new
 
     #### API Conventions
