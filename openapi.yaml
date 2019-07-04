@@ -2,7 +2,7 @@ openapi: '3.0.2'
 
 # API metadata
 info:
-  title: AppVeyor REST API (v1 aka non-user-level)
+  title: AppVeyor REST API (v2 aka user-level)
   version: 1.0.0
   description: |
     AppVeyor is a hosted continuous integration service which runs on Microsoft
@@ -47,11 +47,15 @@ externalDocs:
   description: AppVeyor REST API Documentation
   url: https://www.appveyor.com/docs/api/
 
+# Note: Previous versions of this document included /account/{accountName} in
+# the url.  This was problematic due to poor support for server variables in
+# code generators, especially for overriding servers in path items (which is
+# necessary for paths not rooted below /account/{accountName}).
 servers:
 - url: https://ci.appveyor.com/api
 
 security:
-- apiToken: []
+- apiTokenV2: []
 
 tags:
 - name: Collaborator
@@ -78,12 +82,14 @@ tags:
 
 components:
   securitySchemes:
-    apiToken:
+    apiTokenV2:
       description: >-
+        A user-level API key (v2) that allows working with any account to which
+        the user has access.
         API token can be acquired from https://ci.appveyor.com/api-keys
 
-        **IMPORTANT:** Token must not start with `"v2."`.  Tokens that start
-        with `"v2."` must use the user-level (aka v2) API.
+        **IMPORTANT:** Token must start with `"v2."`.  Tokens that do not start
+        with `"v2."` must use the non-user-level (aka v1) API operations.
       type: http
       scheme: bearer
 
@@ -119,12 +125,11 @@ components:
     accountName:
       name: accountName
       in: path
-      # Note: copied to accountName server variable for user-level API spec
       description: |-
         AppVeyor account name on which to operate.
         Accounts for which a user has access are listed on the [Security page of
         the user profile](https://ci.appveyor.com/security) (when logged in).
-        The user account is also the `accountName` property of `UserModel`.
+        The account name is also the `accountName` property of `UserModel`.
       required: true
       schema:
         type: string
@@ -2974,7 +2979,9 @@ components:
 # Describe your paths here
 paths:
   ### {{{ User
-  /users:
+  /account/{accountName}/users:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     get:
       tags:
       - User
@@ -3032,8 +3039,9 @@ paths:
         '204':
           description: Success
 
-  /users/{userId}:
+  /account/{accountName}/users/{userId}:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/userId'
     get:
       tags:
@@ -3092,7 +3100,9 @@ paths:
         '204':
           description: Success
 
-  /users/invitations:
+  /account/{accountName}/users/invitations:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     get:
       tags:
       - User
@@ -3148,8 +3158,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/invitations/{userInvitationId}:
+  /account/{accountName}/users/invitations/{userInvitationId}:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/userInvitationId'
     delete:
       tags:
@@ -3162,7 +3173,9 @@ paths:
         '204':
           description: Success
 
-  /user/join-account:
+  /account/{accountName}/user/join-account:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     put:
       tags:
       - User
@@ -3269,7 +3282,9 @@ paths:
   ### User }}}
   ### {{{ Collaborator
 
-  /collaborators:
+  /account/{accountName}/collaborators:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     get:
       tags:
       - Collaborator
@@ -3327,8 +3342,9 @@ paths:
         '204':
           description: Success
 
-  /collaborators/{userId}:
+  /account/{accountName}/collaborators/{userId}:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/userId'
     get:
       tags:
@@ -3395,7 +3411,9 @@ paths:
   ### Collaborator }}}
   ### {{{ Role
 
-  /roles:
+  /account/{accountName}/roles:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     get:
       tags:
       - Role
@@ -3479,8 +3497,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/RoleWithGroups'
 
-  /roles/{roleId}:
+  /account/{accountName}/roles/{roleId}:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/roleId'
     get:
       tags:
@@ -3580,7 +3599,9 @@ paths:
   ### Role }}}
   ### {{{ Project
 
-  /account/encrypt:
+  /account/{accountName}/encrypt:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     post:
       # This operation is not documented anywhere, but is discussed publicly in
       # https://help.appveyor.com/discussions/questions/1892-encryption-through-api
@@ -3608,7 +3629,9 @@ paths:
                 # Avoided since primary use is as string in SecurableValue, not byte[].
               example: wsnoY4v1v1Uofj0xf8E6FA==
 
-  /projects:
+  /account/{accountName}/projects:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     get:
       tags:
       - Project
@@ -4634,7 +4657,9 @@ paths:
   ### Project }}}
   ### {{{ Build
 
-  /builds:
+  /account/{accountName}/builds:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     post:
       tags:
       - Build
@@ -4828,7 +4853,9 @@ paths:
   ### Build }}}
   ### {{{ Environment
 
-  /environments:
+  /account/{accountName}/environments:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     get:
       tags:
       - Environment
@@ -4961,8 +4988,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
 
-  /environments/{deploymentEnvironmentId}/settings:
+  /account/{accountName}/environments/{deploymentEnvironmentId}/settings:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/deploymentEnvironmentId'
     get:
       tags:
@@ -5014,8 +5042,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentEnvironmentSettingsResults'
 
-  /environments/{deploymentEnvironmentId}/deployments:
+  /account/{accountName}/environments/{deploymentEnvironmentId}/deployments:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/deploymentEnvironmentId'
     get:
       tags:
@@ -5102,8 +5131,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentEnvironmentDeploymentsResults'
 
-  /environments/{deploymentEnvironmentId}:
+  /account/{accountName}/environments/{deploymentEnvironmentId}:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/deploymentEnvironmentId'
     delete:
       tags:
@@ -5121,8 +5151,9 @@ paths:
   ### Environment }}}
   ### {{{ Deployment
 
-  /deployments/{deploymentId}:
+  /account/{accountName}/deployments/{deploymentId}:
     parameters:
+    - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/deploymentId'
     get:
       tags:
@@ -5201,7 +5232,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectDeployment'
 
-  /deployments:
+  /account/{accountName}/deployments:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     post:
       tags:
       - Deployment
@@ -5269,7 +5302,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Deployment'
 
-  /deployments/stop:
+  /account/{accountName}/deployments/stop:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
     put:
       tags:
       - Deployment
