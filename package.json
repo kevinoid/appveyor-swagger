@@ -40,7 +40,7 @@
     "bootprint-openapi": "^1.1.0",
     "greenkeeper-lockfile": "^1.15.1",
     "js-yaml": "^3.10.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.0",
     "swagger-cli": "^2.0.0",
     "swagger-spec-validator": "^3.0.0"
   },
