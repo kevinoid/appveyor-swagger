@@ -37,7 +37,7 @@
   "dependencies": {},
   "devDependencies": {
     "bootprint": "^1.0.0",
-    "bootprint-openapi": "^1.1.0",
+    "bootprint-openapi": "^4.0.0",
     "greenkeeper-lockfile": "^1.15.1",
     "js-yaml": "^3.10.0",
     "rimraf": "^3.0.0",
