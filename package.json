@@ -41,7 +41,7 @@
     "greenkeeper-lockfile": "^1.15.1",
     "js-yaml": "^3.10.0",
     "rimraf": "^3.0.0",
-    "swagger-cli": "^3.0.0",
+    "swagger-cli": "^4.0.2",
     "swagger-spec-validator": "^4.0.0"
   },
   "engines": {
