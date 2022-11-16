@@ -41,7 +41,7 @@
     "bootprint": "^4.0.4",
     "bootprint-openapi": "^4.0.0",
     "greenkeeper-lockfile": "^1.15.1",
-    "js-yaml": "^3.10.0",
+    "js-yaml": "^4.0.0",
     "rimraf": "^3.0.0",
     "swagger-cli": "^4.0.0",
     "swagger-spec-validator": "^4.0.0"
