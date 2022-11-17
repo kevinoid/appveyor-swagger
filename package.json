@@ -28,7 +28,7 @@
     "prepare": "js-yaml openapi.yaml >openapi.json",
     "preversion": "depcheck --ignore-dirs doc && david && git-branch-is master && travis-status -b -c -qwx",
     "test": "npm run validate",
-    "validate": "npm run validate-cli && npm run validate-openapi-generator && npm run validate-online",
+    "validate": "npm run validate-autorest && npm run validate-cli && npm run validate-openapi-generator && npm run validate-online",
     "validate-autorest": "autorest --v3 --azure-validator --input-file=openapi.yaml",
     "validate-cli": "swagger-cli validate openapi.yaml",
     "validate-oav": "oav validate-spec openapi.json",
