@@ -58,25 +58,28 @@ security:
 - apiTokenV2: []
 
 tags:
-- name: Collaborator
+- name: Account
+- name: BuildJobs
+- name: Collaborators
   externalDocs:
     url: https://www.appveyor.com/docs/api/team/
-- name: Role
+- name: Roles
   externalDocs:
     url: https://www.appveyor.com/docs/api/team/
 - name: User
+- name: Users
   externalDocs:
     url: https://www.appveyor.com/docs/api/team/
-- name: Build
+- name: Builds
   externalDocs:
     url: https://www.appveyor.com/docs/api/projects-builds/
-- name: Project
+- name: Projects
   externalDocs:
     url: https://www.appveyor.com/docs/api/projects-builds/
-- name: Deployment
+- name: Deployments
   externalDocs:
     url: https://www.appveyor.com/docs/api/environments-deployments/
-- name: Environment
+- name: Environments
   externalDocs:
     url: https://www.appveyor.com/docs/api/environments-deployments/
 
@@ -96,7 +99,7 @@ components:
   parameters:
     ### {{{ Teams
     roleId:
-      name: roleId
+      name: id
       in: path
       description: Role ID
       required: true
@@ -104,7 +107,7 @@ components:
         type: integer
         minimum: 0
     userId:
-      name: userId
+      name: id
       in: path
       description: User ID
       required: true
@@ -143,8 +146,8 @@ components:
       schema:
         type: boolean
         default: false
-    artifactFileName:
-      name: artifactFileName
+    fileName:
+      name: fileName
       in: path
       description: |-
         File name (or path) of a build artifact file.
@@ -154,18 +157,13 @@ components:
       schema:
         type: string
         minLength: 1
-    badgeRepoProvider:
-      name: badgeRepoProvider
+    repositoryType:
+      name: repositoryType
       in: path
-      description: Repository provider supported for badges
+      description: Repository type
       required: true
       schema:
-        type: string
-        # Note: Values are case-insensitive.
-        #       Match capitalization of RepositoryProvider for ease of use.
-        enum:
-        - bitBucket
-        - gitHub
+        $ref: '#/components/schemas/RepositoryProvider'
     branch:
       name: branch
       in: query
@@ -174,7 +172,7 @@ components:
         type: string
         minLength: 1
     buildBranch:
-      name: buildBranch
+      name: branch
       in: path
       description: Build Branch
       required: true
@@ -183,10 +181,29 @@ components:
     buildVersion:
       name: buildVersion
       in: path
-      description: Build Version (`version` property of `Build`)
+      description: Build Version (`version` property of `BuildModel`)
       required: true
       schema:
         type: string
+    includeJobs:
+      name: includeJobs
+      in: query
+      description: Populate jobs property of response.
+      schema:
+        type: boolean
+        default: false
+    # Note: Default differs from parameters/pr.
+    isPR:
+      name: pr
+      in: query
+      description: |
+        Limit results to builds with the given PR type.
+        `true` - only include results from PR builds;
+        `false` - do not include results from PR builds;
+        default/unspecified - do not include results from PR builds.
+      schema:
+        type: boolean
+        default: false
     job:
       name: job
       in: query
@@ -204,10 +221,10 @@ components:
       name: pr
       in: query
       description: |
-        Include PR builds in the search results?
-        `true` - take artifact from PR builds only;
-        `false` - do not look for artifact in PR builds;
-        default/unspecified - look for artifact in both PR an non-PR builds.
+        Limit results to builds with the given PR type.
+        `true` - only include results from PR builds;
+        `false` - do not include results from PR builds;
+        default/unspecified - include results from both PR and non-PR builds.
       schema:
         type: boolean
     projectSlug:
@@ -256,7 +273,7 @@ components:
         type: integer
         minimum: 0
     statusBadgeId:
-      name: statusBadgeId
+      name: id
       in: path
       description: >-
         ID of the status badge (`statusBadgeId` from `ProjectWithConfiguration`).
@@ -319,17 +336,17 @@ components:
     deploymentId:
       name: deploymentId
       in: path
-      description: Deployment ID (`deploymentId` property of `Deployment`)
+      description: Deployment ID (`deploymentId` property of `DeploymentModel`)
       required: true
       schema:
         type: integer
         minimum: 0
-    deploymentEnvironmentId:
-      name: deploymentEnvironmentId
+    environmentId:
+      name: environmentId
       in: path
       description: >
         Deployment Environment ID (`deploymentEnvironmentId` property of
-        `DeploymentEnvironment`)
+        `DeploymentEnvironmentModel`)
       required: true
       schema:
         type: integer
@@ -372,17 +389,6 @@ components:
           type: string
           format: date-time
 
-    UnknownType:
-      description: |
-        A schema for values which have an undocumented/unknown type.
-
-        Although the type of such values could be left unspecified according to
-        JSON Schema (and by extension OpenAPI 2.0), such unspecified types cause
-        tool failures (e.g. swagger-codegen).  So this type can be used as a
-        placeholder to prevent errors and document the behavior.
-      type: string
-      enum: [unknown]
-
     ### {{{ Teams
     BuildNotificationFrequency:
       type: string
@@ -392,7 +398,7 @@ components:
       type: string
       enum: [all, none]
 
-    CollaboratorUpdate:
+    UpdateAccountCollaboratorRequest:
       description: |
         Technically `userId` and `roleId` have default value 0 and are not
         required, but since user 0 and role 0 never exist it would always cause
@@ -520,7 +526,7 @@ components:
 
     # Permissions }}}
 
-    RoleAddition:
+    AddRoleRequest:
       type: object
       properties:
         name:
@@ -530,7 +536,7 @@ components:
       example:
         name: My Role
 
-    Role:
+    RoleModel:
       description: |
         Technically `roleId` has default value 0 and is not required, but
         since role 0 never exists it would always cause a 404 response.
@@ -554,7 +560,7 @@ components:
 
     RoleWithGroups:
       allOf:
-      - $ref: '#/components/schemas/Role'
+      - $ref: '#/components/schemas/RoleModel'
       - type: object
         properties:
           groups:
@@ -630,7 +636,7 @@ components:
             description: Generate API keys
             allowed: false
 
-    InviteUserRequest:
+    InviteAccountUserRequest:
       type: object
       properties:
         email:
@@ -809,9 +815,16 @@ components:
           items:
             $ref: '#/components/schemas/SessionUserAccountModel'
 
-    UserAccountSettings:
+    UserAccountNotificationSettingsModel:
       type: object
       properties:
+        accountId:
+          type: integer
+          minimum: 0
+        name:
+          type: string
+        overrideSettings:
+          type: boolean
         successfulBuildNotification:
           $ref: '#/components/schemas/BuildNotificationFrequency'
         failedBuildNotification:
@@ -832,7 +845,6 @@ components:
             `false` when not specified on update.
           type: boolean
           default: false
-      # Tested against PUT /users 2016-12-29
       required:
       - successfulBuildNotification
       - failedBuildNotification
@@ -892,7 +904,7 @@ components:
         failedBuildNotification: all
         notifyWhenBuildStatusChangedOnly: true
 
-    UserAccountRolesResults:
+    UpdateUserModel:
       description: >-
         The roles property contains all roles, not only the role for which the
         user is a member.
@@ -903,12 +915,12 @@ components:
         roles:
           type: array
           items:
-            $ref: '#/components/schemas/Role'
+            $ref: '#/components/schemas/RoleModel'
 
     ### Teams }}}
     ### {{{ Projects and Builds
 
-    StringValueObject:
+    StringValue:
       type: object
       properties:
         value:
@@ -981,7 +993,7 @@ components:
             type: integer
             minimum: 0
 
-    BuildStartRequest:
+    StartBuildRequest:
       type: object
       properties:
         accountName:
@@ -1011,7 +1023,7 @@ components:
           my_var: value
           another_var: another value
 
-    ReRunBuildRequest:
+    ReBuildRequest:
       type: object
       properties:
         buildId:
@@ -1049,7 +1061,10 @@ components:
           type: string
           format: date-time
 
-    BuildLookupModel:
+    # Based on
+    # EnvironmentDeploymentModel.BuildModel
+    # ProjectDeploymentModel.BuildModel
+    BuildModelBase:
       type: object
       properties:
         branch:
@@ -1062,9 +1077,9 @@ components:
         version:
           type: string
 
-    Build:
+    BuildModel:
       allOf:
-      - $ref: '#/components/schemas/BuildLookupModel'
+      - $ref: '#/components/schemas/BuildModelBase'
       - $ref: '#/components/schemas/Timestamped'
       - type: object
         properties:
@@ -1073,7 +1088,8 @@ components:
             minimum: 0
           jobs:
             description: >-
-              Always empty in getProjectHistory and startDeployment responses.
+              Always empty in createDeployment and getProjectHistory responses,
+              unless includeJobs is true.
             type: array
             items:
               $ref: '#/components/schemas/BuildJob'
@@ -1177,7 +1193,7 @@ components:
           items:
             $ref: '#/components/schemas/AceAccessRight'
 
-    SecurityDescriptor:
+    SecurityDescriptorModel:
       type: object
       properties:
         accessRightDefinitions:
@@ -1189,7 +1205,7 @@ components:
           items:
             $ref: '#/components/schemas/RoleAce'
 
-    NuGetFeed:
+    NuGetFeedModel:
       allOf:
       - $ref: '#/components/schemas/Timestamped'
       - type: object
@@ -1211,7 +1227,7 @@ components:
           publishingEnabled:
             type: boolean
 
-    ProjectAddition:
+    AddProjectRequest:
       description: >-
         `repositoryAuthentication` is only used for git, mercurial, subversion
         `repositoryProvider`.
@@ -1239,7 +1255,8 @@ components:
         repositoryProvider: gitHub
         repositoryName: FeodorFitsner/demo-app
 
-    ProjectLookupModel:
+    # EnvironmentDeploymentModel.ProjectModel
+    ProjectModelBase:
       type: object
       properties:
         projectId:
@@ -1252,14 +1269,13 @@ components:
           type: string
         slug:
           type: string
-          readOnly: true
       # Note: requirements tested against PUT /api/projects 2016-12-21
       required:
       - projectId
 
-    Project:
+    ProjectModel:
       allOf:
-      - $ref: '#/components/schemas/ProjectLookupModel'
+      - $ref: '#/components/schemas/ProjectModelBase'
       - $ref: '#/components/schemas/Timestamped'
       - type: object
         properties:
@@ -1271,15 +1287,18 @@ components:
             description: Only non-empty for response from getProjects.
             type: array
             items:
-              $ref: '#/components/schemas/Build'
+              $ref: '#/components/schemas/BuildModel'
             readOnly: true
           currentBuildId:
             type: integer
             minimum: 0
+            readOnly: true
           repositoryType:
             $ref: '#/components/schemas/RepositoryProvider'
+            readOnly: true
           repositoryScm:
             $ref: '#/components/schemas/RepositoryScm'
+            readOnly: true
           repositoryName:
             type: string
           repositoryBranch:
@@ -1287,8 +1306,10 @@ components:
             type: string
           isPrivate:
             type: boolean
+            readOnly: true
           isGitHubApp:
             type: boolean
+            readOnly: true
           skipBranchesWithoutAppveyorYml:
             type: boolean
           enableSecureVariablesInPullRequests:
@@ -1317,13 +1338,14 @@ components:
               values and items are allowed.
           nuGetFeed:
             description: Not present in response from addProject.
-            $ref: '#/components/schemas/NuGetFeed'
+            $ref: '#/components/schemas/NuGetFeedModel'
+            readOnly: true
           securityDescriptor:
             description: >-
               Not present in response from addProject.
               Not always present in response from getProjects (only after
               updateProject or startBuild?).
-            $ref: '#/components/schemas/SecurityDescriptor'
+            $ref: '#/components/schemas/SecurityDescriptorModel'
           disablePushWebhooks:
             type: boolean
           disablePullRequestWebhooks:
@@ -1332,7 +1354,7 @@ components:
         required:
         - repositoryName
 
-    ProjectBuildNumberUpdate:
+    UpdateProjectBuildNumberRequest:
       type: object
       properties:
         nextBuildNumber:
@@ -1346,19 +1368,19 @@ components:
       type: object
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: '#/components/schemas/ProjectModel'
         build:
-          $ref: '#/components/schemas/Build'
+          $ref: '#/components/schemas/BuildModel'
 
     ProjectHistory:
       type: object
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: '#/components/schemas/ProjectModel'
         builds:
           type: array
           items:
-            $ref: '#/components/schemas/Build'
+            $ref: '#/components/schemas/BuildModel'
 
     BuildCloudName:
       type: string
@@ -1442,7 +1464,7 @@ components:
       - PowerShell Core
       - POSIX shell
 
-    Script:
+    BuildScript:
       type: object
       properties:
         language:
@@ -1474,8 +1496,7 @@ components:
       - WebDeployPackage
       - Zip
 
-    # Note: Called ArtifactEntry in XML
-    Artifact:
+    ArtifactEntry:
       type: object
       properties:
         path:
@@ -1563,7 +1584,7 @@ components:
           type: boolean
         value:
           description: |-
-            Encrypted values can be created using the encryptValue operation.
+            Encrypted values can be created using the encryptData operation.
 
             Empty environment variables are represented by missing (null) value
             rather than an empty string.
@@ -1579,7 +1600,21 @@ components:
           $ref: '#/components/schemas/SecurableValue'
       required: [name, value]
 
-    StoredNameValueMatrix:
+    MatrixVariablesGroup:
+      type: object
+      properties:
+        variables:
+          $ref: '#/components/schemas/SecurableVariable'
+
+    TestCategoriesGroup:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/StringValue'
+
+    EnvironmentVariablesGroup:
       type: object
       properties:
         variables:
@@ -1601,7 +1636,7 @@ components:
           # https://github.com/OAI/OpenAPI-Specification/pull/741
       required: [host, ip]
 
-    EncryptRequest:
+    EncryptDataRequest:
       type: object
       properties:
         plainValue:
@@ -1616,7 +1651,7 @@ components:
       type: string
       enum: [exclude, include]
 
-    ProjectConfiguration:
+    BuildConfigurationModel:
       type: object
       properties:
         doNotIncrementBuildNumberOnPullRequests:
@@ -1624,21 +1659,21 @@ components:
         hotFixScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         initScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         branchesMode:
           $ref: '#/components/schemas/ProjectBranchesMode'
         includeBranches:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         excludeBranches:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         skipTags:
           type: boolean
         skipNonTags:
@@ -1648,58 +1683,70 @@ components:
         skipCommitsFiles:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         onlyCommitsFiles:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         cloneScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         onBuildSuccessScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         onBuildErrorScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         onBuildFinishScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         patchAssemblyInfo:
           type: boolean
+          default: false
         assemblyInfoFile:
           type: string
+          default: 'AssemblyInfo.*'
         assemblyVersionFormat:
           type: string
+          default: '{version}'
         assemblyFileVersionFormat:
           type: string
+          default: '{version}'
         assemblyInformationalVersionFormat:
           type: string
+          default: '{version}'
         patchDotnetCsproj:
           type: boolean
+          default: false
         dotnetCsprojFile:
           type: string
+          default: '**\\*.csproj'
         dotnetCsprojVersionFormat:
           type: string
+          default: '{version}'
         dotnetCsprojAssemblyVersionFormat:
           type: string
+          default: '{version}'
         dotnetCsprojFileVersionFormat:
           type: string
+          default: '{version}'
         dotnetCsprojInformationalVersionFormat:
           type: string
+          default: '{version}'
         dotnetCsprojPackageVersionFormat:
           type: string
+          default: '{version}'
         maxJobs:
           type: integer
           minimum: 1
         buildCloud:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         operatingSystem:
           title: Build worker image
           type: array
@@ -1721,8 +1768,7 @@ components:
         stacks:
           type: array
           items:
-            $ref: '#/components/schemas/UnknownType'
-          maxItems: 0
+            $ref: '#/components/schemas/StringValue'
         cloneFolder:
           type: string
         shallowClone:
@@ -1739,11 +1785,13 @@ components:
         environmentVariablesMatrix:
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValueMatrix'
+            # Note: Uses EnvironmentVariablesGroup type on server.
+            # Same schema as MatrixVariablesGroup.  Use it for convenience.
+            $ref: '#/components/schemas/MatrixVariablesGroup'
         installScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         hostsEntries:
           type: array
           items:
@@ -1751,7 +1799,7 @@ components:
         cacheEntries:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         configureNuGetProjectSource:
           type: boolean
         configureNuGetAccountSource:
@@ -1773,26 +1821,34 @@ components:
         configuration:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         msBuildProjectFileName:
           type: string
           # format: path
         packageWebApplicationProjects:
           type: boolean
+          default: false
         packageWebApplicationProjectsXCopy:
           type: boolean
+          default: false
         packageWebApplicationProjectsBeanstalk:
           type: boolean
+          default: false
         packageWebApplicationProjectsOctopus:
           type: boolean
+          default: false
         packageAzureWebJobProjects:
           type: boolean
+          default: false
         packageAzureCloudServiceProjects:
           type: boolean
+          default: false
         packageNuGetProjects:
           type: boolean
+          default: false
         packageNuGetSymbols:
           type: boolean
+          default: false
         useSnupkgFormat:
           type: boolean
         packageAspNetCoreProjects:
@@ -1809,54 +1865,49 @@ components:
           description: Only set/used when `buildMode` is `script`.
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         beforeBuildScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         beforePackageScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         afterBuildScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         testMode:
           $ref: '#/components/schemas/TestMode'
         testAssemblies:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         testCategoriesMode:
           type: string
           enum: [exclude, include]
         testCategories:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         testCategoriesMatrix:
           type: array
           items:
-            type: object
-            properties:
-              categories:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/TestCategoriesGroup'
         testScripts:
           description: Only set/used when `testMode` is `script`.
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         beforeTestScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         afterTestScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         deployMode:
           $ref: '#/components/schemas/DeployMode'
         deployments:
@@ -1866,15 +1917,15 @@ components:
         deployScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         beforeDeployScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         afterDeployScripts:
           type: array
           items:
-            $ref: '#/components/schemas/Script'
+            $ref: '#/components/schemas/BuildScript'
         xamarinRegisterAndroidProduct:
           type: boolean
         xamarinRegisterIosProduct:
@@ -1888,35 +1939,35 @@ components:
             https://www.appveyor.com/docs/build-configuration/#allow-failing-jobs
           type: array
           items:
-            $ref: '#/components/schemas/StoredNameValueMatrix'
+            $ref: '#/components/schemas/MatrixVariablesGroup'
         matrixExclude:
           type: array
           items:
             # Note:  Has not been observed in a response.  Guess item type.
-            $ref: '#/components/schemas/StoredNameValueMatrix'
+            $ref: '#/components/schemas/MatrixVariablesGroup'
         matrixOnly:
           type: array
           items:
             # Note:  Has not been observed in a response.  Guess item type.
-            $ref: '#/components/schemas/StoredNameValueMatrix'
+            $ref: '#/components/schemas/MatrixVariablesGroup'
         matrixExcept:
           type: array
           items:
             # Note:  Has not been observed in a response.  Guess item type.
-            $ref: '#/components/schemas/StoredNameValueMatrix'
+            $ref: '#/components/schemas/MatrixVariablesGroup'
         artifacts:
           type: array
           items:
-            $ref: '#/components/schemas/Artifact'
+            $ref: '#/components/schemas/ArtifactEntry'
         notifications:
           type: array
           items:
-            $ref: '#/components/schemas/NotificationProviderSettings'
+            $ref: '#/components/schemas/NotificationEntry'
 
     ProjectWithConfiguration:
       type: object
       allOf:
-      - $ref: '#/components/schemas/Project'
+      - $ref: '#/components/schemas/ProjectModel'
       - type: object
         properties:
           versionFormat:
@@ -1938,15 +1989,24 @@ components:
             $ref: '#/components/schemas/RepositoryAuthenticationType'
           repositoryUsername:
             type: string
+          repositoryPassword:
+            description: Required if repositoryAuthentication is credentials
+            type: string
+            format: password
+            writeOnly: true
           sshPublicKey:
             type: string
+            readOnly: true
           webhookId:
             type: string
+            readOnly: true
           webhookUrl:
             type: string
             format: uri
+            readOnly: true
           statusBadgeId:
             type: string
+            readOnly: true
           buildPriority:
             type: integer
             minimum: 1
@@ -1954,8 +2014,10 @@ components:
             type: boolean
           customYmlName:
             type: string
+          commitStatusContextName:
+            type: string
           configuration:
-            $ref: '#/components/schemas/ProjectConfiguration'
+            $ref: '#/components/schemas/BuildConfigurationModel'
         # Note: requirements tested against PUT /api/projects 2016-12-21
         required:
         - versionFormat
@@ -2065,7 +2127,7 @@ components:
       type: object
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: '#/components/schemas/ProjectModel'
         settings:
           $ref: '#/components/schemas/ProjectWithConfiguration'
         images:
@@ -2075,7 +2137,7 @@ components:
         buildClouds:
           type: array
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         defaultImageName:
           type: string
       example:
@@ -2429,14 +2491,14 @@ components:
           type: array
           # The web UI only displays a single branch.  Max length?
           items:
-            $ref: '#/components/schemas/StringValueObject'
+            $ref: '#/components/schemas/StringValue'
         onEnvironmentVariables:
           type: array
           items:
             $ref: '#/components/schemas/SecurableVariable'
       required: [provider]
 
-    DeploymentEnvironmentSettings:
+    DeploymentEnvironmentSettingsModel:
       type: object
       properties:
         providerSettings:
@@ -2450,13 +2512,13 @@ components:
         notifications:
           type: array
           items:
-            $ref: '#/components/schemas/NotificationProviderSettings'
+            $ref: '#/components/schemas/NotificationEntry'
       # 6/24: addEnvironment returns 500 with body
       # {"message":"Object reference not set to an instance of an object."}
       # if environmentVariables or providerSettings is missing
       required: [environmentVariables, providerSettings]
 
-    DeploymentEnvironmentAddition:
+    AddEnvironmentRequest:
       type: object
       properties:
         name:
@@ -2464,7 +2526,7 @@ components:
         provider:
           $ref: '#/components/schemas/DeploymentProviderType'
         settings:
-          $ref: '#/components/schemas/DeploymentEnvironmentSettings'
+          $ref: '#/components/schemas/DeploymentEnvironmentSettingsModel'
       required: [name, provider, settings]
       example:
         name: production
@@ -2489,7 +2551,7 @@ components:
               value: '123'
               isEncrypted: false
 
-    DeploymentEnvironmentLookupModel:
+    DeploymentEnvironmentModelBase:
       type: object
       properties:
         deploymentEnvironmentId:
@@ -2498,6 +2560,7 @@ components:
         name:
           type: string
         provider:
+          readOnly: true
           $ref: '#/components/schemas/DeploymentProviderType'
 
     DeploymentProjectSelectionMode:
@@ -2519,18 +2582,19 @@ components:
       - Only selected projects can be deployed to the environment.
       - All projects except the selected projects can be deployed to the environment.
 
-    DeploymentEnvironment:
+    DeploymentEnvironmentModel:
       allOf:
-      - $ref: '#/components/schemas/DeploymentEnvironmentLookupModel'
+      - $ref: '#/components/schemas/DeploymentEnvironmentModelBase'
       - $ref: '#/components/schemas/Timestamped'
       - type: object
         properties:
           accountId:
+            readOnly: true
             type: integer
           projectsMode:
             $ref: '#/components/schemas/DeploymentProjectSelectionMode'
           securityDescriptor:
-            $ref: '#/components/schemas/SecurityDescriptor'
+            $ref: '#/components/schemas/SecurityDescriptorModel'
           tags:
             description: |-
               Comma-separated list of environment tags for dynamic grouping.
@@ -2554,19 +2618,20 @@ components:
 
     DeploymentEnvironmentWithSettings:
       allOf:
-      - $ref: '#/components/schemas/DeploymentEnvironment'
+      - $ref: '#/components/schemas/DeploymentEnvironmentModel'
       - type: object
         properties:
           environmentAccessKey:
             type: string
           settings:
-            $ref: '#/components/schemas/DeploymentEnvironmentSettings'
+            $ref: '#/components/schemas/DeploymentEnvironmentSettingsModel'
           selectedProjects:
             description: Project IDs of selected projects
             type: array
             items:
               type: integer
               minimum: 1
+            readOnly: true
           # Note: projects is omitted from addEnvironment
           projects:
             description: |
@@ -2606,7 +2671,7 @@ components:
         environment:
           $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
 
-    DeploymentStartRequest:
+    AddDeploymentRequest:
       type: object
       properties:
         environmentName:
@@ -2641,7 +2706,7 @@ components:
           server: myserver.com
           another_var: another value
 
-    DeploymentJob:
+    DeploymentJobModel:
       allOf:
       - $ref: '#/components/schemas/Job'
       - type: object
@@ -2665,22 +2730,22 @@ components:
           type: string
           format: date-time
 
-    Deployment:
+    DeploymentModel:
       allOf:
       - $ref: '#/components/schemas/DeploymentLookupModel'
       - $ref: '#/components/schemas/Timestamped'
       - type: object
         properties:
           build:
-            $ref: '#/components/schemas/Build'
+            $ref: '#/components/schemas/BuildModel'
           environment:
-            $ref: '#/components/schemas/DeploymentEnvironment'
+            $ref: '#/components/schemas/DeploymentEnvironmentModel'
           jobs:
             type: array
             items:
-              $ref: '#/components/schemas/DeploymentJob'
+              $ref: '#/components/schemas/DeploymentJobModel'
 
-    DeploymentCancellation:
+    StopDeploymentRequest:
       type: object
       properties:
         deploymentId:
@@ -2690,13 +2755,13 @@ components:
       example:
         deploymentId: 123
 
-    ProjectDeployment:
+    DeploymentModelResults:
       type: object
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: '#/components/schemas/ProjectModel'
         deployment:
-          $ref: '#/components/schemas/Deployment'
+          $ref: '#/components/schemas/DeploymentModel'
       required: [project, deployment]
 
     ProjectDeploymentModel:
@@ -2705,15 +2770,15 @@ components:
       - type: object
         properties:
           build:
-            $ref: '#/components/schemas/BuildLookupModel'
+            $ref: '#/components/schemas/BuildModelBase'
           environment:
-            $ref: '#/components/schemas/DeploymentEnvironmentLookupModel'
+            $ref: '#/components/schemas/DeploymentEnvironmentModelBase'
 
     ProjectDeploymentsResults:
       type: object
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: '#/components/schemas/ProjectModel'
         deployments:
           type: array
           items:
@@ -2725,15 +2790,15 @@ components:
       - type: object
         properties:
           build:
-            $ref: '#/components/schemas/BuildLookupModel'
+            $ref: '#/components/schemas/BuildModelBase'
           project:
-            $ref: '#/components/schemas/ProjectLookupModel'
+            $ref: '#/components/schemas/ProjectModelBase'
 
     DeploymentEnvironmentDeploymentsResults:
       type: object
       properties:
         environment:
-          $ref: '#/components/schemas/DeploymentEnvironment'
+          $ref: '#/components/schemas/DeploymentEnvironmentModel'
         deployments:
           type: array
           items:
@@ -2766,18 +2831,18 @@ components:
           type: boolean
       required: [$type]
 
-    NotificationProviderSettings:
+    NotificationEntry:
       type: object
       discriminator:
         propertyName: provider
         mapping:
-          Campfire: '#/components/schemas/CampfireNotificationProviderSettings'
-          Email: '#/components/schemas/EmailNotificationProviderSettings'
-          GitHubPullRequest: '#/components/schemas/GitHubPullRequestNotificationProviderSettings'
-          HipChat: '#/components/schemas/HipChatNotificationProviderSettings'
-          Slack: '#/components/schemas/SlackNotificationProviderSettings'
-          Webhook: '#/components/schemas/WebhookNotificationProviderSettings'
-          VSOTeamRoom: '#/components/schemas/VSOTeamRoomNotificationProviderSettings'
+          Campfire: '#/components/schemas/CampfireNotificationEntry'
+          Email: '#/components/schemas/EmailNotificationEntry'
+          GitHubPullRequest: '#/components/schemas/GitHubPullRequestNotificationEntry'
+          HipChat: '#/components/schemas/HipChatNotificationEntry'
+          Slack: '#/components/schemas/SlackNotificationEntry'
+          Webhook: '#/components/schemas/WebhookNotificationEntry'
+          VSOTeamRoom: '#/components/schemas/VSOTeamRoomNotificationEntry'
       properties:
         provider:
           type: string
@@ -2800,9 +2865,9 @@ components:
           template:
             type: string
 
-    CampfireNotificationProviderSettings:
+    CampfireNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2821,13 +2886,13 @@ components:
           recipients:
             type: array
             items:
-              $ref: '#/components/schemas/StringValueObject'
+              $ref: '#/components/schemas/StringValue'
           recipientsValue:
             type: string
 
-    EmailNotificationProviderSettings:
+    EmailNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2844,9 +2909,9 @@ components:
           template:
             type: string
 
-    GitHubPullRequestNotificationProviderSettings:
+    GitHubPullRequestNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2870,9 +2935,9 @@ components:
             type: string
             format: uri
 
-    HipChatNotificationProviderSettings:
+    HipChatNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2894,9 +2959,9 @@ components:
           template:
             type: string
 
-    SlackNotificationProviderSettings:
+    SlackNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2928,9 +2993,9 @@ components:
           customRequestBody:
             type: string
 
-    WebhookNotificationProviderSettings:
+    WebhookNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2953,9 +3018,9 @@ components:
           template:
             type: string
 
-    VSOTeamRoomNotificationProviderSettings:
+    VSOTeamRoomNotificationEntry:
       allOf:
-      - $ref: '#/components/schemas/NotificationProviderSettings'
+      - $ref: '#/components/schemas/NotificationEntry'
       - type: object
         properties:
           settings:
@@ -2975,212 +3040,19 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Error'
+      x-ms-error-response: true
 
 # Describe your paths here
 paths:
   ### {{{ User
-  /account/{accountName}/users:
-    parameters:
-    - $ref: '#/components/parameters/accountName'
-    get:
-      tags:
-      - User
-      operationId: getUsers
-      summary: Get users
-      externalDocs:
-        url: 'https://www.appveyor.com/docs/api/team/#get-users'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserModel'
-              example:
-              - accountId: 2
-                accountName: FeodorFitsner
-                isOwner: false
-                isCollaborator: false
-                userId: 2019
-                fullName: NuGet
-                email: nuget@appveyor.com
-                roleId: 5
-                roleName: User
-                successfulBuildNotification: all
-                failedBuildNotification: all
-                notifyWhenBuildStatusChangedOnly: true
-                created: '2014-02-12T19:21:15.0618564+00:00'
-                updated: '2014-03-06T22:47:44.9706252+00:00'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserModel'
-    put:
-      tags:
-      - User
-      operationId: updateUser
-      summary: Update user
-      externalDocs:
-        url: 'https://www.appveyor.com/docs/api/team/#update-user'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserModel'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '204':
-          description: Success
-
-  /account/{accountName}/users/{userId}:
-    parameters:
-    - $ref: '#/components/parameters/accountName'
-    - $ref: '#/components/parameters/userId'
-    get:
-      tags:
-      - User
-      operationId: getUser
-      summary: Get user
-      externalDocs:
-        url: 'https://www.appveyor.com/docs/api/team/#get-user'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserAccountRolesResults'
-              example:
-                user:
-                  accountId: 2
-                  accountName: FeodorFitsner
-                  isOwner: false
-                  isCollaborator: false
-                  userId: 2019
-                  fullName: NuGet
-                  email: nuget@appveyor.com
-                  roleId: 5
-                  roleName: User
-                  successfulBuildNotification: all
-                  failedBuildNotification: all
-                  notifyWhenBuildStatusChangedOnly: true
-                  created: '2014-02-12T19:21:15.0618564+00:00'
-                  updated: '2014-03-06T22:47:44.9706252+00:00'
-                roles:
-                - roleId: 4
-                  name: Administrator
-                  isSystem: true
-                  created: '2013-09-26T19:23:39.3615105+00:00'
-                - roleId: 5
-                  name: User
-                  isSystem: true
-                  created: '2013-09-26T19:23:39.3645117+00:00'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/UserAccountRolesResults'
-    delete:
-      tags:
-      - User
-      operationId: deleteUser
-      summary: Delete user
-      externalDocs:
-        url: 'https://www.appveyor.com/docs/api/team/#delete-user'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '204':
-          description: Success
-
-  /account/{accountName}/users/invitations:
-    parameters:
-    - $ref: '#/components/parameters/accountName'
-    get:
-      tags:
-      - User
-      operationId: getUserInvitations
-      summary: Get user invitations
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserInvitationModel'
-              example:
-              - userInvitationId: 6i9w9rcp5us7lxnbdo63
-                email: nuget@appveyor.com
-                roleId: 5
-                roleName: User
-                accountId: 2
-                accountName: FeodorFitsner
-                created: '2019-03-20T16:22:50.2504181+00:00'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserInvitationModel'
-    post:
-      tags:
-      - User
-      operationId: inviteUser
-      summary: Invite user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InviteUserRequest'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '204':
-          description: Success
-        '409':
-          description: If email has already been invited.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /account/{accountName}/users/invitations/{userInvitationId}:
-    parameters:
-    - $ref: '#/components/parameters/accountName'
-    - $ref: '#/components/parameters/userInvitationId'
-    delete:
-      tags:
-      - User
-      operationId: cancelUserInvitation
-      summary: Cancel user invitation
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '204':
-          description: Success
-
   /account/{accountName}/user/join-account:
     parameters:
     - $ref: '#/components/parameters/accountName'
     put:
       tags:
       - User
-      operationId: joinAccount
-      summary: Join Account
+      operationId: joinAccountAsCollaborator
+      summary: Join account as collaborator
       requestBody:
         required: true
         content:
@@ -3278,16 +3150,239 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Error'
+          x-ms-error-response: true
 
   ### User }}}
-  ### {{{ Collaborator
+  ### {{{ Users
+  /account/{accountName}/users:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
+    get:
+      tags:
+      - Users
+      operationId: getAccountUsers
+      summary: Get users
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-users'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserModel'
+              example:
+              - accountId: 2
+                accountName: FeodorFitsner
+                isOwner: false
+                isCollaborator: false
+                userId: 2019
+                fullName: NuGet
+                email: nuget@appveyor.com
+                roleId: 5
+                roleName: User
+                successfulBuildNotification: all
+                failedBuildNotification: all
+                notifyWhenBuildStatusChangedOnly: true
+                created: '2014-02-12T19:21:15.0618564+00:00'
+                updated: '2014-03-06T22:47:44.9706252+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserModel'
+    put:
+      tags:
+      - Users
+      operationId: updateAccountUser
+      summary: Update user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#update-user'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '204':
+          description: Success
+
+  /account/{accountName}/users/{id}:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
+    - $ref: '#/components/parameters/userId'
+    get:
+      tags:
+      - Users
+      operationId: getAccountUser
+      summary: Get user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#get-user'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserModel'
+              example:
+                user:
+                  accountId: 2
+                  accountName: FeodorFitsner
+                  isOwner: false
+                  isCollaborator: false
+                  userId: 2019
+                  fullName: NuGet
+                  email: nuget@appveyor.com
+                  roleId: 5
+                  roleName: User
+                  successfulBuildNotification: all
+                  failedBuildNotification: all
+                  notifyWhenBuildStatusChangedOnly: true
+                  created: '2014-02-12T19:21:15.0618564+00:00'
+                  updated: '2014-03-06T22:47:44.9706252+00:00'
+                roles:
+                - roleId: 4
+                  name: Administrator
+                  isSystem: true
+                  created: '2013-09-26T19:23:39.3615105+00:00'
+                - roleId: 5
+                  name: User
+                  isSystem: true
+                  created: '2013-09-26T19:23:39.3645117+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateUserModel'
+    delete:
+      tags:
+      - Users
+      operationId: deleteAccountUser
+      summary: Delete user
+      externalDocs:
+        url: 'https://www.appveyor.com/docs/api/team/#delete-user'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '204':
+          description: Success
+
+  /account/{accountName}/users/invitations:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
+    get:
+      tags:
+      - Users
+      operationId: getAccountUserInvitations
+      summary: Get user invitations
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInvitationModel'
+              example:
+              - userInvitationId: 6i9w9rcp5us7lxnbdo63
+                email: nuget@appveyor.com
+                roleId: 5
+                roleName: User
+                accountId: 2
+                accountName: FeodorFitsner
+                created: '2019-03-20T16:22:50.2504181+00:00'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInvitationModel'
+    post:
+      tags:
+      - Users
+      operationId: inviteAccountUser
+      summary: Invite user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteAccountUserRequest'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '204':
+          description: Success
+        '409':
+          description: If email has already been invited.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+          x-ms-error-response: true
+
+  /account/{accountName}/users/invitations/{userInvitationId}:
+    parameters:
+    - $ref: '#/components/parameters/accountName'
+    - $ref: '#/components/parameters/userInvitationId'
+    delete:
+      tags:
+      - Users
+      operationId: deleteAccountUserInvitation
+      summary: Delete user invitation
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '204':
+          description: Success
+    get:
+      tags:
+      - Users
+      operationId: getAccountUserInvitation
+      summary: Get user invitation
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInvitationModel'
+              example:
+                userInvitationId: 6i9w9rcp5us7lxnbdo63
+                email: nuget@appveyor.com
+                roleId: 5
+                roleName: User
+                accountId: 2
+                accountName: FeodorFitsner
+                created: '2019-03-20T16:22:50.2504181+00:00'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserInvitationModel'
+
+  ### Users }}}
+  ### {{{ Collaborators
 
   /account/{accountName}/collaborators:
     parameters:
     - $ref: '#/components/parameters/accountName'
     get:
       tags:
-      - Collaborator
+      - Collaborators
       operationId: getCollaborators
       summary: Get collaborators
       externalDocs:
@@ -3325,7 +3420,7 @@ paths:
                   $ref: '#/components/schemas/UserModel'
     put:
       tags:
-      - Collaborator
+      - Collaborators
       operationId: updateCollaborator
       summary: Update collaborator
       externalDocs:
@@ -3335,20 +3430,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CollaboratorUpdate'
+              $ref: '#/components/schemas/UpdateAccountCollaboratorRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
         '204':
           description: Success
 
-  /account/{accountName}/collaborators/{userId}:
+  /account/{accountName}/collaborators/{id}:
     parameters:
     - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/userId'
     get:
       tags:
-      - Collaborator
+      - Collaborators
       operationId: getCollaborator
       summary: Get collaborator
       externalDocs:
@@ -3361,7 +3456,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserAccountRolesResults'
+                $ref: '#/components/schemas/UpdateUserModel'
               example:
                 user:
                   accountId: 2
@@ -3394,10 +3489,10 @@ paths:
                   updated: '2014-03-18T20:16:06.8803375+00:00'
             application/xml:
               schema:
-                $ref: '#/components/schemas/UserAccountRolesResults'
+                $ref: '#/components/schemas/UpdateUserModel'
     delete:
       tags:
-      - Collaborator
+      - Collaborators
       operationId: deleteCollaborator
       summary: Delete collaborator
       externalDocs:
@@ -3408,15 +3503,15 @@ paths:
         '204':
           description: Success
 
-  ### Collaborator }}}
-  ### {{{ Role
+  ### Collaborators }}}
+  ### {{{ Roles
 
   /account/{accountName}/roles:
     parameters:
     - $ref: '#/components/parameters/accountName'
     get:
       tags:
-      - Role
+      - Roles
       operationId: getRoles
       summary: Get roles
       externalDocs:
@@ -3431,7 +3526,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Role'
+                  $ref: '#/components/schemas/RoleModel'
               example:
               - roleId: 4
                 name: Administrator
@@ -3445,10 +3540,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Role'
+                  $ref: '#/components/schemas/RoleModel'
     post:
       tags:
-      - Role
+      - Roles
       operationId: addRole
       summary: Add role
       externalDocs:
@@ -3458,7 +3553,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RoleAddition'
+              $ref: '#/components/schemas/AddRoleRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -3473,7 +3568,7 @@ paths:
                 $ref: '#/components/schemas/RoleWithGroups'
     put:
       tags:
-      - Role
+      - Roles
       operationId: updateRole
       summary: Update role
       externalDocs:
@@ -3483,6 +3578,9 @@ paths:
         content:
           application/json:
             schema:
+              # Note: Server uses UpdateRoleRequest which mostly duplicates
+              # RoleWithGroups, omitting some properties.  We use RoleWithGroups
+              # and mark omitted properties readOnly for ease of use.
               $ref: '#/components/schemas/RoleWithGroups'
       responses:
         default:
@@ -3497,14 +3595,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/RoleWithGroups'
 
-  /account/{accountName}/roles/{roleId}:
+  /account/{accountName}/roles/{id}:
     parameters:
     - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/roleId'
     get:
       tags:
-      - Role
-      operationId: getRole
+      - Roles
+      operationId: getRoleById
       summary: Get role
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/team/#get-role'
@@ -3585,7 +3683,7 @@ paths:
                 $ref: '#/components/schemas/RoleWithGroups'
     delete:
       tags:
-      - Role
+      - Roles
       operationId: deleteRole
       summary: Delete role
       externalDocs:
@@ -3596,8 +3694,8 @@ paths:
         '204':
           description: Success
 
-  ### Role }}}
-  ### {{{ Project
+  ### Roles }}}
+  ### {{{ Account
 
   /account/{accountName}/encrypt:
     parameters:
@@ -3607,15 +3705,15 @@ paths:
       # https://help.appveyor.com/discussions/questions/1892-encryption-through-api
       # https://github.com/appveyor/ci/issues/665
       tags:
-      - Project
-      operationId: encryptValue
+      - Account
+      operationId: encryptData
       summary: Encrypt a value for use in SecurableValue.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EncryptRequest'
+              $ref: '#/components/schemas/EncryptDataRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -3629,12 +3727,15 @@ paths:
                 # Avoided since primary use is as string in SecurableValue, not byte[].
               example: wsnoY4v1v1Uofj0xf8E6FA==
 
+  ### Account }}}
+  ### {{{ Projects
+
   /account/{accountName}/projects:
     parameters:
     - $ref: '#/components/parameters/accountName'
     get:
       tags:
-      - Project
+      - Projects
       operationId: getProjects
       summary: Get projects
       externalDocs:
@@ -3649,7 +3750,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Project'
+                  $ref: '#/components/schemas/ProjectModel'
               example:
               - projectId: 19096
                 accountId: 2
@@ -3691,10 +3792,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Project'
+                  $ref: '#/components/schemas/ProjectModel'
     post:
       tags:
-      - Project
+      - Projects
       operationId: addProject
       summary: Add project
       externalDocs:
@@ -3704,7 +3805,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectAddition'
+              $ref: '#/components/schemas/AddProjectRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -3713,7 +3814,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectModel'
               example:
                 projectId: 43682
                 accountId: 2
@@ -3729,10 +3830,10 @@ paths:
                 created: '2014-08-16T00:52:15.6604826+00:00'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectModel'
     put:
       tags:
-      - Project
+      - Projects
       operationId: updateProject
       summary: Update project
       externalDocs:
@@ -3742,6 +3843,10 @@ paths:
         content:
           application/json:
             schema:
+              # Note: Server uses UpdateProjectRequest which mostly
+              # duplicates ProjectWithConfiguration, omitting some properties.
+              # We use ProjectWithConfiguration and mark omitted properties
+              # readOnly for ease of use.
               $ref: '#/components/schemas/ProjectWithConfiguration'
       responses:
         default:
@@ -3755,8 +3860,8 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     get:
       tags:
-      - Project
-      operationId: getProjectLastBuild
+      - Projects
+      operationId: getProjectCurrentBuild
       summary: Get project last build
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-last-build'
@@ -3832,7 +3937,7 @@ paths:
                 $ref: '#/components/schemas/ProjectBuildResults'
     delete:
       tags:
-      - Project
+      - Projects
       operationId: deleteProject
       summary: Delete project
       externalDocs:
@@ -3843,14 +3948,14 @@ paths:
         '204':
           description: Success
 
-  /projects/{accountName}/{projectSlug}/branch/{buildBranch}:
+  /projects/{accountName}/{projectSlug}/branch/{branch}:
     parameters:
     - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/projectSlug'
     - $ref: '#/components/parameters/buildBranch'
     get:
       tags:
-      - Project
+      - Projects
       operationId: getProjectLastBuildBranch
       summary: Get project last branch build
       externalDocs:
@@ -3934,8 +4039,8 @@ paths:
     - $ref: '#/components/parameters/buildVersion'
     get:
       tags:
-      - Project
-      operationId: getProjectBuildByVersion
+      - Projects
+      operationId: getProjectVersionBuild
       summary: Get project build by version
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-build-by-version'
@@ -4017,7 +4122,7 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     get:
       tags:
-      - Project
+      - Projects
       operationId: getProjectHistory
       summary: Get project history
       externalDocs:
@@ -4027,6 +4132,7 @@ paths:
       - $ref: '#/components/parameters/recordsNumber'
       - $ref: '#/components/parameters/startBuildId'
       - $ref: '#/components/parameters/branch'
+      - $ref: '#/components/parameters/includeJobs'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -4091,11 +4197,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectHistory'
 
-  /projects/{accountName}/{projectSlug}/artifacts/{artifactFileName}:
+  /projects/{accountName}/{projectSlug}/artifacts/{fileName}:
     parameters:
     - $ref: '#/components/parameters/accountName'
     - $ref: '#/components/parameters/projectSlug'
-    - $ref: '#/components/parameters/artifactFileName'
+    - $ref: '#/components/parameters/fileName'
     - $ref: '#/components/parameters/branch'
     - $ref: '#/components/parameters/tag'
     - $ref: '#/components/parameters/job'
@@ -4103,8 +4209,9 @@ paths:
     - $ref: '#/components/parameters/pr'
     get:
       tags:
-      - Project
-      operationId: getProjectArtifact
+      # Note: Has /projects/ path, but defined on BuildJobsController
+      - BuildJobs
+      operationId: downloadLastSuccessfulArtifact
       summary: Get last successful build artifact
       description: |-
         The `job` parameter is mandatory if the build contains multiple jobs.
@@ -4131,7 +4238,7 @@ paths:
     - $ref: '#/components/parameters/recordsNumber'
     get:
       tags:
-      - Project
+      - Projects
       operationId: getProjectDeployments
       summary: Get project deployments
       externalDocs:
@@ -4227,7 +4334,7 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     get:
       tags:
-      - Project
+      - Projects
       operationId: getProjectSettings
       summary: Get project settings
       externalDocs:
@@ -4402,8 +4509,8 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     get:
       tags:
-      - Project
-      operationId: getProjectSettingsYaml
+      - Projects
+      operationId: getProjectSettingsYml
       summary: Get project settings in YAML
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-settings-in-yaml'
@@ -4432,7 +4539,7 @@ paths:
                   ...
     put:
       tags:
-      - Project
+      - Projects
       operationId: updateProjectSettingsYaml
       summary: Update project settings in YAML
       externalDocs:
@@ -4442,7 +4549,7 @@ paths:
         content:
           # Note: Could use an unofficial media type, such as the ones in
           # https://stackoverflow.com/q/332129
-          # API returns text/plain from getProjectSettingsYaml.  Use it here.
+          # API returns text/plain from getProjectSettingsYml.  Use it here.
           text/plain:
             schema:
               type: string
@@ -4463,7 +4570,7 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     put:
       tags:
-      - Project
+      - Projects
       operationId: updateProjectBuildNumber
       summary: Update project build number
       externalDocs:
@@ -4473,7 +4580,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectBuildNumberUpdate'
+              $ref: '#/components/schemas/UpdateProjectBuildNumberRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -4486,8 +4593,8 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     get:
       tags:
-      - Project
-      operationId: getProjectEnvironmentVariables
+      - Projects
+      operationId: getProjectSettingsEnvironmentVariables
       summary: Get project environment variables
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#get-project-environment-variables'
@@ -4518,8 +4625,8 @@ paths:
                   $ref: '#/components/schemas/SecurableVariable'
     put:
       tags:
-      - Project
-      operationId: updateProjectEnvironmentVariables
+      - Projects
+      operationId: updateProjectSettingsEnvironmentVariables
       summary: Update project environment variables
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#update-project-environment-variables'
@@ -4543,7 +4650,7 @@ paths:
     - $ref: '#/components/parameters/projectSlug'
     delete:
       tags:
-      - Project
+      - Projects
       operationId: deleteProjectBuildCache
       summary: Delete project build cache
       externalDocs:
@@ -4554,81 +4661,14 @@ paths:
         '204':
           description: Success
 
-  /projects/status/{statusBadgeId}:
+  /projects/status/{id}:
     parameters:
     - $ref: '#/components/parameters/statusBadgeId'
     get:
       tags:
-      - Project
-      operationId: getProjectStatusBadge
+      - Projects
+      operationId: getProjectStatusImage
       summary: Get project status badge image
-      externalDocs:
-        url: https://www.appveyor.com/docs/status-badges/
-      security: []
-      parameters:
-      - $ref: '#/components/parameters/svg'
-      - $ref: '#/components/parameters/retina'
-      - $ref: '#/components/parameters/passingText'
-      - $ref: '#/components/parameters/failingText'
-      - $ref: '#/components/parameters/pendingText'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '200':
-          description: Success
-          content:
-            image/svg+xml:
-              schema:
-                type: string
-                format: binary
-            image/png:
-              schema:
-                type: string
-                format: binary
-
-  /projects/status/{statusBadgeId}/branch/{buildBranch}:
-    parameters:
-    - $ref: '#/components/parameters/statusBadgeId'
-    - $ref: '#/components/parameters/buildBranch'
-    get:
-      tags:
-      - Project
-      operationId: getProjectBranchStatusBadge
-      summary: Get project branch status badge image
-      externalDocs:
-        url: https://www.appveyor.com/docs/status-badges/
-      security: []
-      parameters:
-      - $ref: '#/components/parameters/svg'
-      - $ref: '#/components/parameters/retina'
-      - $ref: '#/components/parameters/passingText'
-      - $ref: '#/components/parameters/failingText'
-      - $ref: '#/components/parameters/pendingText'
-      responses:
-        default:
-          $ref: '#/components/responses/Error'
-        '200':
-          description: Success
-          content:
-            image/svg+xml:
-              schema:
-                type: string
-                format: binary
-            image/png:
-              schema:
-                type: string
-                format: binary
-
-  /projects/status/{badgeRepoProvider}/{repoAccountName}/{repoSlug}:
-    parameters:
-    - $ref: '#/components/parameters/badgeRepoProvider'
-    - $ref: '#/components/parameters/repoAccountName'
-    - $ref: '#/components/parameters/repoSlug'
-    get:
-      tags:
-      - Project
-      operationId: getPublicProjectStatusBadge
-      summary: Get status badge image for a project with a public repository
       externalDocs:
         url: https://www.appveyor.com/docs/status-badges/
       security: []
@@ -4639,6 +4679,7 @@ paths:
       - $ref: '#/components/parameters/passingText'
       - $ref: '#/components/parameters/failingText'
       - $ref: '#/components/parameters/pendingText'
+      - $ref: '#/components/parameters/isPR'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -4654,15 +4695,87 @@ paths:
                 type: string
                 format: binary
 
-  ### Project }}}
-  ### {{{ Build
+  /projects/status/{id}/branch/{branch}:
+    parameters:
+    - $ref: '#/components/parameters/statusBadgeId'
+    - $ref: '#/components/parameters/buildBranch'
+    get:
+      tags:
+      - Projects
+      operationId: getProjectStatusImageByBranch
+      summary: Get project branch status badge image
+      externalDocs:
+        url: https://www.appveyor.com/docs/status-badges/
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/svg'
+      - $ref: '#/components/parameters/retina'
+      - $ref: '#/components/parameters/passingText'
+      - $ref: '#/components/parameters/failingText'
+      - $ref: '#/components/parameters/pendingText'
+      - $ref: '#/components/parameters/isPR'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '200':
+          description: Success
+          content:
+            image/svg+xml:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+
+  # Note: API uses {*repositoryName} which is unsupported in OpenAPI since
+  # allowReserved can't be applied to parameters in path.
+  /projects/status/{repositoryType}/{repoAccountName}/{repoSlug}:
+    parameters:
+    - $ref: '#/components/parameters/repositoryType'
+    - $ref: '#/components/parameters/repoAccountName'
+    - $ref: '#/components/parameters/repoSlug'
+    get:
+      tags:
+      - Projects
+      operationId: getProjectStatusImageByRepositoryName
+      summary: Get status badge image for a project with a given repo name
+      externalDocs:
+        url: https://www.appveyor.com/docs/status-badges/
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/branch'
+      - $ref: '#/components/parameters/svg'
+      - $ref: '#/components/parameters/retina'
+      - $ref: '#/components/parameters/passingText'
+      - $ref: '#/components/parameters/failingText'
+      - $ref: '#/components/parameters/pendingText'
+      - $ref: '#/components/parameters/isPR'
+      responses:
+        default:
+          $ref: '#/components/responses/Error'
+        '200':
+          description: Success
+          content:
+            image/svg+xml:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+
+  ### Projects }}}
+  ### {{{ Builds
 
   /account/{accountName}/builds:
     parameters:
     - $ref: '#/components/parameters/accountName'
     post:
       tags:
-      - Build
+      - Builds
       operationId: startBuild
       summary: Start build of branch most recent commit
       externalDocs:
@@ -4672,7 +4785,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BuildStartRequest'
+              $ref: '#/components/schemas/StartBuildRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -4681,7 +4794,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Build'
+                $ref: '#/components/schemas/BuildModel'
               example:
                 buildId: 136709
                 jobs: []
@@ -4700,11 +4813,11 @@ paths:
                 created: '2014-08-16T00:40:38.1703914+00:00'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Build'
+                $ref: '#/components/schemas/BuildModel'
     put:
       tags:
-      - Build
-      operationId: reRunBuild
+      - Builds
+      operationId: reBuild
       summary: Re-run build
       description: >-
         If `reRunIncomplete` is `true` and all jobs in the referenced build
@@ -4717,7 +4830,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReRunBuildRequest'
+              $ref: '#/components/schemas/ReBuildRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -4726,7 +4839,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Build'
+                $ref: '#/components/schemas/BuildModel'
               example:
                 buildId: 136709
                 jobs: []
@@ -4745,7 +4858,7 @@ paths:
                 created: '2014-08-16T00:40:38.1703914+00:00'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Build'
+                $ref: '#/components/schemas/BuildModel'
 
   /builds/{accountName}/{projectSlug}/{buildVersion}:
     parameters:
@@ -4754,7 +4867,7 @@ paths:
     - $ref: '#/components/parameters/buildVersion'
     delete:
       tags:
-      - Build
+      - Builds
       operationId: cancelBuild
       summary: Cancel build
       externalDocs:
@@ -4765,13 +4878,16 @@ paths:
         '204':
           description: Success
 
+  ### Builds }}}
+  ### {{{ BuildJobs
+
   /buildjobs/{jobId}/artifacts:
     parameters:
     - $ref: '#/components/parameters/jobId'
     get:
       tags:
-      - Build
-      operationId: getBuildArtifacts
+      - BuildJobs
+      operationId: getArtifacts
       summary: Get build artifacts
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/samples/download-artifacts-advanced-ps/'
@@ -4802,14 +4918,14 @@ paths:
                 items:
                   $ref: '#/components/schemas/ArtifactModel'
 
-  /buildjobs/{jobId}/artifacts/{artifactFileName}:
+  /buildjobs/{jobId}/artifacts/{fileName}:
     parameters:
     - $ref: '#/components/parameters/jobId'
-    - $ref: '#/components/parameters/artifactFileName'
+    - $ref: '#/components/parameters/fileName'
     get:
       tags:
-      - Build
-      operationId: getBuildArtifact
+      - BuildJobs
+      operationId: downloadArtifact
       summary: Download build artifact
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/samples/download-artifacts-advanced-ps/'
@@ -4832,8 +4948,8 @@ paths:
     - $ref: '#/components/parameters/jobId'
     get:
       tags:
-      - Build
-      operationId: getBuildLog
+      - BuildJobs
+      operationId: downloadLog
       summary: Download build log
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/projects-builds/#download-build-log'
@@ -4844,21 +4960,21 @@ paths:
         '200':
           description: |-
             Success.
-            Note:  Response content is plain text sent with Content-Type application/octet-stream.
+            Note:  Response content is UTF-8 encoded plain text sent with Content-Type application/octet-stream.
           content:
             application/octet-stream:
               schema:
                 type: string
 
-  ### Build }}}
-  ### {{{ Environment
+  ### BuildJobs }}}
+  ### {{{ Environments
 
   /account/{accountName}/environments:
     parameters:
     - $ref: '#/components/parameters/accountName'
     get:
       tags:
-      - Environment
+      - Environments
       operationId: getEnvironments
       summary: Get environments
       externalDocs:
@@ -4873,7 +4989,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DeploymentEnvironmentLookupModel'
+                  $ref: '#/components/schemas/DeploymentEnvironmentModelBase'
               example:
               - deploymentEnvironmentId: 14
                 name: azure-blob-1
@@ -4885,10 +5001,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DeploymentEnvironmentLookupModel'
+                  $ref: '#/components/schemas/DeploymentEnvironmentModelBase'
     post:
       tags:
-      - Environment
+      - Environments
       operationId: addEnvironment
       summary: Add environment
       externalDocs:
@@ -4898,7 +5014,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeploymentEnvironmentAddition'
+              $ref: '#/components/schemas/AddEnvironmentRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -4938,7 +5054,7 @@ paths:
                 $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
     put:
       tags:
-      - Environment
+      - Environments
       operationId: updateEnvironment
       summary: Update environment
       externalDocs:
@@ -4948,6 +5064,10 @@ paths:
         content:
           application/json:
             schema:
+              # Note: Server uses UpdateEnvironmentRequest which mostly
+              # duplicates DeploymentEnvironment, omitting some properties.
+              # We use DeploymentEnvironment and mark omitted properties
+              # readOnly for ease of use.
               $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
       responses:
         default:
@@ -4988,13 +5108,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentEnvironmentWithSettings'
 
-  /account/{accountName}/environments/{deploymentEnvironmentId}/settings:
+  /account/{accountName}/environments/{environmentId}/settings:
     parameters:
     - $ref: '#/components/parameters/accountName'
-    - $ref: '#/components/parameters/deploymentEnvironmentId'
+    - $ref: '#/components/parameters/environmentId'
     get:
       tags:
-      - Environment
+      - Environments
       operationId: getEnvironmentSettings
       summary: Get environment settings
       externalDocs:
@@ -5042,13 +5162,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentEnvironmentSettingsResults'
 
-  /account/{accountName}/environments/{deploymentEnvironmentId}/deployments:
+  /account/{accountName}/environments/{environmentId}/deployments:
     parameters:
     - $ref: '#/components/parameters/accountName'
-    - $ref: '#/components/parameters/deploymentEnvironmentId'
+    - $ref: '#/components/parameters/environmentId'
     get:
+      parameters:
+      - $ref: '#/components/parameters/recordsNumber'
+      - $ref: '#/components/parameters/startBuildId'
       tags:
-      - Environment
+      - Environments
       operationId: getEnvironmentDeployments
       summary: Get environment deployments
       externalDocs:
@@ -5131,13 +5254,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentEnvironmentDeploymentsResults'
 
-  /account/{accountName}/environments/{deploymentEnvironmentId}:
+  /account/{accountName}/environments/{environmentId}:
     parameters:
     - $ref: '#/components/parameters/accountName'
-    - $ref: '#/components/parameters/deploymentEnvironmentId'
+    - $ref: '#/components/parameters/environmentId'
     delete:
       tags:
-      - Environment
+      - Environments
       operationId: deleteEnvironment
       summary: Delete environment
       externalDocs:
@@ -5148,8 +5271,8 @@ paths:
         '204':
           description: Success
 
-  ### Environment }}}
-  ### {{{ Deployment
+  ### Environments }}}
+  ### {{{ Deployments
 
   /account/{accountName}/deployments/{deploymentId}:
     parameters:
@@ -5157,7 +5280,7 @@ paths:
     - $ref: '#/components/parameters/deploymentId'
     get:
       tags:
-      - Deployment
+      - Deployments
       operationId: getDeployment
       summary: Get deployment
       externalDocs:
@@ -5170,7 +5293,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDeployment'
+                $ref: '#/components/schemas/DeploymentModelResults'
               example:
                 project:
                   projectId: 22321
@@ -5230,15 +5353,15 @@ paths:
                   updated: '2014-08-12T23:06:25.0502019+00:00'
             application/xml:
               schema:
-                $ref: '#/components/schemas/ProjectDeployment'
+                $ref: '#/components/schemas/DeploymentModelResults'
 
   /account/{accountName}/deployments:
     parameters:
     - $ref: '#/components/parameters/accountName'
     post:
       tags:
-      - Deployment
-      operationId: startDeployment
+      - Deployments
+      operationId: createDeployment
       summary: Start deployment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#start-deployment'
@@ -5247,7 +5370,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeploymentStartRequest'
+              $ref: '#/components/schemas/AddDeploymentRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
@@ -5256,7 +5379,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Deployment'
+                $ref: '#/components/schemas/DeploymentModel'
               example:
                 deploymentId: 19475
                 build:
@@ -5300,15 +5423,15 @@ paths:
                 updated: '2014-08-12T23:06:25.0502019+00:00'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Deployment'
+                $ref: '#/components/schemas/DeploymentModel'
 
   /account/{accountName}/deployments/stop:
     parameters:
     - $ref: '#/components/parameters/accountName'
     put:
       tags:
-      - Deployment
-      operationId: cancelDeployment
+      - Deployments
+      operationId: stopDeployment
       summary: Cancel deployment
       externalDocs:
         url: 'https://www.appveyor.com/docs/api/environments-deployments/#cancel-deployment'
@@ -5317,13 +5440,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeploymentCancellation'
+              $ref: '#/components/schemas/StopDeploymentRequest'
       responses:
         default:
           $ref: '#/components/responses/Error'
         '204':
           description: Success
 
-  ### Deployment }}}
+  ### Deployments }}}
 
 # vim: set foldmethod=marker :
