@@ -4119,7 +4119,7 @@ paths:
           content:
             # Note: API does not currently guess artifact content type.
             # All are sent as application/octet-stream
-            '*/*':
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -4822,7 +4822,7 @@ paths:
           content:
             # Note: API does not currently guess artifact content type.
             # All are sent as application/octet-stream
-            '*/*':
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -4846,7 +4846,7 @@ paths:
             Success.
             Note:  Response content is plain text sent with Content-Type application/octet-stream.
           content:
-            '*/*':
+            application/octet-stream:
               schema:
                 type: string
 
