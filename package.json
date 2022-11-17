@@ -48,7 +48,7 @@
     "oav": "^3.0.0",
     "rimraf": "^3.0.0",
     "swagger-cli": "^4.0.0",
-    "swagger-spec-validator": "^4.0.0"
+    "swagger-spec-validator": "^5.0.0"
   },
   "engines": {
     "node": ">=6",
