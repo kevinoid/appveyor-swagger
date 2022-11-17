@@ -29,21 +29,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Set up Node.js
       uses: actions/setup-node@v3
-      with:
-        # Note: '*' is "latest LTS version" (without check-latest, it would be
-        # "latest LTS version in local cache") because it first checks
-        # https://github.com/actions/node-versions/releases then falls back to
-        # https://nodejs.org/dist/index.json
-        # For explanation and discussion, see:
-        # https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#check-latest-version=
-        # https://github.com/actions/setup-node/issues/61#issuecomment-577548687
-        # https://github.com/actions/setup-node/issues/164#issuecomment-648999618
-        # https://github.com/actions/setup-node/pull/104
-        #
-        # Support for "current"/"latest"/"node" was added in v3.2.0
-        # https://github.com/actions/setup-node/pull/483
-        node-version: latest
-        check-latest: true
     - name: Display Node.js version
       run: node --version
     - name: Install dependencies
