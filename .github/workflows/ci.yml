@@ -32,6 +32,6 @@ jobs:
     - name: Display Node.js version
       run: node --version
     - name: Install dependencies
-      run: npm install --strict-peer-deps
+      run: npm install --no-strict-peer-deps
     - name: Validate
       run: npm run validate
