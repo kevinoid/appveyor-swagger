@@ -1,5 +1,56 @@
 # Change Log
 
+## [v2.0.0](https://github.com/kevinoid/appveyor-swagger/tree/v2.0.0) (2019-03-26)
+
+- Remove`UserAddition` and `CollaboratorAddition` schemas along with the
+  `addUser` and `addCollaborator` operations.
+  These operations were removed from the AppVeyor REST API due to abuse.
+  See [appveyor/ci#2892](https://github.com/appveyor/ci/issues/2892).
+- Remove `Agent` from `DeploymentProviderType` which is no longer supported.
+- Add `AzureAppServiceZipDeploy`, `ElasticBeanstalk`, `Environment`, `Local`,
+  and `Octopus` to `DeploymentProviderType`.
+- Fix HTTP method for `cancelDeployment` (should be `PUT`, not `DELETE`).
+- Add `inviteUser`, `getUserInvitations`, `cancelUserInvitation`, `joinAccount`
+  operations with `UserInvitationModel`, `InviteUserRequest`,
+  `JoinAccountRequest`, `SessionModel`, `SessionUserModel`, and
+  `SessionUserAccountModel` schemas.
+- Add `x-enum-varnames` to `NotificationSettingsType` to generate more
+  reasonable names for the enumerated values.
+- Add `*DPSettingName` enumerations with supported setting names for each
+  deployment provider (for convenience).
+- Add `Visual Studio 2019` to `BuildWorkerImageName`.
+- Add `zhaw18` to `BuildWorkerImageName`.
+- Add `x-apiClientRegistration`, `x-apisguru-categories`, and
+  `x-description-language` extension properties.
+
+- New OpenAPI Specification Version 3 AppVeyor API definition.
+- Generate OAS2/Swagger 2 definition from OAS3 definitions.
+- Generate non-`discriminator` version of definitions.
+
+### OpenAPI-only  Changes
+
+- New user-level (aka v2) AppVeyor API definition.
+- Operations returning `type: file` (`getBuildArtifact`, `getBuildLog`,
+  `getProjectArtifact`, `getProjectBranchStatusBadge`, `getProjectStatusBadge`,
+  `getPublicProjectStatusBadge`) now return `type: string, format: binary`
+  since `type: file` was removed from OAS3.
+- Add `DeploymentProjectSelectionMode` enum schema (previously avoided due to
+  lack of generator support for non-string enums).
+- Move `build` property of `DeploymentLookupModel` to `ProjectDeploymentModel`
+  and `EnvironmentDeploymentModel` to prevent conflict with `Deployment`
+  (which has a compatible `build` property with schema `Build`, which includes
+  `BuildLookupModel`, but prevents code generation with AutoRest).
+- Require `environmentVariables` and `providerSettings` in
+  `DeploymentEnvironmentSettings` due to `addEnvironment` returning 500.
+- Rename `accountName` path parameter to `account` to match name used in error
+  responses from the AppVeyor server.
+- New tags:
+    <!-- Copy revertTagChanges from build/to-appveyor-swagger.js -->
+- New operationIds:
+    <!-- Copy revertOperationIdChanges from build/to-appveyor-swagger.js -->
+- New schema names:
+    <!-- Copy revertSchemaNameChanges from build/to-appveyor-swagger.js -->
+
 ## [v1.0.0](https://github.com/kevinoid/appveyor-swagger/tree/v1.0.0) (2019-03-05)
 [Full Changelog](https://github.com/kevinoid/appveyor-swagger/compare/v0.20190213.0...v1.0.0)
 

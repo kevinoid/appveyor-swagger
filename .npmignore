@@ -1,6 +1,7 @@
 .editorconfig
 .npmignore
 .travis.yml
+/build/
 /doc/
 TODO.*
 appveyor.yml

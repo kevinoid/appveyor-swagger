@@ -32,6 +32,11 @@ jobs:
     - name: Display Node.js version
       run: node --version
     - name: Install dependencies
-      run: npm install --strict-peer-deps
+      # Note: strict-peer-deps disabled due to
+      # https://github.com/OpenAPITools/openapi-generator-cli/issues/373
+      # (which recurs due to different outdated dependencies)
+      run: npm install --no-strict-peer-deps
+    - name: Lint
+      run: npm run lint
     - name: Validate
       run: npm run validate
