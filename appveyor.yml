@@ -1,6 +1,13 @@
 # AppVeyor configuration file
 # https://www.appveyor.com/docs/appveyor-yml
 
+# Select build environment
+# https://www.appveyor.com/docs/build-environment/
+# https://www.appveyor.com/docs/windows-images-software/
+# Note: Default is "Visual Studio 2015", which is Server 2012 R2, which is
+# not supported by node 25.3.
+image: Visual Studio 2026
+
 install:
   - ps: Install-Product node
   - npm -g install npm
