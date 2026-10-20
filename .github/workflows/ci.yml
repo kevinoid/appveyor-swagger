@@ -26,7 +26,7 @@ jobs:
     name: Validate
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
     - name: Set up Node.js
       uses: actions/setup-node@v3
     - name: Display Node.js version
