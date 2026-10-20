@@ -35,6 +35,10 @@ jobs:
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
     - name: Display Node.js version
       run: node --version
+    - name: Harden npm
+      run: >-
+        npm config set allow-git=none &&
+        npm config set ignore-scripts=true
     - name: Install dependencies
       # Note: strict-peer-deps disabled due to
       # https://github.com/OpenAPITools/openapi-generator-cli/issues/373
