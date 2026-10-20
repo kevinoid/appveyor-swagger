@@ -1,4 +1,5 @@
-# http://www.appveyor.com/docs/appveyor-yml
+# AppVeyor configuration file
+# https://www.appveyor.com/docs/appveyor-yml
 
 install:
   - ps: Install-Product node
