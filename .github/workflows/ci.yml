@@ -34,8 +34,11 @@ jobs:
     - name: Display Node.js version
       run: node --version
     - name: Harden npm
-      run: >-
-        npm config set allow-git=none &&
+      run: |
+        npm_version="$(npm --version)"
+        if [ "${npm_version%%.*}" -ge 11 ]; then
+            npm config set allow-git=none
+        fi
         npm config set ignore-scripts=true
     - name: Install dependencies
       # Note: strict-peer-deps disabled due to
