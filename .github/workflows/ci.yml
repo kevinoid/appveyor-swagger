@@ -21,6 +21,8 @@ on:   # yamllint disable-line rule:truthy
   - cron: '50 8 * * 1'
   workflow_dispatch: {}
 
+permissions: {}
+
 jobs:
   test:
     name: Validate
