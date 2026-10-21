@@ -68,12 +68,11 @@ generated API changes.  Users who encounter changes which violate semantic
 versioning expectations are encouraged to report the issue so the version can
 be incremented accordingly.
 
+
 ### Schema Names
 
 The schema names used in the definition are based on the names returned in the
-XML API responses, where those names are not confusing and do not conflict
-with the requirements imposed by `discriminator`.  (The OpenAPI Spec requires
-`discriminator` property values match schema names).
+XML API responses, where possible.
 
 ### Schema Strictness
 
@@ -83,6 +82,7 @@ attempts to make the types as strict as possible without compromising
 usability and clarity.  This provides the most type safety (for strictly typed
 languages) and protection against accidental API misuse.  Specific choices are
 described below.
+
 
 #### `With` Schema Types
 
@@ -99,6 +99,7 @@ and do not provide copy constructors between them, using them becomes more
 painful.  I would appreciate feedback about this trade-off in real-world use
 cases.
 
+
 #### `PUT` vs `GET` Schema Types
 
 `PUT` schemas could be defined separately from the `GET` types in several
@@ -107,43 +108,4 @@ which could result in non-nullable/non-optional codegen in some languages
 (although it does not in any that I'm currently aware of).  The down-side is
 that unless the codegen includes an easy way to translate data between these
 types, doing a `GET`+modify+`PUT` becomes more painful than it should be.  So
-this has been not been done.
-
-### Polymorphism
-
-`swagger-polymorphic.yaml` attempts to provide stricter type definitions by
-applying polymorphism using the
-[`discriminator`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#user-content-schemaDiscriminator)
-property.  Most tools provide limited or no support for this property.
-Therefore, this file is mostly kept for reference and in the hopes that future
-tools may be able to make use of it.
-
-Polymorphic types are problematic for several reasons, not least of which is
-the requirement that Schema name match the `discriminator` property value,
-which can cause collisions and require ugly names.
-[OAI/OpenAPI-Specification#403](https://github.com/OAI/OpenAPI-Specification/issues/403)
-There are various extensions available:
-
-* AutoRest uses
-  [`x-ms-discriminator-value`](https://github.com/Azure/autorest/pull/474)
-* Swagger Codegen has an open PR to use
-  [`x-discriminator-value`](https://github.com/swagger-api/swagger-codegen/pull/4252)
-
-There are also plans to support `oneOf` and `anyOf` in OpenAPI v3.0
-[OAI/OpenAPI-Specification#741](https://github.com/OAI/OpenAPI-Specification/pull/741)
-along with adding a value to type map for `discriminator`.  This may solve the
-above issues.
-
-### Shared responses
-
-The next version of the spec includes support for version ranges using `4XX`
-notation
-([OAI/OpenAPI-Specification#638](https://github.com/OAI/OpenAPI-Specification/pull/638)).
-There is also discussion of including a mechanism for defining default
-responses in
-[OAI/OpenAPI-Specification#521](https://github.com/OAI/OpenAPI-Specification/issues/521)
-and
-[OAI/OpenAPI-Specification#563](https://github.com/OAI/OpenAPI-Specification/issues/563)
-Unfortunately, since neither of these is supported in OpenAPI v2.0, the
-definition in this project contains a redundant error response definition for
-error for each API path.
+this has not been done.

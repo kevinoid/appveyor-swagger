@@ -49,5 +49,7 @@ jobs:
     # https://github.com/npm/cli/issues/8698
     - name: Prepare package
       run: npm run prepare
+    - name: Lint
+      run: npm run lint
     - name: Validate
       run: npm run validate
