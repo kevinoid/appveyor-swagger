@@ -45,5 +45,9 @@ jobs:
       # https://github.com/OpenAPITools/openapi-generator-cli/issues/373
       # (which recurs due to different outdated dependencies)
       run: npm install --no-strict-peer-deps
+    # Must run prepare explicitly due to ignore-scripts=true
+    # https://github.com/npm/cli/issues/8698
+    - name: Prepare package
+      run: npm run prepare
     - name: Validate
       run: npm run validate
